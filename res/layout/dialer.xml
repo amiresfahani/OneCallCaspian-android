@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
   	android:background="@drawable/background">
     
-    <org.linphone.ui.AddressText
+    <com.onecallcaspian.ui.AddressText
         android:id="@+id/Adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:src="@drawable/add_contact" />
         
-        <org.linphone.ui.CallButton
+        <com.onecallcaspian.ui.CallButton
             android:id="@+id/Call"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:src="@drawable/call" />
         
-        <org.linphone.ui.EraseButton
+        <com.onecallcaspian.ui.EraseButton
             android:id="@+id/Erase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         
     </LinearLayout>
 	
-    <org.linphone.ui.Numpad 
+    <com.onecallcaspian.ui.Numpad 
 	    android:id="@+id/Dialer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

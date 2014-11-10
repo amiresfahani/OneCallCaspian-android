@@ -25,7 +25,7 @@
 
         <fragment
             android:id="@+id/status"
-            android:name="org.linphone.StatusFragment"
+            android:name="com.onecallcaspian.StatusFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/status" />
@@ -42,8 +42,7 @@
         android:layout_marginTop="20dp"
         android:visibility="invisible"
         android:src="@drawable/switch_camera" />
-    
-    <org.linphone.ui.Numpad
+    com.onecallcaspian.ui.NumpadNumpad
         android:id="@+id/numpad"
         android:background="@drawable/dialer_alt_background"
         android:layout_width="wrap_content"
