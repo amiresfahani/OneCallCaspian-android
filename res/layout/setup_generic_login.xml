@@ -59,18 +59,20 @@
             android:background="@drawable/setup_field_background" />
         
         <EditText
-            android:textCursorDrawable="@null"
             android:id="@+id/setup_domain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/setup_field_background"
             android:hint="@string/setup_domain_hint"
             android:inputType="textEmailAddress"
-            android:layout_marginTop="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:singleLine="true"
+            android:text="@string/setup_domainaddress"
             android:textColor="@android:color/black"
-            android:background="@drawable/setup_field_background" />
+            android:textCursorDrawable="@null"
+            android:visibility="gone" />
         
         <RelativeLayout
             android:layout_marginTop="10dp"
