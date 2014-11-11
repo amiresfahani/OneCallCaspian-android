@@ -156,9 +156,7 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 
 		LinphoneManager.createAndStart(this, this);
 		mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		if (Version.sdkAboveOrEqual(Version.API12_HONEYCOMB_MR1_31X)) {
-			startWifiLock();
-		}
+		startWifiLock();
 		instance = this; // instance is ready once linphone manager has been created
 		
 
@@ -199,9 +197,9 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 																							, mkeepAlivePendingIntent);
 	}
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+	//@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 	private void startWifiLock() {
-		mWifiLock = mWifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, this.getPackageName()+"-wifi-call-lock");
+		mWifiLock = mWifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, this.getPackageName()+"-wifi-call-lock");
 		mWifiLock.setReferenceCounted(false);
 	}
 

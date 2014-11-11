@@ -290,17 +290,20 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		if (accountCreated)
 			return;
 		
-		boolean isMainAccountLinphoneDotOrg = domain.equals(getString(R.string.default_domain));
+		boolean isMainAccountLinphoneDotOrg = false;
+		boolean isDefaultDomain = domain.equals(getString(R.string.default_domain));
 		boolean useLinphoneDotOrgCustomPorts = getResources().getBoolean(R.bool.use_linphone_server_ports);
 		AccountBuilder builder = new AccountBuilder(LinphoneManager.getLc())
 		.setUsername(username)
 		.setDomain(domain)
-		.setPassword(password);
+		.setPassword(password)
+		.setTransport(TransportType.LinphoneTransportTcp);
 		
-		if (isMainAccountLinphoneDotOrg && useLinphoneDotOrgCustomPorts) {
+
+		if (isMainAccountLinphoneDotOrg && useLinphoneDotOrgCustomPorts && !isDefaultDomain) {
 			if (getResources().getBoolean(R.bool.disable_all_security_features_for_markets)) {
 				builder.setProxy(domain + ":5228")
-				.setTransport(TransportType.LinphoneTransportTcp);
+ 				.setTransport(TransportType.LinphoneTransportTcp);
 			}
 			else {
 				builder.setProxy(domain + ":5223")

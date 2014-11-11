@@ -70,7 +70,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:singleLine="true"
-            android:text="@string/setup_domainaddress"
+            android:text="@string/default_domain"
             android:textColor="@android:color/black"
             android:textCursorDrawable="@null"
             android:visibility="gone" />
