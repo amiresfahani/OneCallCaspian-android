@@ -550,7 +550,6 @@ public class LinphoneManager implements LinphoneCoreListener {
 		IntentFilter lFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         lFilter.addAction(Intent.ACTION_SCREEN_OFF);
         mServiceContext.registerReceiver(mKeepAliveReceiver, lFilter);
-
 		updateNetworkReachability();
 
 		if (Version.sdkAboveOrEqual(Version.API11_HONEYCOMB_30)) {

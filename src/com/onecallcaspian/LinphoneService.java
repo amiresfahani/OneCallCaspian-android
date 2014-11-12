@@ -188,12 +188,12 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 			}, 5000);
 		}
 		
-		//make sure the application will at least wakes up every 10 mn
+		//make sure the application will at least wakes up every 1 mn
 		Intent intent = new Intent(this, KeepAliveHandler.class);
-	    mkeepAlivePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+	    mkeepAlivePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		((AlarmManager) this.getSystemService(Context.ALARM_SERVICE)).setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP
-																							, SystemClock.elapsedRealtime()+600000
-																							, 600000
+																							, SystemClock.elapsedRealtime()+60000
+																							, 60000
 																							, mkeepAlivePendingIntent);
 	}
 	
