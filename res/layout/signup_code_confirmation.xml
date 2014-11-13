@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/signup_code_title_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#66A7C8"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/signup_code_back_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:padding="5dp"
+                android:src="@drawable/backimage"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="10dp"
+                android:text="Signup"
+                android:textColor="#fff"
+                android:textSize="22sp" />
+        </RelativeLayout>
+    </LinearLayout>
+    
+    <LinearLayout 
+        
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:orientation="vertical"
+		
+        >
+        <TextView 
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Code Below"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:layout_margin="10dp"
+            />
+       
+        
+        <EditText 
+            android:id="@+id/signup_code_access_code_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/field"
+            android:hint="Access Code"
+              android:singleLine="true"
+              android:textColor="#000"
+              android:gravity="center"
+              android:textSize="18sp"
+            android:inputType="number"
+            android:paddingLeft="10dp"
+            />
+        <ImageView 
+            android:id="@+id/signup_code_enter_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_gravity="center"
+            android:src="@drawable/enter_btn"
+            android:layout_margin="10dp"
+            />
+         <EditText
+            android:id="@+id/signup_code_domain_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/white"
+            android:hint="@string/setup_domain_hint"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/setup_domainaddress"
+            android:textColor="@android:color/black"
+            android:textCursorDrawable="@null"
+            android:visibility="gone" />
+        
+    </LinearLayout>
+
+</LinearLayout>

@@ -479,13 +479,10 @@
 
 	<string name="remote_composing">Remote is writing...</string>
 	<string name="unread_messages">%i unread messages</string>
-
-	<string name="retry">Retry</string>
-
-	<string name="remote_provisioning_failure">Failed to download or apply remote provisioning profile...</string>
-	<string name="remote_provisioning_again_title">Remote provisioning</string>
-	<string name="remote_provisioning_again_message">Do you want to change the provisioning URI ?</string>
-	<string name="pref_dtmf_sequence_title">DTMF sequence</string>
-	<string name="dtmf_sequence_not_set_failure">No DTMF set in advanced preferences</string>
-	<string name="dtmf_sequence">DTMF sequence</string>
+	<string name="crash_text"></string>
+	<string name="crash_texte">Ooooops ! crashed, but a report has been sent  developer to help fix the issue ! Thank you</string>
+		<string name="retry">Retry</string>
+		
+	<string name="welcome">Welcome to One Call Caspian</string>
+	<string name ="internet_connection_error">Internet Connection Error. Please connect to working Internet connection</string>
 </resources>

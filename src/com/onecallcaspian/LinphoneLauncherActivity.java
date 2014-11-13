@@ -22,6 +22,9 @@ import static android.content.Intent.ACTION_MAIN;
 
 import org.linphone.mediastream.Log;
 
+
+import com.onecallcaspian.custom.ErrorReporter;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -51,13 +54,24 @@ public class LinphoneLauncherActivity extends Activity {
 		new Log(getResources().getString(R.string.app_name), !getResources().getBoolean(R.bool.disable_every_log));
 		
 		// Hack to avoid to draw twice LinphoneActivity on tablets
-        if (getResources().getBoolean(R.bool.isTablet)) {
+  /*  reopen for tab    if (getResources().getBoolean(R.bool.isTablet)) {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
+		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.launcher);
-        
+		
+		try {
+			ErrorReporter errReporter = new ErrorReporter();
+			errReporter.Init(LinphoneLauncherActivity.this);
+			errReporter.CheckErrorAndSendMail(LinphoneLauncherActivity.this);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		mHandler = new Handler();
 		
 		if (LinphoneService.isReady()) {
@@ -98,6 +112,8 @@ public class LinphoneLauncherActivity extends Activity {
 					sleep(30);
 				} catch (InterruptedException e) {
 					throw new RuntimeException("waiting thread sleep() has been interrupted");
+				}catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 

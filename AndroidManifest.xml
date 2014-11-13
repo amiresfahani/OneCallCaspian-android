@@ -95,6 +95,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+                <activity
+            android:name="com.onecallcaspian.custom.SignUp"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.onecallcaspian.custom.ConfirmSignUpAccessCode"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.onecallcaspian.custom.Password"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.onecallcaspian.custom.ForgotPassword"
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name="com.onecallcaspian.LinphoneActivity"
             android:launchMode="singleTask"

@@ -100,7 +100,7 @@ public class LinphoneActivity extends FragmentActivity implements
 	private static final int CALL_ACTIVITY = 19;
 
 	private static LinphoneActivity instance;
-
+	private LinphonePreferences mPrefs;
 	private StatusFragment statusFragment;
 	private TextView missedCalls, missedChats;
 	private ImageView dialer;
@@ -130,12 +130,12 @@ public class LinphoneActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (isTablet() && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+/*	reopen for tab	if (isTablet() && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else if (!isTablet() && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-		
+        }*/
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		if (!LinphoneManager.isInstanciated()) {
 			Log.e("No service running: avoid crash by starting the launcher", this.getClass().getName());
 			// super.onCreate called earlier
@@ -144,7 +144,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			return;
 		}
 		
-		boolean useFirstLoginActivity = getResources().getBoolean(R.bool.display_account_wizard_at_first_start);
+	/*	boolean useFirstLoginActivity = getResources().getBoolean(R.bool.display_account_wizard_at_first_start);
 		if (LinphonePreferences.instance().isProvisioningLoginViewEnabled()) {
 			Intent wizard = new Intent();
 			wizard.setClass(this, RemoteProvisioningLoginActivity.class);
@@ -152,13 +152,20 @@ public class LinphoneActivity extends FragmentActivity implements
 			startActivityForResult(wizard, REMOTE_PROVISIONING_LOGIN_ACTIVITY);
 		} else if (useFirstLoginActivity && LinphonePreferences.instance().isFirstLaunch()) {
 			if (LinphonePreferences.instance().getAccountCount() > 0) {
+				
+				
 				LinphonePreferences.instance().firstLaunchSuccessful();
+				
+				
 			} else {
 				startActivityForResult(new Intent().setClass(this, SetupActivity.class), FIRST_LOGIN_ACTIVITY);
 			}
-		}
-
+		}*/
+		
 		setContentView(R.layout.main);
+		
+		mPrefs = LinphonePreferences.instance();
+		
 		instance = this;
 		fragmentsHistory = new ArrayList<FragmentsAvailable>();
 		initButtons();
@@ -1290,6 +1297,11 @@ public class LinphoneActivity extends FragmentActivity implements
 		displayMissedCalls(LinphoneManager.getLc().getMissedCallsCount());
 
 		LinphoneManager.getInstance().changeStatusToOnline();
+		
+		if(mPrefs.getAccountCount() <= 0 ){
+			startActivity(new Intent(this, SetupActivity.class));
+			return;
+		}
 
 		if(getIntent().getIntExtra("PreviousActivity", 0) != CALL_ACTIVITY){
 			if (LinphoneManager.getLc().getCalls().length > 0) {
@@ -1307,6 +1319,7 @@ public class LinphoneActivity extends FragmentActivity implements
 					}
 				}
 		}
+		
 	}
 
 	@Override
