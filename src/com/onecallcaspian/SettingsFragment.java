@@ -88,6 +88,17 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		initNetworkSettings();
 		initAdvancedSettings();
 
+		findPreference(getString(R.string.menu_exit_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				if (LinphoneActivity.isInstanciated()) {
+					LinphoneActivity.instance().exit();
+					return true;
+				}
+				return false;
+			}
+		});
+
 		// Add action on About button
 		findPreference(getString(R.string.menu_about_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override

@@ -35,7 +35,10 @@ import org.linphone.core.LpConfig;
 import org.linphone.core.TunnelConfig;
 import org.linphone.mediastream.Log;
 
+import com.onecallcaspian.setup.SetupActivity;
+
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * @author Sylvain Berfini
@@ -685,8 +688,10 @@ public class LinphonePreferences {
 	}
 
 	public void deleteAccount(int n) {
-		final LinphoneProxyConfig proxyCfg = getProxyConfig(n);
-
+		LinphoneAuthInfo authInfo = getAuthInfo(n);
+		if (authInfo != null)
+			getLc().removeAuthInfo(authInfo);
+		LinphoneProxyConfig proxyCfg = getProxyConfig(n);
 		if (proxyCfg != null)
 			getLc().removeProxyConfig(proxyCfg);
 		if (getLc().getProxyConfigList().length == 0) {
@@ -694,6 +699,10 @@ public class LinphonePreferences {
 		} else {
 			resetDefaultProxyConfig();
 			getLc().refreshRegisters();
+		}
+		if(getAccountCount() <= 0 ){
+			mContext.startActivity(new Intent(mContext, SetupActivity.class));
+			return;
 		}
 	}
 	// End of accounts settings

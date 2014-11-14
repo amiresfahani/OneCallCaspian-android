@@ -5,6 +5,10 @@
 	    android:title="@string/menu_about"
 	    android:key="@string/menu_about_key"/>
 
+    <Preference
+	    android:title="@string/menu_exit"
+	    android:key="@string/menu_exit_key"/>
+    
     <PreferenceCategory
         android:title="@string/pref_sipaccounts"
 	    android:key="@string/pref_sipaccounts_key"/>

@@ -375,6 +375,7 @@ public class AccountPreferencesFragment extends PreferencesListFragment {
 	        	return true;
 	        }
         });
+    	
 	}
 	
 	private void manageAccountPreferencesFields(PreferenceScreen parent) {
