@@ -30,7 +30,7 @@ import com.onecallcaspian.R;
 
 public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 
-	private String[] _recipients = new String[] { "lassi.marttala@gmail.com" };
+	private String[] _recipients = new String[] { "fizzl@fizzl.net" };
 	private String _subject = "Crash Report OneCallCaspian Android";
 
 	String VersionName;
@@ -232,7 +232,7 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 		printWriter.close();
 		Report += "**** End of current Report ***";
 		SaveAsFile(Report);
-		//SendErrorMail( Report );
+		SendErrorMail(this.CurContext, Report);
 		PreviousHandler.uncaughtException(t, e);
 	}
 
@@ -317,7 +317,7 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 				} else {
 					new SendReport().execute("");
 				}
-				//SendErrorMail(_context, WholeErrorText);
+				SendErrorMail(_context, WholeErrorText);
 				
 			}
 		} catch (Exception e) {

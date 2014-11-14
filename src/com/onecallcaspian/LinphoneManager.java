@@ -78,6 +78,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -173,6 +174,7 @@ public class LinphoneManager implements LinphoneCoreListener {
 		mPauseSoundFile = basePath + "/toy_mono.wav";
 		mChatDatabaseFile = basePath + "/linphone-history.db";
 		mErrorToneFile = basePath + "/error.wav";
+		mNotificationToneFile = basePath + "/mt1.mp3";
 
 		mPrefs = LinphonePreferences.instance();
 		mAudioManager = ((AudioManager) c.getSystemService(Context.AUDIO_SERVICE));
@@ -194,6 +196,7 @@ public class LinphoneManager implements LinphoneCoreListener {
 	private final String mPauseSoundFile;
 	private final String mChatDatabaseFile;
 	private final String mErrorToneFile;
+	private final String mNotificationToneFile;
 
 	private Timer mTimer;
 
@@ -563,6 +566,7 @@ public class LinphoneManager implements LinphoneCoreListener {
 		copyIfNotExist(R.raw.ringback, mRingbackSoundFile);
 		copyIfNotExist(R.raw.toy_mono, mPauseSoundFile);
 		copyIfNotExist(R.raw.incoming_chat, mErrorToneFile);
+		copyIfNotExist(R.raw.mt1, mNotificationToneFile);
 		copyIfNotExist(R.raw.linphonerc_default, mLinphoneConfigFile);
 		copyFromPackage(R.raw.linphonerc_factory, new File(mLinphoneFactoryConfigFile).getName());
 		copyIfNotExist(R.raw.lpconfig, mLPConfigXsd);
@@ -1024,10 +1028,18 @@ public class LinphoneManager implements LinphoneCoreListener {
 				try {
 					if (ringtone.startsWith("content://")) {
 						mRingerPlayer.setDataSource(mServiceContext, Uri.parse(ringtone));
-					} else {
+					} 
+					else if((new File(ringtone)).exists()) {
 						FileInputStream fis = new FileInputStream(ringtone);
 						mRingerPlayer.setDataSource(fis.getFD());
 						fis.close();
+					}
+					else {
+						AssetFileDescriptor afd = mServiceContext.getAssets().openFd(ringtone);
+						long start = afd.getStartOffset();
+						long end = afd.getLength();
+						mRingerPlayer.setDataSource(afd.getFileDescriptor(), start, end);
+						afd.close();
 					}
 				} catch (IOException e) {
 					Log.e(e, "Cannot set ringtone");

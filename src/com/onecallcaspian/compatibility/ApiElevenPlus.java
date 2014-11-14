@@ -58,6 +58,8 @@ public class ApiElevenPlus {
 			title = context.getString(R.string.unread_messages)
 					.replace("%i", String.valueOf(msgCount));
 		}
+		
+		Uri sound = Uri.parse("android.resource://com.onecallcaspian/" + R.raw.mt1);
 
 		Notification notif = new Notification.Builder(context)
 						.setContentTitle(title)
@@ -67,10 +69,11 @@ public class ApiElevenPlus {
 						.setAutoCancel(true)
 						.setDefaults(
 								Notification.DEFAULT_LIGHTS
-										| Notification.DEFAULT_SOUND
 										| Notification.DEFAULT_VIBRATE)
 						.setWhen(System.currentTimeMillis())
-						.setLargeIcon(contactIcon).getNotification();
+						.setLargeIcon(contactIcon)
+						.setSound(sound)
+						.getNotification();
 
 		return notif;
 	}

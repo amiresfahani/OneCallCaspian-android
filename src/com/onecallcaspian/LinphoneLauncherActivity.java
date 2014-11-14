@@ -28,6 +28,7 @@ import com.onecallcaspian.custom.ErrorReporter;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -49,6 +50,14 @@ public class LinphoneLauncherActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		try {
+			ErrorReporter errReporter = new ErrorReporter();
+			errReporter.Init(LinphoneLauncherActivity.this);
+			errReporter.CheckErrorAndSendMail(LinphoneLauncherActivity.this);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Used to change for the lifetime of the app the name used to tag the logs
 		new Log(getResources().getString(R.string.app_name), !getResources().getBoolean(R.bool.disable_every_log));
@@ -63,14 +72,6 @@ public class LinphoneLauncherActivity extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.launcher);
 		
-		try {
-			ErrorReporter errReporter = new ErrorReporter();
-			errReporter.Init(LinphoneLauncherActivity.this);
-			errReporter.CheckErrorAndSendMail(LinphoneLauncherActivity.this);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		mHandler = new Handler();
 		
@@ -102,6 +103,7 @@ public class LinphoneLauncherActivity extends Activity {
 				finish();
 			}
 		}, 1000);
+		LinphonePreferences.instance().setRingtone(getResources().getString(R.string.ringtone_asset));
 	}
 
 

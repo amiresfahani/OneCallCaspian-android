@@ -111,7 +111,6 @@ public class LinphonePreferences {
 
 	public void setRingtone(String ringtonePath) {
 		getConfig().setString("app", "ringtone", ringtonePath);
-
 	}
 
 	public boolean shouldAutomaticallyAcceptFriendsRequests() {

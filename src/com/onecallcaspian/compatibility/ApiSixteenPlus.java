@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
@@ -44,6 +45,8 @@ public class ApiSixteenPlus {
 					.replace("%i", String.valueOf(msgCount));
 		}
 
+		Uri sound = Uri.parse("android.resource://com.onecallcaspian/" + R.raw.mt1);
+		
 		Notification notif = new Notification.Builder(context)
 						.setContentTitle(title)
 						.setContentText(msg)
@@ -52,10 +55,10 @@ public class ApiSixteenPlus {
 						.setContentIntent(intent)
 						.setDefaults(
 								Notification.DEFAULT_LIGHTS
-										| Notification.DEFAULT_SOUND
 										| Notification.DEFAULT_VIBRATE)
 						.setWhen(System.currentTimeMillis())
 						.setLargeIcon(contactIcon)
+						.setSound(sound)
 				.build();
 
 		return notif;

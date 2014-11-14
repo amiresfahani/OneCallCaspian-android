@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Caspian custom strings -->
+    <string name="ringtone_asset">audio/rt1.mp3</string>
+    <string name="messagetone_asset">/mt1.mp3</string>
     <!-- Tutorial settings -->
     <bool name="show_tutorials_instead_of_app">false</bool> <!-- Be careful ! Setting this to true prevent the app from working ! It will only display tutorial activities -->
 
