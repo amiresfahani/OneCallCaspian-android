@@ -33,7 +33,6 @@ import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.mediastream.Log;
 import org.linphone.mediastream.Version;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -57,6 +56,7 @@ import android.provider.MediaStore;
 
 import com.onecallcaspian.LinphoneSimpleListener.LinphoneServiceListener;
 import com.onecallcaspian.compatibility.Compatibility;
+import com.onecallcaspian.custom.ErrorReporter;
 
 /**
  * 
@@ -131,7 +131,14 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		try {
+			ErrorReporter errReporter = new ErrorReporter();
+			errReporter.Init(this);
+			errReporter.CheckErrorAndSendMail(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// In case restart after a crash. Main in LinphoneActivity
 		mNotificationTitle = getString(R.string.service_name);
 
@@ -197,7 +204,6 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 																							, mkeepAlivePendingIntent);
 	}
 	
-	//@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 	private void startWifiLock() {
 		mWifiLock = mWifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, this.getPackageName()+"-wifi-call-lock");
 		mWifiLock.setReferenceCounted(false);

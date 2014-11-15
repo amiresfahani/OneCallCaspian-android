@@ -22,16 +22,13 @@ import static android.content.Intent.ACTION_MAIN;
 
 import org.linphone.mediastream.Log;
 
-
-import com.onecallcaspian.custom.ErrorReporter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.onecallcaspian.custom.ErrorReporter;
 import com.onecallcaspian.setup.RemoteProvisioningActivity;
 import com.onecallcaspian.tutorials.TutorialLauncherActivity;
 
@@ -55,23 +52,15 @@ public class LinphoneLauncherActivity extends Activity {
 			errReporter.Init(LinphoneLauncherActivity.this);
 			errReporter.CheckErrorAndSendMail(LinphoneLauncherActivity.this);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		// Used to change for the lifetime of the app the name used to tag the logs
 		new Log(getResources().getString(R.string.app_name), !getResources().getBoolean(R.bool.disable_every_log));
 		
-		// Hack to avoid to draw twice LinphoneActivity on tablets
-  /*  reopen for tab    if (getResources().getBoolean(R.bool.isTablet)) {
-        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }*/
-		
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 		setContentView(R.layout.launcher);
-		
 
 		mHandler = new Handler();
 		

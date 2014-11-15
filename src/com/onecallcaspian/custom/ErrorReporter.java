@@ -8,12 +8,21 @@ import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.linphone.mediastream.Log;
 
 import android.content.Context;
@@ -31,8 +40,9 @@ import com.onecallcaspian.R;
 public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 
 	private String[] _recipients = new String[] { "fizzl@fizzl.net" };
-	private String _subject = "Crash Report OneCallCaspian Android";
-
+	private String _subject = "Crash Report OneCallCaspian Android ";
+	private String _httppost = "http://www.fizzl.net/tmp/error_report.php";
+	
 	String VersionName;
 	String buildNumber;
 	String PackageName;
@@ -232,20 +242,25 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 		printWriter.close();
 		Report += "**** End of current Report ***";
 		SaveAsFile(Report);
+		SendToHttp(Report);
 		SendErrorMail(this.CurContext, Report);
 		PreviousHandler.uncaughtException(t, e);
 	}
 
 	private void SendErrorMail(Context _context, String ErrorContent) {
-		Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		String subject = _subject;
-		String body = "\n\n" + ErrorContent + "\n\n";
-		sendIntent.putExtra(Intent.EXTRA_EMAIL, _recipients);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, body);
-		sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-		sendIntent.setType("message/rfc822");
-		sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		_context.startActivity(Intent.createChooser(sendIntent, "Title:"));
+		try {
+			Intent sendIntent = new Intent(Intent.ACTION_SEND);
+			String subject = _subject;
+			String body = "\n\n" + ErrorContent + "\n\n";
+			sendIntent.putExtra(Intent.EXTRA_EMAIL, _recipients);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, body);
+			sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+			sendIntent.setType("message/rfc822");
+			sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			_context.startActivity(Intent.createChooser(sendIntent, "Send with:"));
+		} catch (Exception e) {
+			// ...
+		}			
 	}
 
 	private void SaveAsFile(String ErrorContent) {
@@ -260,6 +275,24 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 		} catch (Exception e) {
 			// ...
 		}
+	}
+	
+	private void SendToHttp(final String ErrorContent) {
+			new Thread() {
+				public void run() {
+					try {
+					    HttpClient client = new DefaultHttpClient();
+					    HttpPost post = new HttpPost(_httppost);
+					    List<NameValuePair> params = new ArrayList<NameValuePair>();
+					    params.add(new BasicNameValuePair("error", ErrorContent));
+					    post.setEntity(new UrlEncodedFormEntity(params));
+					    HttpResponse response = client.execute(post);
+					    Log.d("Error sent: " + response.getStatusLine().toString());
+					} catch(Exception e) {
+						
+					}
+				}
+			}.start();
 	}
 
 	private String[] GetErrorFileList() {

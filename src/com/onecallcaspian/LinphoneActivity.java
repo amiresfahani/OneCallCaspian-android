@@ -82,7 +82,6 @@ import com.onecallcaspian.LinphoneSimpleListener.LinphoneOnCallStateChangedListe
 import com.onecallcaspian.LinphoneSimpleListener.LinphoneOnMessageReceivedListener;
 import com.onecallcaspian.LinphoneSimpleListener.LinphoneOnRegistrationStateChangedListener;
 import com.onecallcaspian.compatibility.Compatibility;
-import com.onecallcaspian.setup.RemoteProvisioningLoginActivity;
 import com.onecallcaspian.setup.SetupActivity;
 import com.onecallcaspian.ui.AddressText;
 
@@ -130,11 +129,6 @@ public class LinphoneActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-/*	reopen for tab	if (isTablet() && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else if (!isTablet() && getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }*/
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		if (!LinphoneManager.isInstanciated()) {
 			Log.e("No service running: avoid crash by starting the launcher", this.getClass().getName());
@@ -143,24 +137,6 @@ public class LinphoneActivity extends FragmentActivity implements
 			startActivity(getIntent().setClass(this, LinphoneLauncherActivity.class));
 			return;
 		}
-		
-	/*	boolean useFirstLoginActivity = getResources().getBoolean(R.bool.display_account_wizard_at_first_start);
-		if (LinphonePreferences.instance().isProvisioningLoginViewEnabled()) {
-			Intent wizard = new Intent();
-			wizard.setClass(this, RemoteProvisioningLoginActivity.class);
-			wizard.putExtra("Domain", LinphoneManager.getInstance().wizardLoginViewDomain);
-			startActivityForResult(wizard, REMOTE_PROVISIONING_LOGIN_ACTIVITY);
-		} else if (useFirstLoginActivity && LinphonePreferences.instance().isFirstLaunch()) {
-			if (LinphonePreferences.instance().getAccountCount() > 0) {
-				
-				
-				LinphonePreferences.instance().firstLaunchSuccessful();
-				
-				
-			} else {
-				startActivityForResult(new Intent().setClass(this, SetupActivity.class), FIRST_LOGIN_ACTIVITY);
-			}
-		}*/
 		
 		setContentView(R.layout.main);
 		
