@@ -701,6 +701,12 @@ public class LinphonePreferences {
 			getLc().refreshRegisters();
 		}
 		if(getAccountCount() <= 0 ){
+			if (mContext == null && LinphoneManager.isInstanciated()) {
+				mContext = LinphoneManager.getInstance().getContext();
+			}
+			if(mContext == null) {
+				return;
+			}
 			mContext.startActivity(new Intent(mContext, SetupActivity.class));
 			return;
 		}

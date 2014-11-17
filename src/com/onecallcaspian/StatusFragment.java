@@ -54,6 +54,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.onecallcaspian.LinphoneSimpleListener.LinphoneOnNotifyReceivedListener;
+import com.onecallcaspian.custom.FormattingHelp;
 import com.onecallcaspian.ui.SlidingDrawer;
 import com.onecallcaspian.ui.SlidingDrawer.OnDrawerOpenListener;
 
@@ -581,7 +582,8 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 			
 			TextView identity = (TextView) view.findViewById(R.id.Identity);
 			String sipAddress = (lpc.getIdentity() != null && lpc.getIdentity().startsWith("sip:")) ? lpc.getIdentity().split("sip:")[1] : lpc.getIdentity();
-			identity.setText(sipAddress);
+			String shortname = FormattingHelp.stripDomainFromAddress(sipAddress);
+			identity.setText(shortname);
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

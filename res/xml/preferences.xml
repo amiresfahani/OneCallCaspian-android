@@ -6,6 +6,10 @@
 	    android:key="@string/menu_about_key"/>
 
     <Preference
+	    android:title="@string/menu_logout"
+	    android:key="@string/menu_logout_key"/>
+    
+    <Preference
 	    android:title="@string/menu_exit"
 	    android:key="@string/menu_exit_key"/>
     
@@ -19,7 +23,8 @@
 	
 	<Preference
 	    android:title="@string/pref_add_account"
-	    android:key="@string/pref_add_account_key"/>
+	    android:key="@string/pref_add_account_key"
+	    android:layout="@layout/hidden"/>
 
     <PreferenceCategory
         android:title="@string/pref_tunnel"
@@ -99,7 +104,8 @@
 				android:title="@string/pref_video_initiate_call_with_video_title"
 			    android:key="@string/pref_video_initiate_call_with_video_key"
 				android:summary="@string/pref_video_initiate_call_with_video"
-				android:dependency="@string/pref_video_enable_key"/>
+				android:dependency="@string/pref_video_enable_key"
+				android:layout="@layout/hidden"/>
 
 			<CheckBoxPreference
 				android:title="@string/pref_video_automatically_share_my_video_title"
@@ -112,7 +118,8 @@
 				android:title="@string/pref_video_automatically_accept_video_title"
 				android:key="@string/pref_video_automatically_accept_video_key"
 				android:summary="@string/pref_video_automatically_accept_video"
-				android:dependency="@string/pref_video_enable_key"/>
+				android:dependency="@string/pref_video_enable_key"
+				android:layout="@layout/hidden"/>
 
 			<ListPreference
 			    android:title="@string/pref_preferred_video_size"
@@ -139,7 +146,8 @@
 			
 			<EditTextPreference
 			    android:title="@string/pref_voice_mail"
-				android:key="@string/pref_voice_mail_key"/>
+				android:key="@string/pref_voice_mail_key"
+				android:layout="@layout/hidden"/>
 
 	    </PreferenceScreen>
 
@@ -152,11 +160,13 @@
 
 			<EditTextPreference
 			    android:title="@string/pref_stun_server"
-				android:key="@string/pref_stun_server_key"/>
+				android:key="@string/pref_stun_server_key"
+				android:layout="@layout/hidden"/>
 
 			<CheckBoxPreference
 			    android:title="@string/pref_ice_enable"
-				android:key="@string/pref_ice_enable_key"/>
+				android:key="@string/pref_ice_enable_key"
+				android:layout="@layout/hidden"/>
 
 			<CheckBoxPreference
 			    android:title="@string/pref_upnp_enable"

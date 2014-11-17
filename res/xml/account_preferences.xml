@@ -13,6 +13,7 @@
         <EditTextPreference 
         	android:title="@string/pref_auth_userid"
         	android:dialogMessage="@string/pref_help_auth_userid"
+        	android:layout="@layout/hidden"
             android:persistent="true"/>
         
         <EditTextPreference 
@@ -23,6 +24,7 @@
         <EditTextPreference 
         	android:title="@string/pref_domain"
         	android:dialogMessage="@string/pref_help_domain"
+        	android:layout="@layout/hidden"
             android:persistent="true"/>
         
         <EditTextPreference 
@@ -38,36 +40,43 @@
         
 		<ListPreference 
 		    android:title="@string/pref_transport"
-			android:key="@string/pref_transport_key"/> 
+			android:key="@string/pref_transport_key"
+			android:layout="@layout/hidden"/> 
         
         <EditTextPreference
         	android:title="@string/pref_proxy"
         	android:summary="@string/pref_help_proxy"
+        	android:layout="@layout/hidden"
             android:persistent="true"/>
-        
+
         <CheckBoxPreference
         	android:title="@string/pref_enable_outbound_proxy"
         	android:dialogMessage="@string/pref_help_outbound_proxy"
         	android:summary="@string/pref_help_outbound_proxy"
+        	android:layout="@layout/hidden"
             android:persistent="true"/>
 			 
 		<EditTextPreference 
 			android:title="@string/pref_expire_title"
 			android:key="@string/pref_expire_key"
+			android:layout="@layout/hidden"
 		  	android:numeric="integer" />
 		
 		<EditTextPreference 
 		    android:title="@string/pref_prefix"
-			android:key="@string/pref_prefix_key"/>
+			android:key="@string/pref_prefix_key"
+			android:layout="@layout/hidden"/>
 
 		<CheckBoxPreference
 			android:title="@string/pref_avpf"
-			android:key="@string/pref_avpf_key"/>
+			android:key="@string/pref_avpf_key"
+			android:layout="@layout/hidden"/>
 
 		<EditTextPreference
 			android:title="@string/pref_avpf_rr_interval"
 			android:key="@string/pref_avpf_rr_interval_key"
-			android:numeric="integer"/>
+			android:numeric="integer"
+			android:layout="@layout/hidden"/>
 
 		<CheckBoxPreference 
 			android:title="@string/pref_escape_plus"
@@ -81,10 +90,12 @@
        
         <CheckBoxPreference
         	android:title="@string/pref_disable_account"
-            android:persistent="true"/>
+            android:persistent="true"
+	    android:layout="@layout/hidden"/>
         
         <CheckBoxPreference
         	android:title="@string/pref_default_account"
+		android:layout="@layout/hidden"
             android:persistent="true"/>
         
         <Preference 

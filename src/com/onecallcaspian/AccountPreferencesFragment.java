@@ -316,6 +316,7 @@ public class AccountPreferencesFragment extends PreferencesListFragment {
     	domain.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
     	domain.setOnPreferenceChangeListener(domainChangedListener);
     	
+    	
     	EditTextPreference displayName = (EditTextPreference) account.getPreference(4);
     	displayName.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
     	displayName.setOnPreferenceChangeListener(displayNameChangedListener);

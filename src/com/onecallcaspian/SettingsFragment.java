@@ -88,6 +88,17 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		initNetworkSettings();
 		initAdvancedSettings();
 
+		findPreference(getString(R.string.menu_logout_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				if (LinphoneActivity.isInstanciated()) {
+					logoutDefault();
+					return true;
+				}
+				return false;
+			}
+		});
+
 		findPreference(getString(R.string.menu_exit_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -295,6 +306,11 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		});
 	}
 
+	private void logoutDefault() {
+		int defaultAccountID = mPrefs.getDefaultAccountIndex();
+		mPrefs.deleteAccount(defaultAccountID);
+	}
+
 	private void initAccounts() {
 		PreferenceCategory accounts = (PreferenceCategory) findPreference(getString(R.string.pref_sipaccounts_key));
 		accounts.removeAll();
@@ -312,7 +328,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			if (username == null) {
 				account.setTitle(getString(R.string.pref_sipaccount));
 			} else {
-				account.setTitle(username + "@" + domain);
+				account.setTitle(username);
 			}
 
 			if (defaultAccountID == i) {

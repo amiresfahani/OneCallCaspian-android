@@ -57,6 +57,7 @@ import android.provider.MediaStore;
 import com.onecallcaspian.LinphoneSimpleListener.LinphoneServiceListener;
 import com.onecallcaspian.compatibility.Compatibility;
 import com.onecallcaspian.custom.ErrorReporter;
+import com.onecallcaspian.custom.FormattingHelp;
 
 /**
  * 
@@ -451,7 +452,8 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 			LinphoneProxyConfig lpc = LinphoneManager.getLc().getDefaultProxyConfig();
 			String id = lpc != null ? lpc.getIdentity() : "";
 			text = String.format(text, id);
-		}
+			text = FormattingHelp.stripDomainFromAddress(text);
+ 		}
 
 		Bitmap bm = null;
 		try {
