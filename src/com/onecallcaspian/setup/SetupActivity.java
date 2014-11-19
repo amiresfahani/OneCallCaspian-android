@@ -181,7 +181,6 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		} else {
 			if (mPrefs.isFirstLaunch()) {
 				mPrefs.setEchoCancellation(false);
-				mPrefs.setAutoStart(true);
 			}
 			success();
 		}
@@ -361,6 +360,8 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 	}
 
 	public void success() {
+		mPrefs.setAutoStart(true);
+		mPrefs.setPushNotificationEnabled(true);
 		mPrefs.firstLaunchSuccessful();
 		setResult(Activity.RESULT_OK);
 		finish();
