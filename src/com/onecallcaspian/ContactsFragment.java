@@ -47,6 +47,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.onecallcaspian.compatibility.Compatibility;
+import com.onecallcaspian.custom.FormattingHelp;
 
 /**
  * @author Sylvain Berfini
@@ -336,7 +337,8 @@ public class ContactsFragment extends Fragment implements OnClickListener, OnIte
 			}
 			
 			TextView name = (TextView) view.findViewById(R.id.name);
-			name.setText(contact.getName());
+			String shortName = FormattingHelp.stripDomainFromAddress(contact.getName());
+			name.setText(shortName);
 			
 			TextView separator = (TextView) view.findViewById(R.id.separator);
 			LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout);

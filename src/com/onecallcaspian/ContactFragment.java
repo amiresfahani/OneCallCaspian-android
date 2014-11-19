@@ -33,6 +33,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.onecallcaspian.compatibility.Compatibility;
+import com.onecallcaspian.custom.FormattingHelp;
 import com.onecallcaspian.ui.AvatarWithShadow;
 
 /**
@@ -94,7 +95,8 @@ public class ContactFragment extends Fragment implements OnClickListener {
         }
 		
 		TextView contactName = (TextView) view.findViewById(R.id.contactName);
-		contactName.setText(contact.getName());	
+		String shortName = FormattingHelp.stripDomainFromAddress(contact.getName());
+		contactName.setText(shortName);	
 		
 		TableLayout controls = (TableLayout) view.findViewById(R.id.controls);
 		controls.removeAllViews();
@@ -107,7 +109,8 @@ public class ContactFragment extends Fragment implements OnClickListener {
 			}
 			
 			TextView tv = (TextView) v.findViewById(R.id.numeroOrAddress);
-			tv.setText(displayednumberOrAddress);
+			String shortAddress = FormattingHelp.stripDomainFromAddress(displayednumberOrAddress);
+			tv.setText(shortAddress);
 			tv.setSelected(true);
 			
 			if (!displayChatAddressOnly) {
