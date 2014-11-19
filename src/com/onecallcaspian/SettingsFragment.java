@@ -121,6 +121,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 				return false;
 			}
 		});
+		
 		findPreference(getString(R.string.setup_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {

@@ -19,7 +19,8 @@
 
 	<Preference
 	    android:title="@string/setup_title"
-	    android:key="@string/setup_key"/>
+	    android:key="@string/setup_key"
+	    android:layout="@layout/hidden"/>
 	
 	<Preference
 	    android:title="@string/pref_add_account"

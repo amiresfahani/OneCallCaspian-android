@@ -26,6 +26,8 @@ import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallLog.CallStatus;
 
+import com.onecallcaspian.custom.FormattingHelp;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -466,7 +468,8 @@ public class HistoryFragment extends Fragment implements OnClickListener, OnChil
 			LinphoneUtils.findUriPictureOfContactAndSetDisplayName(address, view.getContext().getContentResolver());
 			String displayName = getCorrespondentDisplayName(log);
 			String sipUri = address.asStringUriOnly();
-			contact.setText(displayName + " (" + getChildrenCount(groupPosition) + ")");
+			String shortName = FormattingHelp.stripDomainFromAddress(displayName);
+			contact.setText(shortName + " (" + getChildrenCount(groupPosition) + ")");
 			view.setTag(sipUri);
 			
 			if (isEditMode) {

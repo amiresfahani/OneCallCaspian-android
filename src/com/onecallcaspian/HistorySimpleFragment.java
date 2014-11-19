@@ -28,6 +28,8 @@ import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallLog.CallStatus;
 
+import com.onecallcaspian.custom.FormattingHelp;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -395,7 +397,8 @@ public class HistorySimpleFragment extends Fragment implements OnClickListener, 
 			LinphoneUtils.findUriPictureOfContactAndSetDisplayName(address, view.getContext().getContentResolver());
 			String displayName = address.getDisplayName(); 
 			String sipUri = address.asStringUriOnly();
-
+			String shortName = FormattingHelp.stripDomainFromAddress(displayName);
+			
 			if (displayName == null) {
 				if (getResources().getBoolean(R.bool.only_display_username_if_unknown) && LinphoneUtils.isSipAddress(sipUri)) {
 					contact.setText(LinphoneUtils.getUsernameFromAddress(sipUri));
@@ -406,7 +409,7 @@ public class HistorySimpleFragment extends Fragment implements OnClickListener, 
 				if (getResources().getBoolean(R.bool.only_display_username_if_unknown) && LinphoneUtils.isSipAddress(address.getDisplayName())) {
 					contact.setText(LinphoneUtils.getUsernameFromAddress(address.getDisplayName()));
 				} else {
-					contact.setText(displayName);
+					contact.setText(shortName);
 				}
 			}
 			view.setTag(sipUri);
