@@ -61,6 +61,7 @@ import org.linphone.core.PayloadType;
 import org.linphone.core.PresenceActivityType;
 import org.linphone.core.PresenceModel;
 import org.linphone.core.PublishState;
+import org.linphone.core.Reason;
 import org.linphone.core.SubscriptionState;
 import org.linphone.core.TunnelConfig;
 import org.linphone.mediastream.Log;
@@ -748,6 +749,10 @@ public class LinphoneManager implements LinphoneCoreListener {
 
 		LinphoneAddress from = message.getFrom();
 
+		String ourDomain = mServiceContext.getResources().getString(R.string.default_domain);
+		if(from.getDomain().equals(ourDomain)) {
+			return;
+		}
 		String textMessage = message.getText();
 		String url = message.getExternalBodyUrl();
 		int id = -1;
@@ -854,6 +859,12 @@ public class LinphoneManager implements LinphoneCoreListener {
 	@SuppressLint("Wakelock")
 	public void callState(final LinphoneCore lc,final LinphoneCall call, final State state, final String message) {
 		Log.i("new state [",state,"]");
+		String ourDomain = mServiceContext.getResources().getString(R.string.default_domain);
+		if (state == State.IncomingReceived && !call.getRemoteAddress().getDomain().equals(ourDomain)) {
+			mLc.declineCall(call, Reason.NotAcceptable);
+			return;
+		}
+
 		if (state == State.IncomingReceived && !call.equals(lc.getCurrentCall())) {
 			if (call.getReplacedCall()!=null){
 				// attended transfer
