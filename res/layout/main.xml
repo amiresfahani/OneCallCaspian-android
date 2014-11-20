@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/topLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/caspian_dark_blue"
+    >
 
     <!-- Hack to adjust perfectly on every screen the bottom of the fragment with the curved menu -->
     <LinearLayout
@@ -63,13 +65,13 @@
 		    android:src="@drawable/mark"
 		    android:visibility="invisible" />
         
-    </LinearLayout>
+v    </LinearLayout>
     
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/mark"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true" >
 
         <LinearLayout
             android:id="@+id/fragmentContainer"
@@ -92,7 +94,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_alignParentTop="false"
+        android:background="@color/caspian_dark_blue"
+        android:orientation="horizontal" >
 
         <RelativeLayout
             android:layout_width="0dp"
