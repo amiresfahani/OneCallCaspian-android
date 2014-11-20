@@ -25,7 +25,7 @@
 
         <fragment
             android:id="@+id/status"
-            android:name="com.onecallcaspian.StatusFragment"
+            android:name="uk.co.onecallcaspian.StatusFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/status" />

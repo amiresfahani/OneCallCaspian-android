@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
   	android:background="@drawable/background">
     
-    <com.onecallcaspian.ui.AddressText
+    <uk.co.onecallcaspian.ui.AddressText
         android:id="@+id/Adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:src="@drawable/add_contact" />
         
-        <com.onecallcaspian.ui.CallButton
+        <uk.co.onecallcaspian.ui.CallButton
             android:id="@+id/Call"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:src="@drawable/call" />
         
-        <com.onecallcaspian.ui.EraseButton
+        <uk.co.onecallcaspian.ui.EraseButton
             android:id="@+id/Erase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         
     </LinearLayout>
 	
-    <com.onecallcaspian.ui.Numpad 
+    <uk.co.onecallcaspian.ui.Numpad 
 	    android:id="@+id/Dialer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

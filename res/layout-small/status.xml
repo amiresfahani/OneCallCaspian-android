@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 		    
-    <com.onecallcaspian.ui.SlidingDrawer
+    <uk.co.onecallcaspian.ui.SlidingDrawer
 		android:id="@+id/statusBar"
 		linphone:direction="topToBottom"
 		android:layout_width="match_parent"
@@ -257,6 +257,6 @@
 		
 		</RelativeLayout>
 		
-	</com.onecallcaspian.ui.SlidingDrawer>
+	</uk.co.onecallcaspian.ui.SlidingDrawer>
 	
 </RelativeLayout>
