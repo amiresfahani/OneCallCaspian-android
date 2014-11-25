@@ -364,6 +364,7 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		mPrefs.setAutoStart(true);
 		mPrefs.setPushNotificationEnabled(true);
 		mPrefs.firstLaunchSuccessful();
+		mPrefs.setReplacePlusByZeroZero(0, true);
 		setResult(Activity.RESULT_OK);
 		finish();
 	}
