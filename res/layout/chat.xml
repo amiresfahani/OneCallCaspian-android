@@ -74,17 +74,18 @@
 	            android:paddingLeft="10dp" />
 	        
 	        <EditText
-	            android:textCursorDrawable="@null"
 	            android:id="@+id/message"
-            	android:inputType="textMultiLine"
-            	android:maxLines="3"
-	            android:textColor="@android:color/black"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
-	            android:layout_toRightOf="@id/sendPicture"
+	            android:layout_centerVertical="true"
 	            android:layout_toLeftOf="@id/sendMessage"
-	            android:background="@drawable/chat_field_background"
-	            android:layout_centerVertical="true"/>
+	            android:layout_toRightOf="@id/sendPicture"
+	            android:inputType="textMultiLine"
+	            android:maxLines="3"
+	            android:padding="10dp"
+	            android:text="sdfg"
+	            android:textColor="@android:color/black"
+	            android:textCursorDrawable="@null" />
 	        
 	    </RelativeLayout>
 	    

@@ -750,9 +750,12 @@ public class LinphoneManager implements LinphoneCoreListener {
 		LinphoneAddress from = message.getFrom();
 
 		String ourDomain = mServiceContext.getResources().getString(R.string.default_domain);
-		if(from.getDomain().equals(ourDomain)) {
+		String fromDomain = from.getDomain(); 
+		if(!fromDomain.equals(ourDomain)) {
+			cr.deleteMessage(message);
 			return;
 		}
+		
 		String textMessage = message.getText();
 		String url = message.getExternalBodyUrl();
 		int id = -1;

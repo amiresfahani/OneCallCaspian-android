@@ -1,8 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Default" parent="android:Theme.Holo" />
-    <style name="NoTitle" parent="android:Theme.Holo.NoActionBar" />
-    <style name="FullScreen" parent="android:Theme.Holo.NoActionBar.Fullscreen" />
+    <style name="Default" parent="android:Theme.Holo.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:listViewStyle">@style/ListStyle</item>
+    </style>
+
+    <style name="FullScreen" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:listViewStyle">@style/ListStyle</item>
+    </style>
+
+    <style name="NoTitle" parent="android:Theme.NoTitleBar">
+        <item name="android:listViewStyle">@style/ListStyle</item>
+    </style>
+
+    <style name="Theme.Custom" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:listViewStyle">@style/MyListViewStyle</item>
+    </style>
+
+    <style name="MyListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
+        <item name="android:background">@android:color/black</item>
+    </style>
+
+    <style name="ListStyle" parent="@android:style/Widget.ListView">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <item name="android:textColorPrimary">@color/themedark</item>
+        <item name="android:textColorSecondary">@color/themedark</item>
+        <item name="android:textColorTertiary">@android:color/black</item>
+        <item name="android:textColorPrimaryDisableOnly">@android:color/black</item>
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+        <item name="android:cacheColorHint">@android:color/black</item>
+        <item name="android:editTextColor">@android:color/black</item>
+        <item name="android:textColorPrimaryInverse">@android:color/black</item>
+        <item name="android:textColorSecondaryInverse">@android:color/black</item>
+        <item name="android:textColorTertiaryInverse">@android:color/black</item>
+    </style>
+
+    <style name="SettingsTheme" parent="android:Theme.Holo.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/background</item>
+        <item name="android:listViewStyle">@style/ListStyle</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <item name="android:textColorPrimary">@color/themedark</item>
+        <item name="android:textColorSecondary">@color/themelight</item>
+        <item name="android:textColorTertiary">@android:color/black</item>
+        <item name="android:textColorPrimaryDisableOnly">@android:color/darker_gray</item>
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:listSeparatorTextViewStyle">@style/listSeparatorTextViewStyle</item>
+    </style>
+
+    <style name="textStyle" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ff8800</item>
+        <item name="android:background">#755fff</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="listSeparatorTextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/themedark</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@color/themelight</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="pref" parent="android:Theme.Holo.Light">
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
+    <style name="prefCat" parent="android:Theme.Holo.Light">
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
 
 </resources>
+<!--   -->
+

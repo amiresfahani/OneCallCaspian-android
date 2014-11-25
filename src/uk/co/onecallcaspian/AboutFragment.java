@@ -57,14 +57,9 @@ public class AboutFragment extends Fragment implements OnClickListener {
 			Log.e(e, "cannot get version name");
 		}
 
-		sendLogButton = view.findViewById(R.id.send_log);
-		sendLogButton.setOnClickListener(this);
-        sendLogLayout = (LinearLayout)view.findViewById(R.id.send_log_layout);
-        sendLogLayout.setVisibility(getResources().getBoolean(R.bool.enable_log_collect) ? View.VISIBLE : View.GONE);
-
 		exitButton = view.findViewById(R.id.exit);
 		exitButton.setOnClickListener(this);
-		exitButton.setVisibility(View.VISIBLE);
+		exitButton.setVisibility(View.GONE);
 
 
 		return view;

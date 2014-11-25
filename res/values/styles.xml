@@ -1,8 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Default" parent="android:Theme" />
-    <style name="NoTitle" parent="android:Theme.NoTitleBar" />
-    <style name="FullScreen" parent="android:Theme.NoTitleBar.Fullscreen" />
+    <style name="Default" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:listViewStyle">@style/ListStyle</item>
+`</style>
+
+    <style name="FullScreen" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:listViewStyle">@style/ListStyle</item>
+    </style>
+
+    <style name="NoTitle" parent="android:Theme.NoTitleBar">
+        <item name="android:listViewStyle">@style/ListStyle</item>
+    </style>
+
+    <style name="ListStyle" parent="@android:style/Widget.ListView">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <item name="android:textColorPrimary">@color/themedark</item>
+        <item name="android:textColorSecondary">@color/themedark</item>
+        <item name="android:textColorTertiary">@android:color/black</item>
+        <item name="android:textColorPrimaryDisableOnly">@android:color/black</item>
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+    </style>
+
+    <style name="PreferencesTheme" parent="android:Theme">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="SettingsTheme" parent="android:Theme">
+
+        <!-- Override properties according to your need -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/background</item>
+        <item name="android:listViewStyle">@style/ListStyle</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <item name="android:textColorPrimary">@color/themedark</item>
+        <item name="android:textColorSecondary">@color/themelight</item>
+        <item name="android:textColorTertiary">@android:color/black</item>
+        <item name="android:textColorPrimaryDisableOnly">@android:color/darker_gray</item>
+        <item name="android:textColorHint">@android:color/transparent</item>
+    </style>
 
 </resources>
