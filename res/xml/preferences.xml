@@ -213,7 +213,8 @@
 
 			<CheckBoxPreference
 				android:title="@string/pref_debug"
-			    android:key="@string/pref_debug_key"/>
+			    android:key="@string/pref_debug_key"
+			    android:layout="@layout/hidden"/>
 
 			<CheckBoxPreference
 				android:title="@string/pref_background_mode"
@@ -234,22 +235,26 @@
 
 			 <EditTextPreference
 				android:title="@string/pref_image_sharing_server_title"
-				android:key="@string/pref_image_sharing_server_key"/>
+				android:key="@string/pref_image_sharing_server_key"
+				android:layout="@layout/hidden"/>
 
 			 <EditTextPreference
 				android:title="@string/pref_remote_provisioning_title"
 				android:key="@string/pref_remote_provisioning_key"/>
 
 			 <PreferenceCategory
-			     android:title="@string/pref_primary_account_title">
+			     android:title="@string/pref_primary_account_title"
+			     android:layout="@layout/hidden">
 
 			     <EditTextPreference
 			         android:title="@string/pref_display_name_title"
-			         android:key="@string/pref_display_name_key"/>
+			         android:key="@string/pref_display_name_key"
+			         android:layout="@layout/hidden"/>
 
 			     <EditTextPreference
 			         android:title="@string/pref_user_name_title"
-			         android:key="@string/pref_user_name_key"/>
+			         android:key="@string/pref_user_name_key"
+			         android:layout="@layout/hidden"/>
 
 			 </PreferenceCategory>
 

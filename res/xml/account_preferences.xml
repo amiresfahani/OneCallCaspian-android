@@ -91,11 +91,11 @@
         <CheckBoxPreference
         	android:title="@string/pref_disable_account"
             android:persistent="true"
-	    android:layout="@layout/hidden"/>
+	    	android:layout="@layout/hidden"/>
         
         <CheckBoxPreference
         	android:title="@string/pref_default_account"
-		android:layout="@layout/hidden"
+			android:layout="@layout/hidden"
             android:persistent="true"/>
         
         <Preference 

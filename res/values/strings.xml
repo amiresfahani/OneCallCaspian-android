@@ -211,7 +211,7 @@
 	<string name="pref_domain">Domain*</string>
 	<string name="pref_passwd">Password*</string>
 	<string name="pref_username">Username*</string>
-	<string name="pref_sipaccount">SIP Account</string>
+	<string name="pref_sipaccount">Caspian ID</string>
 	<string name="wrong_username">wrong user name</string>
 	<string name="wrong_passwd">wrong password</string>
 	<string name="wrong_domain">Wrong domain</string>
@@ -259,7 +259,7 @@
 	<string name="pref_video_codec_h264_unavailable">Codec disabled, build the app from source code to enable it</string>
 	<string name="pref_video_codec_mpeg4_unavailable">Codec disabled, build the app from source code to enable it</string>
 
-	<string name="pref_sipaccounts">SIP Accounts</string>
+	<string name="pref_sipaccounts">Caspian ID</string>
 	<string name="pref_dtmf">Gate code</string>
 	<string name="pref_wifi_only">Use wifi only</string>
 	<string name="pref_push_notification">Enable push notifications</string>

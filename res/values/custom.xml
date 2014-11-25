@@ -5,7 +5,7 @@
     <string name="history_detail_date_format">EEEE MMM d HH:mm</string>
     <string name="messages_date_format">HH:mm d MMM</string>
     <string name="today_date_format">HH:mm</string>
-    <string name="picture_name_format">linphone-mms-%s.jpg</string>
+    <string name="picture_name_format">caspian-mms-%s.jpg</string>
     <string name="app_name">One Call Caspian</string>
     <string name="service_name">One Call Caspian</string>
     <string name="addressbook_label">One Call Caspian</string>
@@ -22,13 +22,12 @@
     <string name="about_text4">Disclaimer : </string>
     <string name="about_text5">CASPIAN MARKETS LIMITED does not take any responsibility for nor does it endorse the content of external hyperlinks on this app.</string>
     <string name="about_text6">One Call Caspian\'s Credit Card payments will appear as Caspian Markets on your bank or card statement.   </string>
-    <string name="about_text7">CASPIAN MARKETS LIMITED  \n
-
-23 ALBERT ROAD MANCHESTER  \n
-
-M19 2EQ \n
-
-UK </string>
+    <string name="about_text7">Caspian Markets LTD\n\n
+							23 Albert Road\n
+							Levenshulme\n
+							Manchester\n
+							M19 2EQ\n
+							UK </string>
     <string name="about_text8">	    onecallcaspian.co.uk is a trading name of CASPIAN MARKETS LIMITED,    a company registered in England and Wales. Company number: 8605389</string>
     <string name="about_text9">	    Customer Service: 03303500153 \n
 
