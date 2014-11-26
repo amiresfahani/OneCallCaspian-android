@@ -8,15 +8,16 @@
         android:id="@+id/Adress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:background="@drawable/dialer_address_background"
-        android:inputType="textEmailAddress"
+        android:enabled="false"
         android:hint="@string/addressHint"
+        android:inputType="textEmailAddress"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-       	android:layout_gravity="center" 
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:textColor="@android:color/white" />
     
     <LinearLayout
         android:id="@+id/controls"
