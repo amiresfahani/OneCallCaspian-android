@@ -271,7 +271,7 @@ public class ApiFivePlus {
 	}
 	
 	public static Notification createMessageNotification(Context context, String title, String msg, PendingIntent intent) {
-		Uri sound = Uri.parse("android.resource://com.onecallcaspian/" + R.raw.mt1);
+		Uri sound = Uri.parse("android.resource://uk.co.onecallcaspian/" + R.raw.mt1);
 
 		Notification notif = new Notification();
 		notif.icon = R.drawable.chat_icon_over;

@@ -62,8 +62,9 @@
         <activity
             android:name="uk.co.onecallcaspian.LinphoneLauncherActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Default"
-            android:windowSoftInputMode="adjustPan|stateHidden" android:screenOrientation="portrait">
+            android:windowSoftInputMode="adjustPan|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -95,8 +96,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-                <activity
-            android:name="uk.co.onecallcaspian.custom.SignUpUp"
+        <activity
+            android:name="uk.co.onecallcaspian.custom.SignUp"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -134,7 +135,8 @@
             android:name="uk.co.onecallcaspian.InCallActivity"
             android:launchMode="singleTop"
             android:noHistory="true"
-            android:theme="@style/FullScreen" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -224,35 +226,40 @@
 
         <activity
             android:name="uk.co.onecallcaspian.tutorials.TutorialLauncherActivity"
-            android:theme="@style/Default" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name="uk.co.onecallcaspian.tutorials.TutorialBuddyStatusActivity"
-            android:theme="@style/Default" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name="uk.co.onecallcaspian.tutorials.TutorialChatRoomActivity"
-            android:theme="@style/Default" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name="uk.co.onecallcaspian.tutorials.TutorialHelloWorldActivity"
-            android:theme="@style/Default" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name="uk.co.onecallcaspian.tutorials.TutorialRegistrationActivity"
-            android:theme="@style/Default" android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

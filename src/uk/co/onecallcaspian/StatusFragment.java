@@ -661,6 +661,9 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 	private class BalanceTask extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void...params) {
+			if(mPrefs.getAccountCount() < 1) {
+				return null;
+			}
 			String user = mPrefs.getAccountUsername(0);
 			String password = mPrefs.getAccountPassword(0);
 			String ret = null;

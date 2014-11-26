@@ -59,7 +59,7 @@ public class ApiElevenPlus {
 					.replace("%i", String.valueOf(msgCount));
 		}
 		
-		Uri sound = Uri.parse("android.resource://com.onecallcaspian/" + R.raw.mt1);
+		Uri sound = Uri.parse("android.resource://uk.co.onecallcaspian/" + R.raw.mt1);
 
 		Notification notif = new Notification.Builder(context)
 						.setContentTitle(title)
