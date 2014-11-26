@@ -15,5 +15,6 @@ public class WebApis {
 	//http://onecallcaspian.co.uk/mobile/forgotPassword?phone_code=91&phone_number=9643258963
 	public static String forgot_password = "http://onecallcaspian.co.uk/mobile/forgotPassword?"; 
 	
+	//http://onecallcaspian.co.uk/mobile/credit?phone_number=1234567890&password=123456
 	public static String balance = "http://onecallcaspian.co.uk/mobile/credit?";
 }

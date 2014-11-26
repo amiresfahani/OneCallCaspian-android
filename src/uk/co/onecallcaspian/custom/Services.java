@@ -5,19 +5,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.util.Xml.Encoding;
 
 public class Services {
 
@@ -417,17 +424,14 @@ public class Services {
 		try {
 			HttpClient client = new DefaultHttpClient();
 
-			HttpPost post = new HttpPost(WebApis.balance);
+			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
+			pairs.add(new BasicNameValuePair("phone_number", username));
+			pairs.add(new BasicNameValuePair("password", password));
+			String paramString = URLEncodedUtils.format(pairs, "utf-8");
+			String url = WebApis.balance + paramString;
 
-			MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			HttpResponse response = null;
-
-			// http://onecallcaspian.co.uk/mobile/credit?phone_number=989193655637&password=123456
-			reqEntity.addPart("phone_number", new StringBody(username));
-			reqEntity.addPart("password", new StringBody(password));
-
-			post.setEntity(reqEntity);
-			response = client.execute(post);
+			HttpGet get= new HttpGet(url);
+			HttpResponse response = client.execute(get);
 
 			if (response.getStatusLine().getStatusCode() != 200) {
 				Log.d("MyApp", "Server encountered an error");

@@ -34,15 +34,20 @@ import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
 import org.linphone.mediastream.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnNotifyReceivedListener;
 import uk.co.onecallcaspian.custom.FormattingHelp;
+import uk.co.onecallcaspian.custom.Services;
+import uk.co.onecallcaspian.data.JsonCredit;
 import uk.co.onecallcaspian.ui.SlidingDrawer;
 import uk.co.onecallcaspian.ui.SlidingDrawer.OnDrawerOpenListener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -57,8 +62,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
-import uk.co.onecallcaspian.R;
+import android.widget.Toast;
 
 /**
  * @author Sylvain Berfini
@@ -66,16 +70,17 @@ import uk.co.onecallcaspian.R;
 public class StatusFragment extends Fragment implements LinphoneOnNotifyReceivedListener {
 	private Handler mHandler = new Handler();
 	private Handler refreshHandler = new Handler();
-	private TextView statusText, exit, voicemailCount;
+	private TextView statusText, exit, balance;
 	private ImageView statusLed, callQuality, encryption, background;
 	private ListView sliderContentAccounts;
-	private TableLayout callStats;
 	private SlidingDrawer drawer;
-//	private LinearLayout allAccountsLed;
+	private TableLayout callStats;
+	//	private LinearLayout allAccountsLed;
 	private Runnable mCallQualityUpdater;
 	private boolean isInCall, isAttached = false;
 	private Timer mTimer;
 	private TimerTask mTask;
+	private LinphonePreferences mPrefs;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -100,7 +105,7 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 		
 		sliderContentAccounts = (ListView) view.findViewById(R.id.accounts);
 
-		voicemailCount = (TextView) view.findViewById(R.id.voicemailCount);
+		balance = (TextView) view.findViewById(R.id.statusBalance);
 		
 		exit = (TextView) view.findViewById(R.id.exit);
 		exit.setOnTouchListener(new View.OnTouchListener() {
@@ -118,6 +123,7 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 		// We create it once to not delay the first display
 		populateSliderContent();
 
+		mPrefs = LinphonePreferences.instance();
         return view;
     }
 	
@@ -173,14 +179,12 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 		if (LinphoneManager.isInstanciated() && LinphoneManager.getLc() != null) {
 			sliderContentAccounts.setVisibility(View.GONE);
 			callStats.setVisibility(View.GONE);
-			voicemailCount.setVisibility(View.GONE);
 			
 			if (isInCall && isAttached && getResources().getBoolean(R.bool.display_call_stats)) {
 				callStats.setVisibility(View.VISIBLE);
 				LinphoneCall call = LinphoneManager.getLc().getCurrentCall();
 				initCallStatsRefresher(call, callStats);
 			} else if (!isInCall) {
-				voicemailCount.setVisibility(View.VISIBLE);
 				sliderContentAccounts.setVisibility(View.VISIBLE);
 				AccountsListAdapter adapter = new AccountsListAdapter();
 				sliderContentAccounts.setAdapter(adapter);
@@ -360,6 +364,9 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				drawer.unlock();
 			}
 		}
+		
+		BalanceTask balanceTask = new BalanceTask();
+		balanceTask.execute();
 	}
 	
 	@Override
@@ -374,7 +381,6 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 	
 	public void refreshStatusItems(final LinphoneCall call, boolean isVideoEnabled) {
 		if (call != null) {
-			voicemailCount.setVisibility(View.GONE);
 			MediaEncryption mediaEncryption = call.getCurrentParamsCopy().getMediaEncryption();
 
 			if (isVideoEnabled) {
@@ -645,10 +651,42 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 		int unreadCount = -1;
 
 		if (unreadCount > 0) {
-			voicemailCount.setText(unreadCount + " unread messages");
-			voicemailCount.setVisibility(View.VISIBLE);
+//			voicemailCount.setText(unreadCount + " unread messages");
+//			voicemailCount.setVisibility(View.VISIBLE);
 		} else {
-			voicemailCount.setVisibility(View.GONE);
+//			voicemailCount.setVisibility(View.GONE);
+		}
+	}
+	
+	private class BalanceTask extends AsyncTask<Void, Void, String> {
+		@Override
+		protected String doInBackground(Void...params) {
+			String user = mPrefs.getAccountUsername(0);
+			String password = mPrefs.getAccountPassword(0);
+			String ret = null;
+			if(user != null && password != null) {
+				ret = Services.getBalanceDetails(user, password);
+			}
+			return ret;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if(result == null) {
+				return;
+			}
+			Gson gson = new Gson();
+			JsonCredit credit = gson.fromJson(result, JsonCredit.class);
+			if(credit != null) {
+				if(credit.error) {
+					balance.setText(R.string.balance_unknown);
+					return;
+				}
+				String balanceFormat = getActivity().getResources().getString(R.string.balance_format);
+				String balanceFormatted = String.format(balanceFormat, credit.balance);
+				balance.setText(balanceFormatted);
+			}
 		}
 	}
 }

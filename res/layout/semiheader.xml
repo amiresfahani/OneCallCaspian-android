@@ -9,15 +9,13 @@
     
     <TextView
         android:id="@+id/semiheading"
-           android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="helloworld"
-    android:textColor="@color/themedark"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        
-        />
+        android:padding="12dp"
+        android:text="About Us"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/themedark" />
     
     </RelativeLayout>
 </merge>
