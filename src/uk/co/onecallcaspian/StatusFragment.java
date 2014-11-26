@@ -661,7 +661,7 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 	private class BalanceTask extends AsyncTask<Void, Void, String> {
 		@Override
 		protected String doInBackground(Void...params) {
-			if(mPrefs.getAccountCount() < 1) {
+			if(mPrefs == null || mPrefs.getAccountCount() < 1) {
 				return null;
 			}
 			String user = mPrefs.getAccountUsername(0);
@@ -684,6 +684,10 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 			if(credit != null) {
 				if(credit.error) {
 					balance.setText(R.string.balance_unknown);
+					return;
+				}
+				Activity activity = getActivity();
+				if(activity == null) {
 					return;
 				}
 				String balanceFormat = getActivity().getResources().getString(R.string.balance_format);

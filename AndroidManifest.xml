@@ -109,7 +109,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="uk.co.onecallcaspian.custom.ForgotPasswordrd"
+            android:name="uk.co.onecallcaspian.custom.ForgotPassword"
             android:screenOrientation="portrait" >
         </activity>
         <activity

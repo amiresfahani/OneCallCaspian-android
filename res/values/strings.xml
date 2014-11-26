@@ -487,6 +487,6 @@
 	<string name="welcome">Welcome to One Call Caspian</string>
 	<string name ="internet_connection_error">Internet Connection Error. Please connect to working Internet connection</string>
 	
-	<string name="balance_unknown">Unknown €</string>
-	<string name="balance_format">%.2f €</string>
+	<string name="balance_unknown">Unknown £</string>
+	<string name="balance_format">%.2f £</string>
 </resources>
