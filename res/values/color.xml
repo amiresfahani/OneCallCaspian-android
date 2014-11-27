@@ -2,7 +2,7 @@
 <resources>
     <color name="main_app_color">#ffcf4c29</color>
     
-    <color name="text_selected">#ffcf4c29</color>
+    <color name="text_selected">#ff66a7c8</color>
     <color name="text_over">#ffb9c4cb</color>
     <color name="text_default">#ff5b656f</color>
     <color name="text_disabled">#ffa6b3bf</color>

@@ -150,6 +150,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         remoteComposing.setVisibility(View.GONE);
         
         messagesList = (ListView) view.findViewById(R.id.chatMessageList);
+        messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        messagesList.setStackFromBottom(true);
+
         
         message = (EditText) view.findViewById(R.id.message);
         if (!getActivity().getResources().getBoolean(R.bool.allow_chat_multiline)) {
@@ -662,7 +665,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	}
 
 	private void scrollToEnd() {
-		messagesList.smoothScrollToPosition(messagesList.getCount());
+		// USing Android transcript mode. See onCreate how.
+		// messagesList.smoothScrollToPosition(messagesList.getCount());
 		chatRoom.markAsRead();
 	}
 

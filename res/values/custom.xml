@@ -11,7 +11,7 @@
     <string name="addressbook_label">One Call Caspian</string>
     <string name="notification_title">One Call Caspian</string>
     <string name="wait_dialog_text">Starting up</string>
-    <string name="notification_registered">Registered as %s </string>
+    <string name="notification_registered">%s</string>
     <string name="notification_register_failure">Fails to register to %s</string>
     <string name="about_title">	    About Us</string>
     <string name="settings_title">	    Settings</string>

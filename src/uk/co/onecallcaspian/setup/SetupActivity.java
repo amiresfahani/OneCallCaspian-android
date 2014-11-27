@@ -20,8 +20,10 @@ package uk.co.onecallcaspian.setup;
  */
 import org.linphone.core.LinphoneAddress.TransportType;
 import org.linphone.core.LinphoneCore.RegistrationState;
+import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.core.PayloadType;
 
 import uk.co.onecallcaspian.LinphoneManager;
 import uk.co.onecallcaspian.LinphonePreferences;
@@ -365,7 +367,34 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		mPrefs.setPushNotificationEnabled(true);
 		mPrefs.firstLaunchSuccessful();
 		mPrefs.setReplacePlusByZeroZero(0, true);
+		enableAllCodecs();
 		setResult(Activity.RESULT_OK);
 		finish();
+	}
+
+	private void enableAllCodecs() {
+		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+		if(lc == null) return;
+		
+		PayloadType[] audioCodecs = lc.getAudioCodecs();
+		PayloadType[] videoCodecs = lc.getVideoCodecs();
+		
+		for(PayloadType pt : audioCodecs) {
+			try {
+				lc.enablePayloadType(pt, true);
+			} catch (LinphoneCoreException e) {
+				e.printStackTrace();
+				continue;
+			}
+		}
+
+		for(PayloadType pt : videoCodecs) {
+			try {
+				lc.enablePayloadType(pt, true);
+			} catch (LinphoneCoreException e) {
+				e.printStackTrace();
+				continue;
+			}
+		}
 	}
 }

@@ -102,6 +102,15 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				populateSliderContent();
 			}
 		});
+		drawer.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LinphoneCore lc = LinphoneManager.getLc();
+				if (lc.isNetworkReachable()) {
+					lc.refreshRegisters();
+				}				
+			}
+		});
 		
 		sliderContentAccounts = (ListView) view.findViewById(R.id.accounts);
 

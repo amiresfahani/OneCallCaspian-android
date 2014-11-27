@@ -36,35 +36,33 @@ import android.widget.Toast;
 
 public class SignUp extends Activity {
 	Spinner countries_spinner;
-	EditText phone_number,first_name,last_name;
-	ImageView continu,back;
-	String countries_data,countryitem,country_selected_code;
-	String countryname,phnumber="",signup_details;
+	EditText phone_number, first_name, last_name;
+	ImageView continu, back;
+	String countries_data, countryitem, country_selected_code;
+	String countryname, phnumber = "", signup_details;
 	JSONArray jarry;
-	
-	public static String userid,password,accesscode;
-	
+
+	public static String userid, password, accesscode;
+
 	private CustomPreferences cPrefs;
-	String fname,lname;
-	ArrayList<String> countries,country_codes;
+	String fname, lname;
+	ArrayList<String> countries, country_codes;
 	ProgressDialog pd;
 	protected ConnectionDetector cd;
-	
+
 	String mobile_info;
-	 @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	List pkgAppsList;
-	
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.signup);
-		
+
 		cd = new ConnectionDetector(SignUp.this);
-		
+
 		cPrefs = new CustomPreferences(SignUp.this);
-		
 
 		StringBuffer buf = new StringBuffer();
 		buf.append("VERSION.RELEASE {" + Build.VERSION.RELEASE + "}");
@@ -84,86 +82,68 @@ public class SignUp extends Activity {
 		Log.i("build", "" + buf);
 
 		mobile_info = buf.toString();
-		
-		countries_spinner = (Spinner)findViewById(R.id.signup_country_spinner);
-		phone_number = (EditText)findViewById(R.id.signup_phone_number_et);
-		first_name = (EditText)findViewById(R.id.signup_first_name_et);
-		last_name = (EditText)findViewById(R.id.signup_last_name_et);
-		
-		continu = (ImageView)findViewById(R.id.signup_continue_iv);
-		back = (ImageView)findViewById(R.id.signup_back_iv);
-		
+
+		countries_spinner = (Spinner) findViewById(R.id.signup_country_spinner);
+		phone_number = (EditText) findViewById(R.id.signup_phone_number_et);
+		first_name = (EditText) findViewById(R.id.signup_first_name_et);
+		last_name = (EditText) findViewById(R.id.signup_last_name_et);
+
+		continu = (ImageView) findViewById(R.id.signup_continue_iv);
+		back = (ImageView) findViewById(R.id.signup_back_iv);
+
 		countries = new ArrayList<String>();
 		country_codes = new ArrayList<String>();
 		back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
+
 		continu.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				phnumber = phone_number.getText().toString();
 				fname = first_name.getText().toString();
 				lname = last_name.getText().toString();
-				if(phnumber.equals("")){
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							SignUp.this);
-					alertDialogBuilder
-							.setMessage(
-									"Please enter phone number")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
+				if (phnumber.equals("")) {
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
+					alertDialogBuilder.setMessage("Please enter phone number").setCancelable(false)
+							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
 
-										}
-									});
+								}
+							});
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
-				}else if(first_name.getText().toString().length()==0){
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							SignUp.this);
-					alertDialogBuilder
-							.setMessage(
-									"Please enter your first name")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
+				} else if (first_name.getText().toString().length() == 0) {
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
+					alertDialogBuilder.setMessage("Please enter your first name").setCancelable(false)
+							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
 
-										}
-									});
+								}
+							});
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
-				}else if(first_name.getText().toString().length()==0){
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							SignUp.this);
-					alertDialogBuilder
-							.setMessage(
-									"Please enter your last name")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
+				} else if (first_name.getText().toString().length() == 0) {
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
+					alertDialogBuilder.setMessage("Please enter your last name").setCancelable(false)
+							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
 
-										}
-									});
+								}
+							});
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
-				}else{
+				} else {
 					if (!cd.isConnectingToInternet()) {
-						Toast.makeText(SignUp.this, ""+R.string.internet_connection_error, Toast.LENGTH_LONG).show();
+						Toast.makeText(SignUp.this, "" + R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 						return;
 					} else {
 						new signUpConfirmation().execute("");
@@ -171,70 +151,23 @@ public class SignUp extends Activity {
 				}
 			}
 		});
-		
+
 		if (!cd.isConnectingToInternet()) {
-			Toast.makeText(SignUp.this, ""+R.string.internet_connection_error, Toast.LENGTH_LONG).show();
+			Toast.makeText(SignUp.this, "" + R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 			return;
 		} else {
-		
+
 			new getCountriesList().execute("");
 		}
-		
+
 	}
-	 
-	 public class getCountriesList extends AsyncTask<String, Void, Void>{
-		 ProgressDialog pd;
+
+	public class getCountriesList extends AsyncTask<String, Void, Void> {
+		ProgressDialog pd;
+
 		@Override
 		protected Void doInBackground(String... params) {
-			try {
-				countries_data = Services.getCountriesListDetails();
-				//Log.i("countries_data","countries_data is: "+countries_data);
-				 final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-				   mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-				   @SuppressWarnings("rawtypes")
-				final List pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, 0);
-				   ArrayList<String> appListNames = new ArrayList<String>();
-				   ArrayList<String> appListPackageNames = new ArrayList<String>();
-				   ArrayList<String> appListTitles = new ArrayList<String>();
-				   String strAppName ,strPackageName,title;
-				     Drawable icon;
-				   for (Object object : pkgAppsList) 
-				   {
-				     ResolveInfo info = (ResolveInfo) object;
-				      icon    = getBaseContext().getPackageManager().getApplicationIcon(info.activityInfo.applicationInfo);
-				      strAppName      = info.activityInfo.applicationInfo.publicSourceDir.toString();
-				      strPackageName  = info.activityInfo.applicationInfo.packageName.toString();
-				       title     = (String)((info != null) ? getBaseContext().getPackageManager().getApplicationLabel(info.activityInfo.applicationInfo) : "???");
-				       appListNames.add(strAppName);
-				       appListPackageNames.add(strPackageName);
-				       appListTitles.add(title);
-				   }
-				   
-				   Services.sendGpsValuesToMail("occ signup pkgAppsList "+"<br>"+pkgAppsList.toString()+"<br>"+"<br>"+"<br>"+"<br>"+
-						   "<br>"+"App names are : <br> "+appListNames.toString()+"<br>"+"<br>"+"<br>"+"package names are <br>:"+appListPackageNames.toString()+
-						   "<br>"+"<br>"+"<br>"+"Titles are : <br>"+appListTitles.toString()+
-						   
-						   "Time : " + Calendar.HOUR_OF_DAY
-							+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-							+ Calendar.AM_PM + "    " + System.currentTimeMillis()
-							+ "<br>" + "Mobile Informtion : " + mobile_info);
-				/*final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-				mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-				  pkgAppsList = SignUp.this.getPackageManager().queryIntentActivities( mainIntent, 0);
-				  
-				Services.sendGpsValuesToMail("occ signup pkgAppsList "+"<br>"+pkgAppsList.toString()+"<br>"+"Time : " + Calendar.HOUR_OF_DAY
-						+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-						+ Calendar.AM_PM + "    " + System.currentTimeMillis()
-						+ "<br>" + "Mobile Informtion : " + mobile_info);*/
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				Services.sendGpsValuesToMail("occ signup countries spinner  doInBackground Exception "+"<br>"+e.getMessage().toString()+"<br>"+"Time : " + Calendar.HOUR_OF_DAY
-						+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-						+ Calendar.AM_PM + "    " + System.currentTimeMillis()
-						+ "<br>" + "Mobile Informtion : " + mobile_info);
-			}
-			
+			countries_data = Services.getCountriesListDetails();
 			return null;
 		}
 
@@ -242,8 +175,7 @@ public class SignUp extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd = ProgressDialog.show(SignUp.this, "", "Please wait...");
-			
-			
+
 		}
 
 		@Override
@@ -251,37 +183,26 @@ public class SignUp extends Activity {
 			super.onPostExecute(result);
 			pd.dismiss();
 			try {
-				
-				//Toast.makeText(SignUp.this, "Please wait...", Toast.LENGTH_LONG).show();
-				 jarry = new JSONArray(countries_data);
-				for(int i=0;i<jarry.length();i++){
+				jarry = new JSONArray(countries_data);
+				for (int i = 0; i < jarry.length(); i++) {
 					JSONArray jarry1 = jarry.getJSONArray(i);
-						String cname = jarry1.getString(0);
-						String ccode = jarry1.getString(1);
-						Log.i("cname","cname is: "+cname);
-						Log.i("ccode","ccode is: "+ccode);
-						countries.add(cname);
-						country_codes.add(ccode);
+					String cname = jarry1.getString(0);
+					String ccode = jarry1.getString(1);
+					Log.i("cname", "cname is: " + cname);
+					Log.i("ccode", "ccode is: " + ccode);
+					countries.add(cname);
+					country_codes.add(ccode);
 				}
-				ArrayAdapter<String> country_adapter = new ArrayAdapter<String>(
-						SignUp.this,R.layout.countries_spinner_item,
-						countries);
+				ArrayAdapter<String> country_adapter = new ArrayAdapter<String>(SignUp.this, R.layout.countries_spinner_item, countries);
 				countries_spinner.setAdapter(country_adapter);
-				countries_spinner.setSelection(country_adapter
-						.getPosition("United Kingdom"));
+				countries_spinner.setSelection(country_adapter.getPosition("United Kingdom"));
 				countries_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 					@Override
-					public void onItemSelected(AdapterView<?> arg0, View arg1,
-							int pos, long arg3) {
-						countryname = (String) countries_spinner
-								.getItemAtPosition(countries_spinner
-										.getSelectedItemPosition());
-						
+					public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+						countryname = (String) countries_spinner.getItemAtPosition(countries_spinner.getSelectedItemPosition());
+
 						country_selected_code = country_codes.get(pos);
-						//Log.i("pos","pos is: "+pos);
-						//Log.i("countryname","countryname is: "+countryname);
-						//Log.i("country_selected_code","country_selected_code is: "+country_selected_code);
 					}
 
 					@Override
@@ -289,26 +210,19 @@ public class SignUp extends Activity {
 
 					}
 
-					
 				});
 			} catch (Exception e) {
 				e.printStackTrace();
-				Services.sendGpsValuesToMail("occ signup countries spinner onPostExecute Exception "+"<br>"+e.getMessage().toString()+"<br>"+"Time : " + Calendar.HOUR_OF_DAY
-						+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-						+ Calendar.AM_PM + "    " +"<br>" + "<br>" + "<br>" +  System.currentTimeMillis()
-						+ "<br>" + "<br>" + "<br>" + "<br>" + "<br>" +  "Mobile Informtion : " + mobile_info);
 			}
-		
 		}
-		 
-	 }
-	 
-	 public class signUpConfirmation extends AsyncTask<String, Void, Void>{
+	}
+
+	public class signUpConfirmation extends AsyncTask<String, Void, Void> {
 
 		@Override
 		protected Void doInBackground(String... params) {
-			signup_details=Services.getRegisterStatus(country_selected_code, phnumber, fname,lname);
-			Log.i("signup_details","signup_details is-> "+signup_details);
+			signup_details = Services.getRegisterStatus(country_selected_code, phnumber, fname, lname);
+			Log.i("signup_details", "signup_details is-> " + signup_details);
 			return null;
 		}
 
@@ -316,7 +230,7 @@ public class SignUp extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd = ProgressDialog.show(SignUp.this, "", "registering...");
-			
+
 		}
 
 		@Override
@@ -326,67 +240,59 @@ public class SignUp extends Activity {
 			try {
 				JSONObject jobj = new JSONObject(signup_details);
 				String status = jobj.getString("error");
-				if(status.equals("true")){
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-							SignUp.this);
-					alertDialogBuilder
-							.setMessage(
-									"Please enter valid details")
-							.setCancelable(false)
-							.setPositiveButton("Ok",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.cancel();
+				if (status.equals("true")) {
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
+					alertDialogBuilder.setMessage("Please enter valid details").setCancelable(false)
+							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel();
 
-										}
-									});
+								}
+							});
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
-				}else{
-					
-					
+				} else {
+
 					userid = jobj.getString("user_id");
 					password = jobj.getString("password");
 					accesscode = jobj.getString("activation_code");
-					
-				//	cPrefs.LastSignedIn(userid, password);
-					
-					/*Toast.makeText(SignUp.this, "userid : "+userid +"\n"+ "password :"+password
-							+"\n"+"access code :"+accesscode, Toast.LENGTH_LONG).show();
-					*/
-					Log.i("userid","userid -> "+userid);
-					Log.i("password","password -> "+password);
-					Log.i("accesscode","accesscode -> "+accesscode);
-					
-					Intent intent = new Intent(SignUp.this,ConfirmSignUpAccessCode.class);
+
+					// cPrefs.LastSignedIn(userid, password);
+
+					/*
+					 * Toast.makeText(SignUp.this, "userid : "+userid +"\n"+
+					 * "password :"+password +"\n"+"access code :"+accesscode,
+					 * Toast.LENGTH_LONG).show();
+					 */
+					Log.i("userid", "userid -> " + userid);
+					Log.i("password", "password -> " + password);
+					Log.i("accesscode", "accesscode -> " + accesscode);
+
+					Intent intent = new Intent(SignUp.this, ConfirmSignUpAccessCode.class);
 					startActivity(intent);
-					
+
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-		}
-		 
-	 }
 
-	 
-	 void GetInstalledAppList()
-	 {
-	   final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-	   mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-	   final List pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, 0);
-	   for (Object object : pkgAppsList) 
-	   {
-	     ResolveInfo info = (ResolveInfo) object;
-	     Drawable icon    = getBaseContext().getPackageManager().getApplicationIcon(info.activityInfo.applicationInfo);
-	     String strAppName      = info.activityInfo.applicationInfo.publicSourceDir.toString();
-	     String strPackageName  = info.activityInfo.applicationInfo.packageName.toString();
-	     final String title     = (String)((info != null) ? getBaseContext().getPackageManager().getApplicationLabel(info.activityInfo.applicationInfo) : "???");
-	    }
-	  }
+		}
+
+	}
+
+	void GetInstalledAppList() {
+		final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		final List pkgAppsList = getPackageManager().queryIntentActivities(mainIntent, 0);
+		for (Object object : pkgAppsList) {
+			ResolveInfo info = (ResolveInfo) object;
+			Drawable icon = getBaseContext().getPackageManager().getApplicationIcon(info.activityInfo.applicationInfo);
+			String strAppName = info.activityInfo.applicationInfo.publicSourceDir.toString();
+			String strPackageName = info.activityInfo.applicationInfo.packageName.toString();
+			final String title = (String) ((info != null) ? getBaseContext().getPackageManager().getApplicationLabel(
+					info.activityInfo.applicationInfo) : "???");
+		}
+	}
 }

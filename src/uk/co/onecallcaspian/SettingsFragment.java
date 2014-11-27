@@ -1,23 +1,23 @@
 package uk.co.onecallcaspian;
 
 /*
-SettingsFragment.java
-Copyright (C) 2013  Belledonne Communications, Grenoble, France
+ SettingsFragment.java
+ Copyright (C) 2013  Belledonne Communications, Grenoble, France
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,8 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 
 	// Inits the values or the listener on some settings
 	private void initSettings() {
-		//Init accounts on Resume instead of on Create to update the account list when coming back from wizard
+		// Init accounts on Resume instead of on Create to update the account
+		// list when coming back from wizard
 
 		initTunnelSettings();
 		initAudioSettings();
@@ -123,13 +124,13 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 				return false;
 			}
 		});
-		
+
 		findPreference(getString(R.string.setup_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				Intent intent = new Intent(LinphoneService.instance(), SetupActivity.class);
-	        	startActivityForResult(intent, WIZARD_INTENT);
-	        	return true;
+				startActivityForResult(intent, WIZARD_INTENT);
+				return true;
 			}
 		});
 		findPreference(getString(R.string.pref_add_account_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -137,12 +138,13 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			public boolean onPreferenceClick(Preference preference) {
 				int nbAccounts = mPrefs.getAccountCount();
 				LinphoneActivity.instance().displayAccountSettings(nbAccounts);
-	        	return true;
+				return true;
 			}
 		});
 	}
 
-	// Sets listener for each preference to update the matching value in linphonecore
+	// Sets listener for each preference to update the matching value in
+	// linphonecore
 	private void setListeners() {
 		setTunnelPreferencesListener();
 		setAudioPreferencesListener();
@@ -162,11 +164,11 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			emptyAndHidePreference(R.string.pref_sipaccounts_key);
 		}
 
-		if (getResources().getBoolean(R.bool.hide_wizard)){
+		if (getResources().getBoolean(R.bool.hide_wizard)) {
 			hidePreference(R.string.setup_key);
 		}
 
-		if(!getResources().getBoolean(R.bool.replace_wizard_with_old_interface)){
+		if (!getResources().getBoolean(R.bool.replace_wizard_with_old_interface)) {
 			hidePreference(R.string.pref_add_account_key);
 		}
 
@@ -259,7 +261,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 	}
 
 	private void setPreferenceDefaultValueAndSummary(int pref, String value) {
-		if(value != null) {
+		if (value != null) {
 			EditTextPreference etPref = (EditTextPreference) findPreference(getString(pref));
 			etPref.setText(value);
 			etPref.setSummary(value);
@@ -338,8 +340,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 				account.setSummary(R.string.default_account_flag);
 			}
 
-			account.setOnPreferenceClickListener(new OnPreferenceClickListener()
-			{
+			account.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
 					LinphoneActivity.instance().displayAccountSettings(accountId);
 					return false;
@@ -404,11 +405,11 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		if (!hasSrtp && !hasZrtp) {
 			pref.setEnabled(false);
 		} else {
-			if (hasSrtp){
+			if (hasSrtp) {
 				entries.add(getString(R.string.media_encryption_srtp));
 				values.add(getString(R.string.pref_media_encryption_key_srtp));
 			}
-			if (hasZrtp){
+			if (hasZrtp) {
 				entries.add(getString(R.string.media_encryption_zrtp));
 				values.add(getString(R.string.pref_media_encryption_key_zrtp));
 			}
@@ -472,7 +473,6 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 					codec.setTitle("AAC-ELD");
 				}
 			}
-
 			codec.setSummary(pt.getRate() + " Hz");
 			codec.setChecked(lc.isPayloadTypeEnabled(pt));
 
@@ -531,26 +531,26 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			}
 		});
 
-		findPreference(getString(R.string.pref_adaptive_rate_algorithm_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				ListPreference listPreference = (ListPreference) preference;
-				mPrefs.setAdaptiveRateAlgorithm(AdaptiveRateAlgorithm.fromString((String)newValue));
-				preference.setSummary(String.valueOf(mPrefs.getAdaptiveRateAlgorithm()));
-				return true;
-			}
-		});
-
+		findPreference(getString(R.string.pref_adaptive_rate_algorithm_key)).setOnPreferenceChangeListener(
+				new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						ListPreference listPreference = (ListPreference) preference;
+						mPrefs.setAdaptiveRateAlgorithm(AdaptiveRateAlgorithm.fromString((String) newValue));
+						preference.setSummary(String.valueOf(mPrefs.getAdaptiveRateAlgorithm()));
+						return true;
+					}
+				});
 
 		findPreference(getString(R.string.pref_codec_bitrate_limit_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				mPrefs.setCodecBitrateLimit(Integer.parseInt(newValue.toString()));
 				LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
-				int bitrate=Integer.parseInt(newValue.toString());
+				int bitrate = Integer.parseInt(newValue.toString());
 
 				for (final PayloadType pt : lc.getAudioCodecs()) {
-					if(lc.payloadTypeIsVbr(pt)){
+					if (lc.payloadTypeIsVbr(pt)) {
 						lc.setPayloadTypeBitrate(pt, bitrate);
 					}
 				}
@@ -560,20 +560,21 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			}
 		});
 
-		findPreference(getString(R.string.pref_echo_canceller_calibration_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				synchronized (SettingsFragment.this) {
-					try {
-						LinphoneManager.getInstance().startEcCalibration(SettingsFragment.this);
-						preference.setSummary(R.string.ec_calibrating);
-					} catch (LinphoneCoreException e) {
-						Log.w(e, "Cannot calibrate EC");
+		findPreference(getString(R.string.pref_echo_canceller_calibration_key)).setOnPreferenceClickListener(
+				new OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						synchronized (SettingsFragment.this) {
+							try {
+								LinphoneManager.getInstance().startEcCalibration(SettingsFragment.this);
+								preference.setSummary(R.string.ec_calibrating);
+							} catch (LinphoneCoreException e) {
+								Log.w(e, "Cannot calibrate EC");
+							}
+						}
+						return true;
 					}
-				}
-				return true;
-			}
-		});
+				});
 	}
 
 	private void initVideoSettings() {
@@ -591,8 +592,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 				if (getResources().getBoolean(R.bool.disable_all_patented_codecs_for_markets)) {
 					continue;
 				} else {
-					if (!Version.hasFastCpuWithAsmOptim() && pt.getMime().equals("H264"))
-					{
+					if (!Version.hasFastCpuWithAsmOptim() && pt.getMime().equals("H264")) {
 						// Android without neon doesn't support H264
 						Log.w("CPU does not have asm optimisations available, disabling H264");
 						continue;
@@ -619,9 +619,12 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 
 		((CheckBoxPreference) findPreference(getString(R.string.pref_video_enable_key))).setChecked(mPrefs.isVideoEnabled());
 		((CheckBoxPreference) findPreference(getString(R.string.pref_video_use_front_camera_key))).setChecked(mPrefs.useFrontCam());
-		((CheckBoxPreference) findPreference(getString(R.string.pref_video_initiate_call_with_video_key))).setChecked(mPrefs.shouldInitiateVideoCall());
-		//((CheckBoxPreference) findPreference(getString(R.string.pref_video_automatically_share_my_video_key))).setChecked(mPrefs.shouldAutomaticallyShareMyVideo());
-		((CheckBoxPreference) findPreference(getString(R.string.pref_video_automatically_accept_video_key))).setChecked(mPrefs.shouldAutomaticallyAcceptVideoRequests());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_video_initiate_call_with_video_key))).setChecked(mPrefs
+				.shouldInitiateVideoCall());
+		// ((CheckBoxPreference)
+		// findPreference(getString(R.string.pref_video_automatically_share_my_video_key))).setChecked(mPrefs.shouldAutomaticallyShareMyVideo());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_video_automatically_accept_video_key))).setChecked(mPrefs
+				.shouldAutomaticallyAcceptVideoRequests());
 	}
 
 	private void setVideoPreferencesListener() {
@@ -643,34 +646,35 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			}
 		});
 
-		findPreference(getString(R.string.pref_video_initiate_call_with_video_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				boolean enable = (Boolean) newValue;
-				mPrefs.setInitiateVideoCall(enable);
-				return true;
-			}
-		});
+		findPreference(getString(R.string.pref_video_initiate_call_with_video_key)).setOnPreferenceChangeListener(
+				new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						boolean enable = (Boolean) newValue;
+						mPrefs.setInitiateVideoCall(enable);
+						return true;
+					}
+				});
 
 		/*
-		findPreference(getString(R.string.pref_video_automatically_share_my_video_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				boolean enable = (Boolean) newValue;
-				mPrefs.setAutomaticallyShareMyVideo(enable);
-				return true;
-			}
-		});
-		*/
+		 * findPreference(getString(R.string.
+		 * pref_video_automatically_share_my_video_key
+		 * )).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		 * 
+		 * @Override public boolean onPreferenceChange(Preference preference,
+		 * Object newValue) { boolean enable = (Boolean) newValue;
+		 * mPrefs.setAutomaticallyShareMyVideo(enable); return true; } });
+		 */
 
-		findPreference(getString(R.string.pref_video_automatically_accept_video_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				boolean enable = (Boolean) newValue;
-				mPrefs.setAutomaticallyAcceptVideoRequests(enable);
-				return true;
-			}
-		});
+		findPreference(getString(R.string.pref_video_automatically_accept_video_key)).setOnPreferenceChangeListener(
+				new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						boolean enable = (Boolean) newValue;
+						mPrefs.setAutomaticallyAcceptVideoRequests(enable);
+						return true;
+					}
+				});
 
 		findPreference(getString(R.string.pref_preferred_video_size_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -767,7 +771,8 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		stun.setSummary(mPrefs.getStunServer());
 		stun.setText(mPrefs.getStunServer());
 
-		((CheckBoxPreference) findPreference(getString(R.string.pref_push_notification_key))).setChecked(mPrefs.isPushNotificationEnabled());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_push_notification_key)))
+				.setChecked(mPrefs.isPushNotificationEnabled());
 		((CheckBoxPreference) findPreference(getString(R.string.pref_ipv6_key))).setChecked(mPrefs.isUsingIpv6());
 	}
 
@@ -813,15 +818,16 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			}
 		});
 
-		findPreference(getString(R.string.pref_transport_use_random_ports_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				boolean randomPort = (Boolean) newValue;
-				mPrefs.useRandomPort((Boolean) newValue);
-				findPreference(getString(R.string.pref_sip_port_key)).setEnabled(!randomPort);
-				return true;
-			}
-		});
+		findPreference(getString(R.string.pref_transport_use_random_ports_key)).setOnPreferenceChangeListener(
+				new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						boolean randomPort = (Boolean) newValue;
+						mPrefs.useRandomPort((Boolean) newValue);
+						findPreference(getString(R.string.pref_sip_port_key)).setEnabled(!randomPort);
+						return true;
+					}
+				});
 
 		findPreference(getString(R.string.pref_sip_port_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -829,7 +835,8 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 				int port = -1;
 				try {
 					port = Integer.parseInt(newValue.toString());
-				} catch (NumberFormatException nfe) { }
+				} catch (NumberFormatException nfe) {
+				}
 
 				mPrefs.setSipPort(port);
 				preference.setSummary(newValue.toString());
@@ -871,10 +878,10 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 	}
 
 	private void initAdvancedSettings() {
-		((CheckBoxPreference)findPreference(getString(R.string.pref_debug_key))).setChecked(mPrefs.isDebugEnabled());
-		((CheckBoxPreference)findPreference(getString(R.string.pref_background_mode_key))).setChecked(mPrefs.isBackgroundModeEnabled());
-		((CheckBoxPreference)findPreference(getString(R.string.pref_animation_enable_key))).setChecked(mPrefs.areAnimationsEnabled());
-		((CheckBoxPreference)findPreference(getString(R.string.pref_autostart_key))).setChecked(mPrefs.isAutoStartEnabled());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_debug_key))).setChecked(mPrefs.isDebugEnabled());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_background_mode_key))).setChecked(mPrefs.isBackgroundModeEnabled());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_animation_enable_key))).setChecked(mPrefs.areAnimationsEnabled());
+		((CheckBoxPreference) findPreference(getString(R.string.pref_autostart_key))).setChecked(mPrefs.isAutoStartEnabled());
 		setPreferenceDefaultValueAndSummary(R.string.pref_image_sharing_server_key, mPrefs.getSharingPictureServerUrl());
 		setPreferenceDefaultValueAndSummary(R.string.pref_remote_provisioning_key, mPrefs.getRemoteProvisioningUrl());
 		setPreferenceDefaultValueAndSummary(R.string.pref_display_name_key, mPrefs.getDefaultDisplayName());

@@ -218,26 +218,25 @@
             
             <TextView
                 android:id="@+id/micro"
-                android:background="@drawable/micro_on"
-	            android:text="@string/button_micro"
-	            android:gravity="center"
-	            android:paddingTop="45dp"
-	            android:textColor="@drawable/text_incall_button_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
-			
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/micro_on"
+                android:gravity="center"
+                android:paddingTop="45dp"
+                android:textColor="@drawable/text_incall_button_color" />
             
             <TextView
                 android:id="@+id/speaker"
-                android:background="@drawable/speaker_off"
-	            android:text="@string/button_speaker"
-	            android:gravity="center"
-	            android:paddingTop="45dp"
-	            android:textColor="@drawable/text_incall_button_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/speaker_off"
+                android:gravity="center"
+                android:paddingTop="45dp"
+                android:textColor="@drawable/text_incall_button_color" />
 
             <TextView
                 android:id="@+id/audioRoute"
