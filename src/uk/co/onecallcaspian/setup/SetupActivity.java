@@ -18,9 +18,12 @@ package uk.co.onecallcaspian.setup;
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+import java.util.ArrayList;
+import java.util.List;
+
 import org.linphone.core.LinphoneAddress.TransportType;
-import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCore;
+import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
@@ -29,7 +32,7 @@ import uk.co.onecallcaspian.LinphoneManager;
 import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.LinphonePreferences.AccountBuilder;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnRegistrationStateChangedListener;
-
+import uk.co.onecallcaspian.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -44,8 +47,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import uk.co.onecallcaspian.R;
 
 /**
  * @author Sylvain Berfini
@@ -367,21 +368,40 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		mPrefs.setPushNotificationEnabled(true);
 		mPrefs.firstLaunchSuccessful();
 		mPrefs.setReplacePlusByZeroZero(0, true);
-		enableAllCodecs();
+		enableCodecs();
 		setResult(Activity.RESULT_OK);
 		finish();
 	}
 
-	private void enableAllCodecs() {
+	private void enableCodecs() {
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
 		if(lc == null) return;
 		
+		List<String> disabledAudioCodecs = new ArrayList<String>();
+		List<String> disabledVideoCodecs = new ArrayList<String>();
+		
+		disabledAudioCodecs.add("PCMU");
+		disabledAudioCodecs.add("PCMA");
+		disabledAudioCodecs.add("GSM");
+		disabledAudioCodecs.add("G722");
+		disabledAudioCodecs.add("G729");
+		
+		disabledVideoCodecs.add("VP8");
+		disabledVideoCodecs.add("MP4V-ES");
+		disabledVideoCodecs.add("H263");
+		disabledVideoCodecs.add("H263-1998");
+
 		PayloadType[] audioCodecs = lc.getAudioCodecs();
 		PayloadType[] videoCodecs = lc.getVideoCodecs();
 		
 		for(PayloadType pt : audioCodecs) {
 			try {
-				lc.enablePayloadType(pt, true);
+				if(disabledAudioCodecs.contains(pt.getMime())) {
+					lc.enablePayloadType(pt, false);
+				}
+				else {
+					lc.enablePayloadType(pt, true);
+				}
 			} catch (LinphoneCoreException e) {
 				e.printStackTrace();
 				continue;
@@ -390,11 +410,17 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 
 		for(PayloadType pt : videoCodecs) {
 			try {
-				lc.enablePayloadType(pt, true);
+				if(disabledVideoCodecs.contains(pt.getMime())) {
+					lc.enablePayloadType(pt, false);
+				}
+				else {
+					lc.enablePayloadType(pt, true);
+				}
 			} catch (LinphoneCoreException e) {
 				e.printStackTrace();
 				continue;
 			}
 		}
 	}
+
 }
