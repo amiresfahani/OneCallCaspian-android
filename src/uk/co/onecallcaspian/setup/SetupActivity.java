@@ -377,30 +377,27 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
 		if(lc == null) return;
 		
-		List<String> disabledAudioCodecs = new ArrayList<String>();
-		List<String> disabledVideoCodecs = new ArrayList<String>();
+		List<String> enabledAudioCodecs = new ArrayList<String>();
+		List<String> enabledVideoCodecs = new ArrayList<String>();
 		
-		disabledAudioCodecs.add("PCMU");
-		disabledAudioCodecs.add("PCMA");
-		disabledAudioCodecs.add("GSM");
-		disabledAudioCodecs.add("G722");
-		disabledAudioCodecs.add("G729");
+		enabledAudioCodecs.add("PCMU");
+		enabledAudioCodecs.add("PCMA");
+		enabledAudioCodecs.add("GSM");
+		enabledAudioCodecs.add("G722");
+		enabledAudioCodecs.add("G729");
 		
-		disabledVideoCodecs.add("VP8");
-		disabledVideoCodecs.add("MP4V-ES");
-		disabledVideoCodecs.add("H263");
-		disabledVideoCodecs.add("H263-1998");
+		enabledVideoCodecs.add("H264");
 
 		PayloadType[] audioCodecs = lc.getAudioCodecs();
 		PayloadType[] videoCodecs = lc.getVideoCodecs();
 		
 		for(PayloadType pt : audioCodecs) {
 			try {
-				if(disabledAudioCodecs.contains(pt.getMime())) {
-					lc.enablePayloadType(pt, false);
+				if(enabledAudioCodecs.contains(pt.getMime())) {
+					lc.enablePayloadType(pt, true);
 				}
 				else {
-					lc.enablePayloadType(pt, true);
+					lc.enablePayloadType(pt, false);
 				}
 			} catch (LinphoneCoreException e) {
 				e.printStackTrace();
@@ -410,11 +407,11 @@ public class SetupActivity extends FragmentActivity implements OnClickListener {
 
 		for(PayloadType pt : videoCodecs) {
 			try {
-				if(disabledVideoCodecs.contains(pt.getMime())) {
-					lc.enablePayloadType(pt, false);
+				if(enabledVideoCodecs.contains(pt.getMime())) {
+					lc.enablePayloadType(pt, true);
 				}
 				else {
-					lc.enablePayloadType(pt, true);
+					lc.enablePayloadType(pt, false);
 				}
 			} catch (LinphoneCoreException e) {
 				e.printStackTrace();
