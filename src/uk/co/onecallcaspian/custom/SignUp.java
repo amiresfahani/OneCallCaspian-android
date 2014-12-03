@@ -242,7 +242,7 @@ public class SignUp extends Activity implements RequestHandlerCallback<SignupJso
 			return;
 		}
 		else {
-			saveCreatedAccount(phnumber, data.password);
+			saveCreatedAccount(country_selected_code+phnumber, data.password);
 			Intent intent = new Intent(SignUp.this, ConfirmSignUpAccessCode.class)
 			.setData(getIntent().getData());
 			intent.putExtra("activation_code", data.activation_code);

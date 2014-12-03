@@ -10,6 +10,9 @@ import org.linphone.mediastream.Log;
 import uk.co.onecallcaspian.LinphoneLauncherActivity;
 
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.data.ForgotPasswordJsonData;
+import uk.co.onecallcaspian.rest.ForgotPasswordHandler;
+import uk.co.onecallcaspian.rest.RequestHandlerCallback;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,7 +32,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class ForgotPassword extends Activity {
+public class ForgotPassword extends Activity implements RequestHandlerCallback<ForgotPasswordJsonData> {
 
 	ImageView back, submit, reset;
 	EditText ph_no;
@@ -89,7 +92,10 @@ public class ForgotPassword extends Activity {
 						Toast.makeText(ForgotPassword.this, "" + R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 						return;
 					} else {
-						new getforgotPassword().execute("");
+						ForgotPasswordHandler h = new ForgotPasswordHandler(ForgotPassword.this);
+						h.setCountryCode(country_selected_code);
+						h.setPhoneNumber(phone_number);
+						h.execute();
 					}
 				}
 			}
@@ -108,71 +114,6 @@ public class ForgotPassword extends Activity {
 		} else {
 			new getCountriesList().execute("");
 		}
-	}
-
-	public class getforgotPassword extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			forgot_password_details = Services.getForgotPasswordDetails(country_selected_code, phone_number);
-			Log.i("forgot_password_details", "forgot_password_details is-> " + forgot_password_details);
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pd = ProgressDialog.show(ForgotPassword.this, "", "getting password...");
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			pd.dismiss();
-
-			try {
-				JSONObject jobj = new JSONObject(forgot_password_details);
-				boolean errorstatus = jobj.getBoolean("error");
-				// String status = jobj.getString("status");
-				// String message = jobj.getString("message");
-				// status.equals("fail")
-				if (errorstatus != false) {
-					AlertDialog.Builder alert_dialog_builder = new AlertDialog.Builder(ForgotPassword.this);
-					alert_dialog_builder.setMessage("Phone number does not exist, please try again.").setCancelable(false)
-							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.cancel();
-
-									ph_no.setText("");
-
-								}
-							});
-					AlertDialog alert = alert_dialog_builder.create();
-					alert.show();
-				} else {
-					AlertDialog.Builder alert_dialog_builder = new AlertDialog.Builder(ForgotPassword.this);
-					alert_dialog_builder.setMessage("Password sent to your mobile. Please login again").setCancelable(false)
-							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.cancel();
-									Intent in = new Intent(ForgotPassword.this, LinphoneLauncherActivity.class);
-									startActivity(in);
-								}
-							});
-					AlertDialog alert = alert_dialog_builder.create();
-					alert.show();
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	public class getCountriesList extends AsyncTask<String, Void, Void> {
@@ -225,5 +166,44 @@ public class ForgotPassword extends Activity {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void requestHandlerDone(ForgotPasswordJsonData data) {
+		if (data.error) {
+			AlertDialog.Builder bld = new AlertDialog.Builder(this);
+			bld.setMessage(data.message)
+			.setTitle("Error")
+			.setPositiveButton("Ok", null)
+			.create()
+			.show();
+			return;
+		} else {
+			AlertDialog.Builder bld = new AlertDialog.Builder(this);
+			bld.setMessage("Password sent to your mobile. Please login again")
+			.setCancelable(false)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+				Intent in = new Intent(ForgotPassword.this, LinphoneLauncherActivity.class);
+				startActivity(in);
+			}
+			});
+			AlertDialog dlg = bld.create();
+			dlg.show();
+		}
+	}
+
+	@Override
+	public void requestHandlerError(String reason) {
+		AlertDialog.Builder bld = new AlertDialog.Builder(this);
+		if(reason == null) {
+			reason = "Server did not give a reason for error.";
+		}
+		bld.setMessage(reason)
+		.setTitle("Error")
+		.setPositiveButton("Ok", null)
+		.create().show();
 	}
 }

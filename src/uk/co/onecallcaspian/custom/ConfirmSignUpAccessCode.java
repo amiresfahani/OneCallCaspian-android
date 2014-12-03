@@ -49,8 +49,7 @@ public class ConfirmSignUpAccessCode extends Activity {
 		back = (ImageView) findViewById(R.id.signup_code_back_iv);
 
 		String tempCode = getIntent().getExtras().getString("activation_code");
-		access_code.setText(tempCode);
-		// access_code.setText(SignUp.accesscode.toString());
+		// access_code.setText(tempCode);
 
 		back.setOnClickListener(new OnClickListener() {
 
