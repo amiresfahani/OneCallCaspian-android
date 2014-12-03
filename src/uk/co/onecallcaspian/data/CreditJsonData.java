@@ -1,6 +1,6 @@
 package uk.co.onecallcaspian.data;
 
-public class JsonCredit {
+public class CreditJsonData {
 	public boolean error;
 	public String card_id;
 	public float balance;

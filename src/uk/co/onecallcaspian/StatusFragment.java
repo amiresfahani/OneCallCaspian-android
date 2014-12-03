@@ -40,7 +40,7 @@ import com.google.gson.GsonBuilder;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnNotifyReceivedListener;
 import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.Services;
-import uk.co.onecallcaspian.data.JsonCredit;
+import uk.co.onecallcaspian.data.CreditJsonData;
 import uk.co.onecallcaspian.ui.SlidingDrawer;
 import uk.co.onecallcaspian.ui.SlidingDrawer.OnDrawerOpenListener;
 import android.app.Activity;
@@ -689,7 +689,7 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				return;
 			}
 			Gson gson = new Gson();
-			JsonCredit credit = gson.fromJson(result, JsonCredit.class);
+			CreditJsonData credit = gson.fromJson(result, CreditJsonData.class);
 			if(credit != null) {
 				if(credit.error) {
 					balance.setText(R.string.balance_unknown);

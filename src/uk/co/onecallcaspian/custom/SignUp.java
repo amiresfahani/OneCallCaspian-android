@@ -7,11 +7,20 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.linphone.core.LinphoneCoreException;
+import org.linphone.core.LinphoneAddress.TransportType;
 import org.linphone.mediastream.Log;
 
 import uk.co.onecallcaspian.CustomPreferences;
+import uk.co.onecallcaspian.LinphoneActivity;
+import uk.co.onecallcaspian.LinphoneManager;
+import uk.co.onecallcaspian.LinphonePreferences;
 
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.LinphonePreferences.AccountBuilder;
+import uk.co.onecallcaspian.data.SignupJsonData;
+import uk.co.onecallcaspian.rest.RequestHandlerCallback;
+import uk.co.onecallcaspian.rest.SignupHandler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -34,7 +44,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class SignUp extends Activity {
+public class SignUp extends Activity implements RequestHandlerCallback<SignupJsonData>{
 	Spinner countries_spinner;
 	EditText phone_number, first_name, last_name;
 	ImageView continu, back;
@@ -146,7 +156,11 @@ public class SignUp extends Activity {
 						Toast.makeText(SignUp.this, "" + R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 						return;
 					} else {
-						new signUpConfirmation().execute("");
+						SignupHandler h = new SignupHandler(SignUp.this);
+						h.setCountryCode(country_selected_code);
+						h.setPhoneNumber(phnumber);
+						h.setCountry(countryname);
+						h.execute();
 					}
 				}
 			}
@@ -217,82 +231,57 @@ public class SignUp extends Activity {
 		}
 	}
 
-	public class signUpConfirmation extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			signup_details = Services.getRegisterStatus(country_selected_code, phnumber, fname, lname);
-			Log.i("signup_details", "signup_details is-> " + signup_details);
-			return null;
+	@Override
+	public void requestHandlerDone(SignupJsonData data) {
+		if(data.error) {
+			AlertDialog.Builder bld = new AlertDialog.Builder(this);
+			bld.setMessage(data.message)
+			.setTitle("Error")
+			.setPositiveButton("Ok", null)
+			.create().show();
+			return;
 		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pd = ProgressDialog.show(SignUp.this, "", "registering...");
-
+		else {
+			saveCreatedAccount(phnumber, data.password);
+			Intent intent = new Intent(SignUp.this, ConfirmSignUpAccessCode.class)
+			.setData(getIntent().getData());
+			intent.putExtra("activation_code", data.activation_code);
+			startActivity(intent);
 		}
+	}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			pd.dismiss();
-			try {
-				JSONObject jobj = new JSONObject(signup_details);
-				String status = jobj.getString("error");
-				if (status.equals("true")) {
-					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SignUp.this);
-					alertDialogBuilder.setMessage("Please enter valid details").setCancelable(false)
-							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									dialog.cancel();
+	@Override
+	public void requestHandlerError(String reason) {
+		AlertDialog.Builder bld = new AlertDialog.Builder(this);
+		if(reason == null) {
+			reason = "Server did not give a reason for error.";
+		}
+		bld.setMessage(reason)
+		.setTitle("Error")
+		.setPositiveButton("Ok", null)
+		.create().show();
+	}
+	
+	public void saveCreatedAccount(String username, String password) {
+		String domain = getString(R.string.default_domain);
+		AccountBuilder builder = new AccountBuilder(LinphoneManager.getLc()).setUsername(username).setDomain(domain).setPassword(password)
+				.setTransport(TransportType.LinphoneTransportTcp);
+		LinphonePreferences mPrefs = LinphonePreferences.instance();
 
-								}
-							});
-					AlertDialog alertDialog = alertDialogBuilder.create();
-					alertDialog.show();
-				} else {
-
-					userid = jobj.getString("user_id");
-					password = jobj.getString("password");
-					accesscode = jobj.getString("activation_code");
-
-					// cPrefs.LastSignedIn(userid, password);
-
-					/*
-					 * Toast.makeText(SignUp.this, "userid : "+userid +"\n"+
-					 * "password :"+password +"\n"+"access code :"+accesscode,
-					 * Toast.LENGTH_LONG).show();
-					 */
-					Log.i("userid", "userid -> " + userid);
-					Log.i("password", "password -> " + password);
-					Log.i("accesscode", "accesscode -> " + accesscode);
-
-					Intent intent = new Intent(SignUp.this, ConfirmSignUpAccessCode.class);
-					startActivity(intent);
-
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
+		if (getResources().getBoolean(R.bool.enable_push_id)) {
+			String regId = mPrefs.getPushNotificationRegistrationID();
+			String appId = getString(R.string.push_sender_id);
+			if (regId != null && mPrefs.isPushNotificationEnabled()) {
+				String contactInfos = "app-id=" + appId + ";pn-type=google;pn-tok=" + regId;
+				builder.setContactParameters(contactInfos);
 			}
-
 		}
 
-	}
-
-	void GetInstalledAppList() {
-		final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		final List pkgAppsList = getPackageManager().queryIntentActivities(mainIntent, 0);
-		for (Object object : pkgAppsList) {
-			ResolveInfo info = (ResolveInfo) object;
-			Drawable icon = getBaseContext().getPackageManager().getApplicationIcon(info.activityInfo.applicationInfo);
-			String strAppName = info.activityInfo.applicationInfo.publicSourceDir.toString();
-			String strPackageName = info.activityInfo.applicationInfo.packageName.toString();
-			final String title = (String) ((info != null) ? getBaseContext().getPackageManager().getApplicationLabel(
-					info.activityInfo.applicationInfo) : "???");
+		try {
+			builder.saveNewAccount();
+		} catch (LinphoneCoreException e) {
+			e.printStackTrace();
 		}
 	}
+
 }

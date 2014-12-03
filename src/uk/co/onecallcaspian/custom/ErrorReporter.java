@@ -348,7 +348,6 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 					Toast.makeText(CurContext, ""+R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 					return;
 				} else {
-					new SendReport().execute("");
 				}
 				SendErrorMail(_context, WholeErrorText);
 				
@@ -369,56 +368,5 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 			return null;
 		}
 	}
-	public class SendReport extends AsyncTask<String, Void, Void>{
 
-		@Override
-		protected Void doInBackground(String... params) {
-			
-
-			try {
-				/*StringBuffer buf = new StringBuffer();
-				buf.append("VERSION.RELEASE {" + Build.VERSION.RELEASE + "}");
-				buf.append("\nVERSION.INCREMENTAL {" + Build.VERSION.INCREMENTAL + "}");
-				buf.append("\nVERSION.SDK {" + Build.VERSION.SDK + "}");
-				buf.append("\nBOARD {" + Build.BOARD + "}");
-				buf.append("\nBRAND {" + Build.BRAND + "}");
-				buf.append("\nDEVICE {" + Build.DEVICE + "}");
-				buf.append("\nFINGERPRINT {" + Build.FINGERPRINT + "}");
-				buf.append("\nHOST {" + Build.HOST + "}");
-				buf.append("\nID {" + Build.ID + "}");
-				buf.append("\nMANUFACTURER {" + android.os.Build.MANUFACTURER + "}");
-				buf.append("\nPRODUCT {" + android.os.Build.PRODUCT + "}");
-				buf.append("\nMODEL {" + android.os.Build.MODEL + "}");
-				buf.append("\nSDK_INT {" + android.os.Build.VERSION.SDK_INT + "}");
-				//+ "Mobile Informtion : " + mobile_info
-				//Log.i("build", "" + buf);
-
-				mobile_info = buf.toString();*/
-				Services.sendGpsValuesToMail("occ Error Report "+"<br>"+report.toString()+"<br>"+"Time : " + Calendar.HOUR_OF_DAY
-						+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-						+ Calendar.AM_PM + "    " + System.currentTimeMillis()
-						+ "<br>" );
-			} catch (Exception e) {
-				Services.sendGpsValuesToMail("occ Error Report "+"<br>"+report+"<br>"+"<br>"+"<br>"+"Occ Error report Exception is: "+e.getStackTrace().toString()+"Time : " + Calendar.HOUR_OF_DAY
-						+ ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND
-						+ Calendar.AM_PM + "    " + System.currentTimeMillis()
-						+ "<br>" + "Mobile Informtion : " + mobile_info);
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			Log.i("ErrorReporting","Error Reporting Exception");
-			//Toast.makeText(CurContext, "Exception", Toast.LENGTH_SHORT).show();
-		}
-		
-	}
 }

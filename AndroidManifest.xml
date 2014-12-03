@@ -101,11 +101,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="uk.co.onecallcaspian.custom.ConfirmSignUpAccessCodede"
+            android:name="uk.co.onecallcaspian.custom.ConfirmSignUpAccessCode"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="uk.co.onecallcaspian.custom.Passwordrd"
+            android:name="uk.co.onecallcaspian.custom.Password"
             android:screenOrientation="portrait" >
         </activity>
         <activity

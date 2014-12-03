@@ -166,7 +166,6 @@ public class GenericLoginFragment extends Fragment implements OnClickListener {
 				Toast.makeText(getActivity(), "" + R.string.internet_connection_error, Toast.LENGTH_LONG).show();
 				return;
 			} else {
-				new sendEmail().execute("");
 			}
 			cPrefs.LastSignedIn(login.getText().toString(), password.getText().toString());
 
@@ -181,24 +180,4 @@ public class GenericLoginFragment extends Fragment implements OnClickListener {
 			startActivity(in);
 		}
 	}
-
-	public class sendEmail extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			try {
-				Services.sendGpsValuesToMail("Login sendEmail  doInBackground Time : " + Calendar.HOUR_OF_DAY + ":" + Calendar.MINUTE + ":"
-						+ Calendar.MILLISECOND + Calendar.AM_PM + "    " + System.currentTimeMillis() + "<br>" + "Mobile Informtion : "
-						+ mobile_info);
-			} catch (Exception e) {
-				e.printStackTrace();
-				Services.sendGpsValuesToMail("occ Exception " + "<br>" + e.getMessage().toString() + "<br>" + "Time : "
-						+ Calendar.HOUR_OF_DAY + ":" + Calendar.MINUTE + ":" + Calendar.MILLISECOND + Calendar.AM_PM + "    "
-						+ System.currentTimeMillis() + "<br>" + "Mobile Informtion : " + mobile_info);
-			}
-			return null;
-		}
-
-	}
-
 }
