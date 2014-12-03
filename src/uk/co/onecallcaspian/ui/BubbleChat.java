@@ -56,8 +56,8 @@ import uk.co.onecallcaspian.R;
 public class BubbleChat {
 	private static final HashMap<String, Integer> emoticons = new HashMap<String, Integer>();
 	static {
-	    emoticons.put(":)", R.drawable.emo_im_happy);
-	    emoticons.put(":-)", R.drawable.emo_im_happy);
+	    emoticons.put(":)", R.drawable.caspian_emo_smile);
+	    emoticons.put(":-)", R.drawable.caspian_emo_smile);
 	    emoticons.put(":(", R.drawable.emo_im_sad);
 	    emoticons.put(":-(", R.drawable.emo_im_sad);
 	    emoticons.put(":-P", R.drawable.emo_im_tongue_sticking_out);
