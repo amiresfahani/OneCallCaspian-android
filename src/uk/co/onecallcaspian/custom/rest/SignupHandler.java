@@ -1,7 +1,7 @@
-package uk.co.onecallcaspian.rest;
+package uk.co.onecallcaspian.custom.rest;
 
 import uk.co.onecallcaspian.custom.WebApis;
-import uk.co.onecallcaspian.data.SignupJsonData;
+import uk.co.onecallcaspian.custom.rest.data.SignupJsonData;
 
 public class SignupHandler extends BaseHandler<SignupJsonData> {
 	// Construction

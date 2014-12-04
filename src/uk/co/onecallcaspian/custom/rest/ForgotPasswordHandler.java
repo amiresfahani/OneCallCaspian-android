@@ -1,7 +1,7 @@
-package uk.co.onecallcaspian.rest;
+package uk.co.onecallcaspian.custom.rest;
 
 import uk.co.onecallcaspian.custom.WebApis;
-import uk.co.onecallcaspian.data.ForgotPasswordJsonData;
+import uk.co.onecallcaspian.custom.rest.data.ForgotPasswordJsonData;
 
 public class ForgotPasswordHandler extends BaseHandler<ForgotPasswordJsonData> {
 	// Construction

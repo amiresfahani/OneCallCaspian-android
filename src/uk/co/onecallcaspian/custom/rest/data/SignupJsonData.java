@@ -1,4 +1,4 @@
-package uk.co.onecallcaspian.data;
+package uk.co.onecallcaspian.custom.rest.data;
 
 public class SignupJsonData extends BaseJsonData {
 	public String activation_code;

@@ -10,9 +10,9 @@ import org.linphone.mediastream.Log;
 import uk.co.onecallcaspian.LinphoneLauncherActivity;
 
 import uk.co.onecallcaspian.R;
-import uk.co.onecallcaspian.data.ForgotPasswordJsonData;
-import uk.co.onecallcaspian.rest.ForgotPasswordHandler;
-import uk.co.onecallcaspian.rest.RequestHandlerCallback;
+import uk.co.onecallcaspian.custom.rest.ForgotPasswordHandler;
+import uk.co.onecallcaspian.custom.rest.RequestHandlerCallback;
+import uk.co.onecallcaspian.custom.rest.data.ForgotPasswordJsonData;
 
 import android.app.Activity;
 import android.app.AlertDialog;

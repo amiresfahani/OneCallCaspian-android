@@ -1,4 +1,4 @@
-package uk.co.onecallcaspian.rest;
+package uk.co.onecallcaspian.custom.rest;
 
 import org.apache.http.HttpResponse;
 

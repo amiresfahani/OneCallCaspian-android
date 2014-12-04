@@ -1,4 +1,4 @@
-package uk.co.onecallcaspian.rest;
+package uk.co.onecallcaspian.custom.rest;
 
 import java.util.ArrayList;
 import java.util.List;

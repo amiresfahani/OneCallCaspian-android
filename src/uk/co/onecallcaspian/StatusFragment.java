@@ -40,7 +40,7 @@ import com.google.gson.GsonBuilder;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnNotifyReceivedListener;
 import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.Services;
-import uk.co.onecallcaspian.data.CreditJsonData;
+import uk.co.onecallcaspian.custom.rest.data.CreditJsonData;
 import uk.co.onecallcaspian.ui.SlidingDrawer;
 import uk.co.onecallcaspian.ui.SlidingDrawer.OnDrawerOpenListener;
 import android.app.Activity;

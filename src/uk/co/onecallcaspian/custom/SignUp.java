@@ -18,9 +18,9 @@ import uk.co.onecallcaspian.LinphonePreferences;
 
 import uk.co.onecallcaspian.R;
 import uk.co.onecallcaspian.LinphonePreferences.AccountBuilder;
-import uk.co.onecallcaspian.data.SignupJsonData;
-import uk.co.onecallcaspian.rest.RequestHandlerCallback;
-import uk.co.onecallcaspian.rest.SignupHandler;
+import uk.co.onecallcaspian.custom.rest.RequestHandlerCallback;
+import uk.co.onecallcaspian.custom.rest.SignupHandler;
+import uk.co.onecallcaspian.custom.rest.data.SignupJsonData;
 
 import android.app.Activity;
 import android.app.AlertDialog;
