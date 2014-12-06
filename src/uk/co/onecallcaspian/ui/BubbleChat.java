@@ -48,47 +48,14 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.custom.adapter.SmiliesListItem;
+import uk.co.onecallcaspian.custom.adapter.SmiliesManager;
 
 /**
  * @author Sylvain Berfini
  */
 @SuppressLint("SimpleDateFormat")
 public class BubbleChat {
-	private static final HashMap<String, Integer> emoticons = new HashMap<String, Integer>();
-	static {
-	    emoticons.put(":x1:", R.drawable.smilie_test_1x1);
-	    emoticons.put(":x2:", R.drawable.smilie_test_1x2);
-	    emoticons.put(":x4:", R.drawable.smilie_test_1x4);
-	    emoticons.put(":)", R.drawable.caspian_emo_smile);
-	    emoticons.put(":-)", R.drawable.caspian_emo_smile);
-	    emoticons.put(":(", R.drawable.emo_im_sad);
-	    emoticons.put(":-(", R.drawable.emo_im_sad);
-	    emoticons.put(":-P", R.drawable.emo_im_tongue_sticking_out);
-	    emoticons.put(":P", R.drawable.emo_im_tongue_sticking_out);
-	    emoticons.put(";-)", R.drawable.emo_im_winking);
-	    emoticons.put(";)", R.drawable.emo_im_winking);
-	    emoticons.put(":-D", R.drawable.emo_im_laughing);
-	    emoticons.put(":D", R.drawable.emo_im_laughing);
-	    emoticons.put("8-)", R.drawable.emo_im_cool);
-	    emoticons.put("8)", R.drawable.emo_im_cool);
-	    emoticons.put("O:)", R.drawable.emo_im_angel);
-	    emoticons.put("O:-)", R.drawable.emo_im_angel);
-	    emoticons.put(":-*", R.drawable.emo_im_kissing);
-	    emoticons.put(":*", R.drawable.emo_im_kissing);
-	    emoticons.put(":-/", R.drawable.emo_im_undecided);
-	    emoticons.put(":/ ", R.drawable.emo_im_undecided); // The space after is needed to avoid bad display of links
-	    emoticons.put(":-\\", R.drawable.emo_im_undecided);
-	    emoticons.put(":\\", R.drawable.emo_im_undecided);
-	    emoticons.put(":-O", R.drawable.emo_im_surprised);
-	    emoticons.put(":O", R.drawable.emo_im_surprised);
-	    emoticons.put(":-@", R.drawable.emo_im_yelling);
-	    emoticons.put(":@", R.drawable.emo_im_yelling);
-	    emoticons.put("O.o", R.drawable.emo_im_wtf);
-	    emoticons.put("o.O", R.drawable.emo_im_wtf);
-	    emoticons.put(":'(", R.drawable.emo_im_crying);
-	    emoticons.put("$.$", R.drawable.emo_im_money_mouth);
-	}
-	
 	private RelativeLayout view;
 	private ImageView statusView;
 	private Button downloadOrShow;
@@ -262,16 +229,16 @@ public class BubbleChat {
 		SpannableStringBuilder builder = new SpannableStringBuilder(spanned);
 		String text = spanned.toString();
 
-		for (Entry<String, Integer> entry : emoticons.entrySet()) {
-			String key = entry.getKey();
-			int indexOf = text.indexOf(key);
-			while (indexOf >= 0) {
-				int end = indexOf + key.length();
-				builder.setSpan(new ImageSpan(context, entry.getValue()), indexOf, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				indexOf = text.indexOf(key, end);
+		for(SmiliesListItem item : SmiliesManager.instance().getList()) {
+			for(String trigger : item.getTriggers()) {
+				int indexOf = text.indexOf(trigger);
+				while(indexOf >= 0) {
+					int end = indexOf + trigger.length();
+					builder.setSpan(new ImageSpan(context, item.getImageResource()), indexOf, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					indexOf = text.indexOf(trigger, end);
+				}
 			}
 		}
-		
 		return builder;
 	}
 	
