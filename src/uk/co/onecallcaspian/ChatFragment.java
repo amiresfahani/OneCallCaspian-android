@@ -42,6 +42,8 @@ import org.linphone.mediastream.Log;
 
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
+import uk.co.onecallcaspian.custom.SmiliesDialogFragment;
+import uk.co.onecallcaspian.custom.SmiliesDialogFragment.SmilieDialogListener;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 import uk.co.onecallcaspian.ui.BubbleChat;
 
@@ -90,7 +92,7 @@ import uk.co.onecallcaspian.R;
 /**
  * @author Sylvain Berfini
  */
-public class ChatFragment extends Fragment implements OnClickListener, LinphoneChatMessage.StateListener, LinphoneOnComposingReceivedListener {
+public class ChatFragment extends Fragment implements OnClickListener, LinphoneChatMessage.StateListener, LinphoneOnComposingReceivedListener, SmilieDialogListener {
 	private static final int ADD_PHOTO = 1337;
 	private static final int MENU_DELETE_MESSAGE = 0;
 	private static final int MENU_SAVE_PICTURE = 1;
@@ -110,7 +112,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private String sipUri;
 	private EditText message;
 	private ImageView cancelUpload;
-	private TextView sendImage, sendMessage, contactName, remoteComposing;
+	private TextView sendImage, selectSmiley, sendMessage, contactName, remoteComposing;
 	private AvatarWithShadow contactPicture;
 	private RelativeLayout uploadLayout, textLayout;
 	private Handler mHandler = new Handler();
@@ -146,6 +148,14 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         sendMessage = (TextView) view.findViewById(R.id.sendMessage);
         sendMessage.setOnClickListener(this);
 
+        selectSmiley = (TextView) view.findViewById(R.id.selectSmiley);
+        selectSmiley.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				selectSmiley();
+			}
+		});
+        
         remoteComposing = (TextView) view.findViewById(R.id.remoteComposing);
         remoteComposing.setVisibility(View.GONE);
         
@@ -1102,5 +1112,16 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				}
 			});
 		}
+	}
+	
+
+	private void selectSmiley() {
+		SmiliesDialogFragment dlg = new SmiliesDialogFragment(this);
+		dlg.show(getFragmentManager(), "SmiliesDialog");
+	}
+
+	@Override
+	public void insertSmiley(String txt) {
+		message.append(" " + txt + " ");		
 	}
 }

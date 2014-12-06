@@ -393,6 +393,7 @@
 
 	<string name="button_send_message">Send</string>
 	<string name="button_send_picture">Pic</string>
+	<string name="button_select_smiley">Emo</string>
 	<string name="uploading_image">Uploading&#8230;</string>
 
 	<string name="call_update_title">Call update requested</string>

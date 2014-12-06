@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class SmiliesListAdapter extends BaseAdapter {
 
@@ -36,7 +36,7 @@ public class SmiliesListAdapter extends BaseAdapter {
 		if(v == null) {
 			v = (ViewGroup) inflater.inflate(R.layout.list_item_smilie, parent, false);
 		}
-		ImageButton btn = (ImageButton) v.findViewById(R.id.imgbtn_smilie);
+		ImageView btn = (ImageView) v.findViewById(R.id.img_smilie);
 		SmiliesListItem si = SmiliesManager.instance().getSmilie(position);
 		btn.setImageResource(si.getImageResource());
 		return v;

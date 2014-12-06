@@ -25,12 +25,14 @@ public class SmiliesDialogFragment extends DialogFragment implements OnItemClick
     public Dialog onCreateDialog(Bundle savedInstanceState) {
     	gridView = new GridView(getActivity());
     	gridView.setAdapter(new SmiliesListAdapter(getActivity()));
+    	gridView.setNumColumns(4);
+    	//gridView.setStretchMode(3);
     	gridView.setOnItemClickListener(this);
     	
     	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setPositiveButton(R.string.caspian_ok, onOkClick);
         builder.setNegativeButton(R.string.caspian_cancel, onCancelClick);
-        builder.setTitle(R.string.caspian_select_smilie);
+        builder.setTitle(null);
         builder.setView(gridView);
         return builder.create();
     }

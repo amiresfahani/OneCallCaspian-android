@@ -49,43 +49,59 @@
 	        
 	        <TextView
 	            android:id="@+id/sendPicture"
-	            android:text="@string/button_send_picture"
-	            android:gravity="center"
-	            android:textColor="@drawable/text_color"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentLeft="true"
 	            android:layout_centerVertical="true"
 	            android:drawableTop="@drawable/chat_send_picture"
+	            android:gravity="center"
 	            android:paddingLeft="10dp"
-	            android:paddingRight="10dp" />
+	            android:paddingRight="10dp"
+	            android:text="@string/button_send_picture"
+	            android:textColor="@drawable/text_color" />
 	        
 	        <TextView
 	            android:id="@+id/sendMessage"
-	            android:text="@string/button_send_message"
-	            android:gravity="center"
-	            android:textColor="@drawable/text_color"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
+	            android:layout_centerVertical="true"
 	            android:drawableTop="@drawable/chat_send_message"
+	            android:gravity="center"
+	            android:paddingLeft="10dp"
 	            android:paddingRight="10dp"
-	            android:paddingLeft="10dp" />
-	        
+	            android:textColor="@drawable/text_color" />
+
 	        <EditText
 	            android:id="@+id/message"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
-	            android:layout_centerVertical="true"
-	            android:layout_toLeftOf="@id/sendMessage"
-	            android:layout_toRightOf="@id/sendPicture"
+	            android:layout_alignParentBottom="false"
+	            android:layout_toLeftOf="@+id/sendMessage"
+	            android:layout_toRightOf="@+id/selectSmiley"
+	            android:ems="10"
 	            android:inputType="textMultiLine"
 	            android:maxLines="3"
 	            android:padding="10dp"
 	            android:text="sdfg"
 	            android:textColor="@android:color/black"
-	            android:textCursorDrawable="@null" />
+	            android:textCursorDrawable="@null" >
+
+	            <requestFocus />
+	        </EditText>
+
+	        <TextView
+	            android:id="@+id/selectSmiley"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_toRightOf="@+id/sendPicture"
+	            android:drawableTop="@drawable/chat_select_smiley"
+	            android:gravity="center"
+	            android:paddingLeft="10dp"
+	            android:paddingRight="10dp"
+	            android:text="@string/button_select_smiley"
+	            android:textColor="@drawable/text_color" />
 	        
 	    </RelativeLayout>
 	    
