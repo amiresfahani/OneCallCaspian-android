@@ -47,4 +47,9 @@ public class SmiliesListItem {
 			triggers.add(newTrigger);
 		}
 	}
+	
+	// Helper methods
+	public boolean hasTrigger(String what) {
+		return triggers.contains(what);
+	}
 }

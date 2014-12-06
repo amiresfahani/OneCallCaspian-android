@@ -91,6 +91,15 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		initNetworkSettings();
 		initAdvancedSettings();
 
+		findPreference(getString(R.string.pref_smilies_enable_large_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				boolean enable = (Boolean) newValue;
+				mPrefs.enableBigSmilies(enable);
+				return true;
+			}
+		});
+				
 		findPreference(getString(R.string.menu_logout_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {

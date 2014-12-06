@@ -52,6 +52,10 @@
 	    android:title="@string/pref_preferences">
 
 		<CheckBoxPreference
+			android:title="@string/pref_smilies_enable_large_title"
+			android:key="@string/pref_smilies_enable_large_key"/>
+
+		<CheckBoxPreference
 			android:title="@string/pref_video_enable_title"
 			android:key="@string/pref_video_enable_key"/>
 

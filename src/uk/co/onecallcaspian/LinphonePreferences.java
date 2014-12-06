@@ -746,6 +746,14 @@ public class LinphonePreferences {
 		getConfig().setBool("app", "front_camera_default", frontcam);
 	}
 
+	public boolean isBigSmilies() {
+		return getConfig().getBool("app", "big_smilies", false);
+	}
+
+	public void enableBigSmilies(boolean enable) {
+		getConfig().setBool("app", "big_smilies", enable);
+	}
+
 	public boolean isVideoEnabled() {
 		return getLc().isVideoSupported() && getLc().isVideoEnabled();
 	}
