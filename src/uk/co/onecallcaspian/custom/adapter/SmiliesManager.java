@@ -84,7 +84,7 @@ public class SmiliesManager {
 				":drink:")); 
 		smallSmilies.add(new SmiliesListItem(":*", 			R.drawable.smilie_64_kiss, 
 				":kiss:", ":-*")); 
-		smallSmilies.add(new SmiliesListItem(":kisses:", 		R.drawable.smilie_64_kisses, 
+		smallSmilies.add(new SmiliesListItem(":kisses:", 	R.drawable.smilie_64_kisses, 
 				":kisses:")); 
 		smallSmilies.add(new SmiliesListItem("^o|", 		R.drawable.smilie_64_penguin, 
 				":penguin:")); 
@@ -99,6 +99,57 @@ public class SmiliesManager {
 		smallSmilies.add(new SmiliesListItem("O_o", 		R.drawable.smilie_64_surprised, 
 				":surprised:")); 
 		smallSmilies.add(new SmiliesListItem(":whistling:", R.drawable.smilie_64_whistling, 
+				":whistling:")); 
+		
+		bigSmilies.add(new SmiliesListItem("O:)",			R.drawable.smilie_128_angel, 
+				":angel:", "O:-)")); 
+		bigSmilies.add(new SmiliesListItem(":(", 			R.drawable.smilie_128_angry, 
+				":angry:", ":-(", ":[", ":-[")); 
+		bigSmilies.add(new SmiliesListItem(":/ ", 			R.drawable.smilie_128_ashamed, 
+				":ashamed:", ":-/", ":|", ":-|")); 
+		bigSmilies.add(new SmiliesListItem("O~", 			R.drawable.smilie_128_balloons, 
+				":balloons:")); 
+		bigSmilies.add(new SmiliesListItem(":$)", 			R.drawable.smilie_128_blush, 
+				":blush:")); 
+		bigSmilies.add(new SmiliesListItem("(||)", 			R.drawable.smilie_128_burger, 
+				":burger:")); 
+		bigSmilies.add(new SmiliesListItem("<|", 			R.drawable.smilie_128_cake, 
+				":cake:")); 
+		bigSmilies.add(new SmiliesListItem(":coffee:",		R.drawable.smilie_128_coffee, 
+				":coffee:")); 
+		bigSmilies.add(new SmiliesListItem("@}-;-", 		R.drawable.smilie_128_flower, 
+				":flower:")); 
+		bigSmilies.add(new SmiliesListItem("¤", 			R.drawable.smilie_128_football, 
+				":football:")); 
+		bigSmilies.add(new SmiliesListItem("(..)", 			R.drawable.smilie_128_glasses, 
+				":glasses:")); 
+		bigSmilies.add(new SmiliesListItem(":o)", 			R.drawable.smilie_128_goofy, 
+				":goofy:")); 
+		bigSmilies.add(new SmiliesListItem(":D", 			R.drawable.smilie_128_grin, 
+				":grin:", ":-D", "XD", "X-D")); 
+		bigSmilies.add(new SmiliesListItem(":)", 			R.drawable.smilie_128_happy, 
+				":happy:", ":-)")); 
+		bigSmilies.add(new SmiliesListItem("<3", 			R.drawable.smilie_128_heart, 
+				":heart:")); 
+		bigSmilies.add(new SmiliesListItem(":drink:", 		R.drawable.smilie_128_icetea, 
+				":drink:")); 
+		bigSmilies.add(new SmiliesListItem(":*", 			R.drawable.smilie_128_kiss, 
+				":kiss:", ":-*")); 
+		bigSmilies.add(new SmiliesListItem(":kisses:", 		R.drawable.smilie_128_kisses, 
+				":kisses:")); 
+		bigSmilies.add(new SmiliesListItem("^o|", 			R.drawable.smilie_128_penguin, 
+				":penguin:")); 
+		bigSmilies.add(new SmiliesListItem(":present:", 	R.drawable.smilie_128_present, 
+				":present:")); 
+		bigSmilies.add(new SmiliesListItem(":O", 			R.drawable.smilie_128_sleepy, 
+				":sleepy:")); 
+		bigSmilies.add(new SmiliesListItem(":stopclock:", 	R.drawable.smilie_128_stopclock, 
+				":stopclock:")); 
+		bigSmilies.add(new SmiliesListItem(":sun:", 		R.drawable.smilie_128_sun, 
+				":sun:")); 
+		bigSmilies.add(new SmiliesListItem("O_o", 			R.drawable.smilie_128_surprised, 
+				":surprised:")); 
+		bigSmilies.add(new SmiliesListItem(":whistling:", 	R.drawable.smilie_128_whistling, 
 				":whistling:")); 
 	}
 	
