@@ -340,6 +340,8 @@ public final class LinphoneService extends Service implements LinphoneServiceLis
 		} catch (Exception e) {
 			bm = BitmapFactory.decodeResource(getResources(), R.drawable.unknown_small);
 		}
+		
+		fromName = FormattingHelp.stripDomainFromAddress(fromName);
 		mMsgNotif = Compatibility.createMessageNotification(getApplicationContext(), mMsgNotifCount, fromName, message, bm, notifContentIntent);
 		
 		notifyWrapper(MESSAGE_NOTIF_ID, mMsgNotif);
