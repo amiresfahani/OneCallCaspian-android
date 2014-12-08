@@ -61,12 +61,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.Fragment.SavedState;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.Fragment.SavedState;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -90,7 +90,7 @@ import uk.co.onecallcaspian.R;
 /**
  * @author Sylvain Berfini
  */
-public class LinphoneActivity extends FragmentActivity implements
+public class LinphoneActivity extends Activity implements
 		OnClickListener, ContactPicked, LinphoneOnCallStateChangedListener,
 		LinphoneOnMessageReceivedListener,
 		LinphoneOnRegistrationStateChangedListener {
@@ -154,7 +154,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			if (findViewById(R.id.fragmentContainer) != null) {
 				dialerFragment = new DialerFragment();
 				dialerFragment.setArguments(getIntent().getExtras());
-				getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, dialerFragment, currentFragment.toString()).commit();
+				getFragmentManager().beginTransaction().add(R.id.fragmentContainer, dialerFragment, currentFragment.toString()).commit();
 				selectMenu(FragmentsAvailable.DIALER);
 			}
 		}
@@ -259,7 +259,7 @@ public class LinphoneActivity extends FragmentActivity implements
 
 		if (currentFragment == FragmentsAvailable.DIALER) {
 			try {
-				dialerSavedState = getSupportFragmentManager().saveFragmentInstanceState(dialerFragment);
+				dialerSavedState = getFragmentManager().saveFragmentInstanceState(dialerFragment);
 			} catch (Exception e) {
 			}
 		}
@@ -352,7 +352,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			statusFragment.closeStatusBar();
 		}
 
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 		if (!withoutAnimation && !isAnimationDisabled && currentFragment.shouldAnimate()) {
 			if (newFragmentType.isRightOf(currentFragment)) {
@@ -368,7 +368,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			}
 		}
 		try {
-			getSupportFragmentManager().popBackStackImmediate(newFragmentType.toString(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			getFragmentManager().popBackStackImmediate(newFragmentType.toString(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		} catch (java.lang.IllegalStateException e) {
 
 		}
@@ -376,7 +376,7 @@ public class LinphoneActivity extends FragmentActivity implements
 		transaction.addToBackStack(newFragmentType.toString());
 		transaction.replace(R.id.fragmentContainer, newFragment, newFragmentType.toString());
 		transaction.commitAllowingStateLoss();
-		getSupportFragmentManager().executePendingTransactions();
+		getFragmentManager().executePendingTransactions();
 
 		currentFragment = newFragmentType;
 	}
@@ -395,7 +395,7 @@ public class LinphoneActivity extends FragmentActivity implements
 
 		LinearLayout ll = (LinearLayout) findViewById(R.id.fragmentContainer2);
 
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		if (newFragmentType.shouldAddItselfToTheRightOf(currentFragment)) {
 			ll.setVisibility(View.VISIBLE);
 			
@@ -422,7 +422,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			}
 			
 			try {
-				getSupportFragmentManager().popBackStackImmediate(newFragmentType.toString(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				getFragmentManager().popBackStackImmediate(newFragmentType.toString(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			} catch (java.lang.IllegalStateException e) {
 				
 			}
@@ -431,7 +431,7 @@ public class LinphoneActivity extends FragmentActivity implements
 			transaction.replace(R.id.fragmentContainer, newFragment);
 		}
 		transaction.commitAllowingStateLoss();
-		getSupportFragmentManager().executePendingTransactions();
+		getFragmentManager().executePendingTransactions();
 		
 		currentFragment = newFragmentType;
 		if (currentFragment == FragmentsAvailable.DIALER) {
@@ -467,7 +467,7 @@ public class LinphoneActivity extends FragmentActivity implements
 		String callTime = secondsToDisplayableString(log.getCallDuration());
 		String callDate = String.valueOf(log.getTimestamp());
 
-		Fragment fragment2 = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer2);
+		Fragment fragment2 = getFragmentManager().findFragmentById(R.id.fragmentContainer2);
 		if (fragment2 != null && fragment2.isVisible() && currentFragment == FragmentsAvailable.HISTORY_DETAIL) {
 			HistoryDetailFragment historyDetailFragment = (HistoryDetailFragment) fragment2;
 			historyDetailFragment.changeDisplayedHistory(sipUri, displayName, pictureUri, status, callTime, callDate);
@@ -495,7 +495,7 @@ public class LinphoneActivity extends FragmentActivity implements
 	}
 
 	public void displayContact(Contact contact, boolean chatOnly) {
-		Fragment fragment2 = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer2);
+		Fragment fragment2 = getFragmentManager().findFragmentById(R.id.fragmentContainer2);
 		if (fragment2 != null && fragment2.isVisible() && currentFragment == FragmentsAvailable.CONTACT) {
 			ContactFragment contactFragment = (ContactFragment) fragment2;
 			contactFragment.changeDisplayedContact(contact);
@@ -546,7 +546,7 @@ public class LinphoneActivity extends FragmentActivity implements
 		String pictureUri = uri == null ? null : uri.toString();
 
 		if (currentFragment == FragmentsAvailable.CHATLIST || currentFragment == FragmentsAvailable.CHAT) {
-			Fragment fragment2 = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer2);
+			Fragment fragment2 = getFragmentManager().findFragmentById(R.id.fragmentContainer2);
 			if (fragment2 != null && fragment2.isVisible() && currentFragment == FragmentsAvailable.CHAT) {
 				ChatFragment chatFragment = (ChatFragment) fragment2;
 				chatFragment.changeDisplayedChat(sipUri, displayName, pictureUri);
@@ -1001,7 +1001,7 @@ public class LinphoneActivity extends FragmentActivity implements
 		} else {
 			Contact contact = findContactWithSipAddress(sipUri);
 			if (contact != null) {
-				FragmentManager fm = getSupportFragmentManager();
+				FragmentManager fm = getFragmentManager();
 				acceptNewFriendDialog = new AcceptNewFriendDialog(contact, sipUri);
 				acceptNewFriendDialog.show(fm, "New Friend Request Dialog");
 			}

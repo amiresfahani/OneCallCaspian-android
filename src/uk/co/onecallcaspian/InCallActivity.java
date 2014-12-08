@@ -46,11 +46,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -74,7 +74,7 @@ import android.widget.Toast;
 /**
  * @author Sylvain Berfini
  */
-public class InCallActivity extends FragmentActivity implements
+public class InCallActivity extends Activity implements
 									LinphoneOnCallStateChangedListener,
 									LinphoneOnCallEncryptionChangedListener,
 									OnClickListener {
@@ -167,7 +167,7 @@ public class InCallActivity extends FragmentActivity implements
         		switchCamera.setVisibility(View.INVISIBLE);
             }
             callFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, callFragment).commitAllowingStateLoss();
+            getFragmentManager().beginTransaction().add(R.id.fragmentContainer, callFragment).commitAllowingStateLoss();
 
         }
 	}
@@ -561,7 +561,7 @@ public class InCallActivity extends FragmentActivity implements
 	private void replaceFragmentVideoByAudio() {
 		audioCallFragment = new AudioCallFragment();
 		
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, audioCallFragment);
 		try {
 			transaction.commitAllowingStateLoss();
@@ -576,7 +576,7 @@ public class InCallActivity extends FragmentActivity implements
 		
 		videoCallFragment = new VideoCallFragment();
 		
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragmentContainer, videoCallFragment);
 		try {
 			transaction.commitAllowingStateLoss();
@@ -1212,7 +1212,7 @@ public class InCallActivity extends FragmentActivity implements
 	}
 	
 	private void showAcceptCallUpdateDialog() {
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getFragmentManager();
         callUpdateDialog = new AcceptCallUpdateDialog();
         callUpdateDialog.show(fm, "Accept Call Update Dialog");
     }
@@ -1382,7 +1382,7 @@ public class InCallActivity extends FragmentActivity implements
 	    	super.onCancel(dialog);
 	    	
 	    	callUpdateDialog = new AcceptCallUpdateDialog();
-	        callUpdateDialog.show(getSupportFragmentManager(), "Accept Call Update Dialog");
+	        callUpdateDialog.show(getFragmentManager(), "Accept Call Update Dialog");
 	    }
 	}
 	
