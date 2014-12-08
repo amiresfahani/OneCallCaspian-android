@@ -17,20 +17,33 @@ public class SmiliesManager {
 	}
 	
 	// Get Nth smilie
+	public SmiliesListItem getSmilie(int which, boolean useSticker) {
+		return getList(useSticker).get(which);
+	}
 	public SmiliesListItem getSmilie(int which) {
-		return getList().get(which);
+		return getSmilie(which, false);
 	}
 	
 	// Get actual smilie resource ID
-	public SmiliesListItem getSmilieForTrigger(String what) {
-		for(SmiliesListItem item : getList()) {
+	public SmiliesListItem getSmilieForTrigger(String what, boolean useSticker) {
+		for(SmiliesListItem item : getList(useSticker)) {
 			if(item.hasTrigger(what)) {
 				return item;
 			}
 		}
 		return null;
 	}
-	
+
+	public SmiliesListItem getSmilieForTrigger(String what) {
+		return getSmilieForTrigger(what, false);
+	}
+
+	public List<SmiliesListItem> getList(boolean useStickers) {
+		if(!useStickers) {
+			return getList();
+		}
+		return stickers;
+	}
 	// Current list to use
 	public List<SmiliesListItem> getList() {
 		List<SmiliesListItem> useList = smallSmilies;
@@ -49,6 +62,7 @@ public class SmiliesManager {
 	private SmiliesManager() {
 		smallSmilies = new ArrayList<SmiliesListItem>();
 		bigSmilies = new ArrayList<SmiliesListItem>();
+		stickers = new ArrayList<SmiliesListItem>();
 
 		smallSmilies.add(new SmiliesListItem("O:)",			R.drawable.smilie_64_angel, 
 				":angel:", "O:-)")); 
@@ -151,8 +165,65 @@ public class SmiliesManager {
 				":surprised:")); 
 		bigSmilies.add(new SmiliesListItem(":whistling:", 	R.drawable.smilie_128_whistling, 
 				":whistling:")); 
+		
+		
+		stickers.add(new SmiliesListItem("O:)",			R.drawable.smilie_256_angel, 
+				":angel:", "O:-)")); 
+		stickers.add(new SmiliesListItem(":(", 			R.drawable.smilie_256_angry, 
+				":angry:", ":-(", ":[", ":-[")); 
+		stickers.add(new SmiliesListItem(":/ ", 		R.drawable.smilie_256_ashamed, 
+				":ashamed:", ":-/", ":|", ":-|")); 
+		stickers.add(new SmiliesListItem("O~", 			R.drawable.smilie_256_balloons, 
+				":balloons:")); 
+		stickers.add(new SmiliesListItem(":$)", 		R.drawable.smilie_256_blush, 
+				":blush:")); 
+		stickers.add(new SmiliesListItem("(||)", 		R.drawable.smilie_256_burger, 
+				":burger:")); 
+		stickers.add(new SmiliesListItem("<|", 			R.drawable.smilie_256_cake, 
+				":cake:")); 
+		stickers.add(new SmiliesListItem(":coffee:",	R.drawable.smilie_256_coffee, 
+				":coffee:")); 
+		stickers.add(new SmiliesListItem("@}-;-", 		R.drawable.smilie_256_flower, 
+				":flower:")); 
+		stickers.add(new SmiliesListItem("¤", 			R.drawable.smilie_256_football, 
+				":football:")); 
+		stickers.add(new SmiliesListItem("(..)", 		R.drawable.smilie_256_glasses, 
+				":glasses:")); 
+		stickers.add(new SmiliesListItem(":o)", 		R.drawable.smilie_256_goofy, 
+				":goofy:")); 
+		stickers.add(new SmiliesListItem(":D", 			R.drawable.smilie_256_grin, 
+				":grin:", ":-D", "XD", "X-D")); 
+		stickers.add(new SmiliesListItem(":)", 			R.drawable.smilie_256_happy, 
+				":happy:", ":-)")); 
+		stickers.add(new SmiliesListItem("<3", 			R.drawable.smilie_256_heart, 
+				":heart:")); 
+		stickers.add(new SmiliesListItem(":drink:", 	R.drawable.smilie_256_icetea, 
+				":drink:")); 
+		stickers.add(new SmiliesListItem(":*", 			R.drawable.smilie_256_kiss, 
+				":kiss:", ":-*")); 
+		stickers.add(new SmiliesListItem(":kisses:", 	R.drawable.smilie_256_kisses, 
+				":kisses:")); 
+		stickers.add(new SmiliesListItem("^o|", 		R.drawable.smilie_256_penguin, 
+				":penguin:")); 
+		stickers.add(new SmiliesListItem(":present:", 	R.drawable.smilie_256_present, 
+				":present:")); 
+		stickers.add(new SmiliesListItem(":O", 			R.drawable.smilie_256_sleepy, 
+				":sleepy:")); 
+		stickers.add(new SmiliesListItem(":stopclock:", R.drawable.smilie_256_stopclock, 
+				":stopclock:")); 
+		stickers.add(new SmiliesListItem(":sun:", 		R.drawable.smilie_256_sun, 
+				":sun:")); 
+		stickers.add(new SmiliesListItem("O_o", 		R.drawable.smilie_256_surprised, 
+				":surprised:")); 
+		stickers.add(new SmiliesListItem(":whistling:", R.drawable.smilie_256_whistling, 
+				":whistling:"));
+		
+		if(!(smallSmilies.size() == bigSmilies.size() && bigSmilies.size() == stickers.size())) {
+			throw new RuntimeException("SmilieManager: List sizes must be equal."); 
+		}
 	}
 	
 	private List<SmiliesListItem> smallSmilies;
 	private List<SmiliesListItem> bigSmilies;
+	private List<SmiliesListItem> stickers;
 }

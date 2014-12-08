@@ -21,7 +21,7 @@ public class SmiliesListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return SmiliesManager.instance().getSmilie(position);
+		return SmiliesManager.instance().getSmilie(position, true);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class SmiliesListAdapter extends BaseAdapter {
 			v = (ViewGroup) inflater.inflate(R.layout.list_item_smilie, parent, false);
 		}
 		ImageView btn = (ImageView) v.findViewById(R.id.img_smilie);
-		SmiliesListItem si = SmiliesManager.instance().getSmilie(position);
+		SmiliesListItem si = SmiliesManager.instance().getSmilie(position, true);
 		btn.setImageResource(si.getImageResource());
 		return v;
 	}
