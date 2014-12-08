@@ -583,7 +583,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	}
 
 	private void sendTextMessage() {
-		sendTextMessage(message.getText().toString());
+		String txt = message.getText().toString().trim();
+		sendTextMessage(txt);
 		message.setText("");
 	}
 
