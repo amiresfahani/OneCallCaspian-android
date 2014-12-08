@@ -243,7 +243,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:maxLength="6"
-                android:paddingRight="50dp"
+                android:paddingRight="1dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </RelativeLayout>
