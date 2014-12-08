@@ -356,6 +356,7 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 			statusText.setVisibility(View.GONE);
 			encryption.setVisibility(View.VISIBLE);
 			exit.setVisibility(View.GONE);
+			balance.setVisibility((View.GONE));
 			
 			// We are obviously connected
 			statusLed.setImageResource(R.drawable.led_connected);
@@ -364,6 +365,8 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 			statusText.setVisibility(View.VISIBLE);
 			background.setVisibility(View.VISIBLE);
 			encryption.setVisibility(View.GONE);
+			balance.setVisibility((View.VISIBLE));
+			
 			if (getResources().getBoolean(R.bool.exit_button_on_dialer))
 				exit.setVisibility(View.VISIBLE);
 			
