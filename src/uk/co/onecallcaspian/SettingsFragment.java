@@ -91,6 +91,7 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 		initNetworkSettings();
 		initAdvancedSettings();
 
+		((CheckBoxPreference) findPreference(getString(R.string.pref_smilies_enable_large_key))).setChecked(mPrefs.isBigSmilies());
 		findPreference(getString(R.string.pref_smilies_enable_large_key)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {

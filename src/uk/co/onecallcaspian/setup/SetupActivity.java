@@ -368,6 +368,7 @@ public class SetupActivity extends Activity implements OnClickListener {
 		mPrefs.setPushNotificationEnabled(true);
 		mPrefs.firstLaunchSuccessful();
 		mPrefs.setReplacePlusByZeroZero(0, true);
+		mPrefs.enableBigSmilies(true);
 		enableCodecs();
 		setResult(Activity.RESULT_OK);
 		finish();

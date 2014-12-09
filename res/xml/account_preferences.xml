@@ -30,13 +30,15 @@
         <EditTextPreference 
         	android:title="@string/pref_display_name"
         	android:dialogMessage="@string/pref_help_display_name"
-            android:persistent="true"/>
+            android:persistent="true"
+            android:layout="@layout/hidden"/>
         
     </PreferenceCategory>
     
     <PreferenceCategory
     	android:title="@string/pref_advanced"
-		android:key="@string/pref_advanced_key">
+		android:key="@string/pref_advanced_key"
+		android:layout="@layout/hidden">
         
 		<ListPreference 
 		    android:title="@string/pref_transport"
@@ -80,7 +82,8 @@
 
 		<CheckBoxPreference 
 			android:title="@string/pref_escape_plus"
-		    android:key="@string/pref_escape_plus_key"/>
+		    android:key="@string/pref_escape_plus_key"
+		    android:layout="@layout/hidden"/>
         
     </PreferenceCategory>
     
