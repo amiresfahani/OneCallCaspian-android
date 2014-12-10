@@ -12,7 +12,7 @@
 		android:adjustViewBounds="true"
 		android:contentDescription="@string/content_description_chat"
 		android:scaleType="fitXY"
-		android:src="@drawable/chat" />
+		android:src="@drawable/chat_in_dialer" />
 
     <TextView
         android:id="@+id/text"

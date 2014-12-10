@@ -2,65 +2,101 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-  	android:background="@drawable/background">
-    
-    <uk.co.onecallcaspian.ui.AddressText
-        android:id="@+id/Adress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:background="@drawable/dialer_address_background"
-        android:enabled="false"
-        android:hint="@string/addressHint"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textColor="@android:color/white" />
-    
+    android:background="@drawable/background" >
+
     <LinearLayout
-        android:id="@+id/controls"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
+        android:id="@+id/addressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <ImageView
             android:id="@+id/addContact"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_description_add_contact"
             android:scaleType="fitXY"
             android:src="@drawable/add_contact" />
-        
-        <uk.co.onecallcaspian.ui.CallButton
-            android:id="@+id/Call"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+
+        <uk.co.onecallcaspian.ui.AddressText
+            android:id="@+id/Adress"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/call" />
-        
+            android:background="@color/caspian_lightblue"
+            android:enabled="false"
+            android:hint="@string/addressHint"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:textColor="@android:color/white" >
+
+            <requestFocus />
+        </uk.co.onecallcaspian.ui.AddressText>
+
         <uk.co.onecallcaspian.ui.EraseButton
             android:id="@+id/Erase"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@drawable/backspace" />
-        
+
     </LinearLayout>
-	
-    <uk.co.onecallcaspian.ui.Numpad 
-	    android:id="@+id/Dialer"
+
+    <LinearLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/caspian_lightblue" >
+
+        <ImageButton
+            android:id="@+id/Sms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:src="@drawable/btn_sms_dialer" />
+
+        <View
+            android:id="@+id/spacer1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <uk.co.onecallcaspian.ui.CallButton
+            android:id="@+id/Call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/call" />
+
+        <View
+            android:id="@+id/spacer2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/Chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:src="@drawable/btn_chat_dialer" />
+
+    </LinearLayout>
+
+    <uk.co.onecallcaspian.ui.Numpad
+        android:id="@+id/Dialer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/controls"
-        android:layout_below="@id/Adress" />
-	
+        android:layout_below="@id/addressLayout" />
+
 </RelativeLayout>
