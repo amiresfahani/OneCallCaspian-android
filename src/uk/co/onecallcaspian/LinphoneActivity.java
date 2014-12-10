@@ -79,6 +79,7 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -106,7 +107,8 @@ public class LinphoneActivity extends Activity implements
 	private TextView missedCalls, missedChats;
 	private ImageView dialer;
 	private LinearLayout menu, mark;
-	private RelativeLayout contacts, history, settings, chat, aboutChat, aboutSettings;
+	private RelativeLayout contacts, history, settings, aboutChat, aboutSettings;
+	private ImageButton chat;
 	private FragmentsAvailable currentFragment, nextFragment;
 	private List<FragmentsAvailable> fragmentsHistory;
 	private Fragment dialerFragment, messageListenerFragment, messageListFragment, friendStatusListenerFragment;
@@ -146,19 +148,29 @@ public class LinphoneActivity extends Activity implements
 		
 		instance = this;
 		fragmentsHistory = new ArrayList<FragmentsAvailable>();
-		initButtons();
 
 		currentFragment = nextFragment = FragmentsAvailable.DIALER;
 		fragmentsHistory.add(currentFragment);
+		initButtons();
+
 		if (savedInstanceState == null) {
 			if (findViewById(R.id.fragmentContainer) != null) {
 				dialerFragment = new DialerFragment();
 				dialerFragment.setArguments(getIntent().getExtras());
-				getFragmentManager().beginTransaction().add(R.id.fragmentContainer, dialerFragment, currentFragment.toString()).commit();
+				getFragmentManager().beginTransaction().add(R.id.fragmentContainer, dialerFragment, currentFragment.toString())
+				.commit();
+				getFragmentManager().executePendingTransactions();
+				dialerFragment.onCreateView(getLayoutInflater(), null, savedInstanceState);
+				chat = (ImageButton) ((DialerFragment) dialerFragment).findViewById(R.id.Chat);
+				chat.setOnClickListener(this);
+				missedChats = (TextView) ((DialerFragment) dialerFragment).findViewById(R.id.missedChats);
 				selectMenu(FragmentsAvailable.DIALER);
 			}
 		}
-
+		
+		if(dialerFragment != null) {
+		}
+		
 		int missedCalls = LinphoneManager.getLc().getMissedCallsCount();
 		displayMissedCalls(missedCalls);
 
@@ -196,8 +208,6 @@ public class LinphoneActivity extends Activity implements
 		dialer.setOnClickListener(this);
 		settings = (RelativeLayout) findViewById(R.id.settings);
 		settings.setOnClickListener(this);
-		chat = (RelativeLayout) findViewById(R.id.chat);
-		chat.setOnClickListener(this);
 		aboutChat = (RelativeLayout) findViewById(R.id.about_chat);
 		aboutSettings = (RelativeLayout) findViewById(R.id.about_settings);
 
@@ -216,7 +226,6 @@ public class LinphoneActivity extends Activity implements
 		}
 
 		missedCalls = (TextView) findViewById(R.id.missedCalls);
-		missedChats = (TextView) findViewById(R.id.missedChats);
 	}
 	
 	private boolean isTablet() {
@@ -597,7 +606,7 @@ public class LinphoneActivity extends Activity implements
 			b.putSerializable("About", FragmentsAvailable.ABOUT_INSTEAD_OF_SETTINGS);
 			changeCurrentFragment(FragmentsAvailable.ABOUT_INSTEAD_OF_SETTINGS, b);
 			aboutSettings.setSelected(true);
-		} else if (id == R.id.chat) {
+		} else if (id == R.id.Chat) {
 			changeCurrentFragment(FragmentsAvailable.CHATLIST, null);
 			chat.setSelected(true);
 		}

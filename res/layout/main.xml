@@ -99,10 +99,9 @@ v    </LinearLayout>
         android:orientation="horizontal" >
 
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-			android:adjustViewBounds="true">
+            android:adjustViewBounds="true" >
 
             <include layout="@layout/menu_history_button" />
 
@@ -116,6 +115,7 @@ v    </LinearLayout>
                 android:gravity="center"
                 android:textSize="20sp"
                 android:visibility="gone" />
+
         </RelativeLayout>
 
         <include layout="@layout/menu_contact_button" />
@@ -132,28 +132,8 @@ v    </LinearLayout>
         
         <include layout="@layout/menu_about_chat_button" />
 
-        <RelativeLayout
-            android:id="@+id/completeChat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-			android:adjustViewBounds="true">
-
-            <include layout="@layout/menu_chat_button" />
-
-            <TextView
-                android:id="@+id/missedChats"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/missed_calls_bg"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:visibility="gone" />
+        <include layout="@layout/menu_shop_button" />
             
-        </RelativeLayout>
-
         <include layout="@layout/menu_settings_button" />
         
         <include layout="@layout/menu_about_settings_button" />
