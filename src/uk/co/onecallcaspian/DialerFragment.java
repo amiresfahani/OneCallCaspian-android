@@ -28,12 +28,16 @@ import uk.co.onecallcaspian.ui.EraseButton;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import uk.co.onecallcaspian.R;
 
@@ -45,9 +49,12 @@ public class DialerFragment extends Fragment {
 	private static boolean isCallTransferOngoing = false;
 	
 	public boolean mVisible;
+	private Handler mHandler = new Handler();
 	private AddressText mAddress;
 	private CallButton mCall;
 	private ImageView mAddContact;
+	private ImageButton chat;
+	private TextView missedChats;
 	private OnClickListener addContactListener, cancelListener, transferListener;
 	private boolean shouldEmptyAddressField = true;
 	View rootView;
@@ -84,12 +91,18 @@ public class DialerFragment extends Fragment {
 			numpad.setAddressWidget(mAddress);
 		}
 		
+		chat = (ImageButton) rootView.findViewById(R.id.Chat);
+		chat.setOnClickListener(onChatClick);
+
+		missedChats = (TextView) rootView.findViewById(R.id.missedChats);
+
 		mAddContact = (ImageView) rootView.findViewById(R.id.addContact);
 		
 		addContactListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LinphoneActivity.instance().displayContactsForEdition(mAddress.getText().toString());
+				// LinphoneActivity.instance().displayContactsForEdition(mAddress.getText().toString());
+				LinphoneActivity.instance().addContact(null, mAddress.getText().toString());
 			}
 		};
 		cancelListener = new OnClickListener() {
@@ -127,12 +140,9 @@ public class DialerFragment extends Fragment {
 				mAddress.setPictureUri(Uri.parse(photo));
 			}
 		}
-		
+				
 		return rootView;
     }
-	public View findViewById(int id) {
-		return rootView.findViewById(id);
-	}
 	
 	/**
 	 * @return null if not ready yet
@@ -177,11 +187,13 @@ public class DialerFragment extends Fragment {
 			mAddContact.setEnabled(true);
 			mAddContact.setImageResource(R.drawable.cancel);
 			mAddContact.setOnClickListener(cancelListener);
+			chat.setEnabled(false);
 		} else {
 			mCall.setImageResource(R.drawable.call);
 			mAddContact.setEnabled(true);
 			mAddContact.setImageResource(R.drawable.add_contact);
 			mAddContact.setOnClickListener(addContactListener);
+			chat.setEnabled(true);
 			enableDisableAddContact();
 		}
 	}
@@ -217,5 +229,36 @@ public class DialerFragment extends Fragment {
 	
 			LinphoneManager.getInstance().newOutgoingCall(mAddress);
 		}
+	}
+	
+	OnClickListener onChatClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if(LinphoneActivity.isInstanciated()) {
+				LinphoneActivity.instance()
+				.changeCurrentFragment(FragmentsAvailable.CHATLIST, null);
+			}
+		}
+	};
+	
+	protected void displayMissedChats(final int missedChatCount) {
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				if (missedChatCount > 0) {
+					missedChats.setText(missedChatCount + "");
+					if (missedChatCount > 99) {
+						missedChats.setTextSize(12);
+					} else {
+						missedChats.setTextSize(20);
+					}
+					missedChats.setVisibility(View.VISIBLE);
+					missedChats.startAnimation(AnimationUtils.loadAnimation(LinphoneActivity.instance(), R.anim.bounce));
+				} else {
+					missedChats.clearAnimation();
+					missedChats.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 }

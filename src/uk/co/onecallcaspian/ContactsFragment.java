@@ -258,7 +258,7 @@ public class ContactsFragment extends Fragment implements OnClickListener, OnIte
 		if (editConsumed) {
 			editOnClick = false;
 			sipAddressToAdd = null;
-		}
+		} 
 		
 		if (LinphoneActivity.isInstanciated()) {
 			LinphoneActivity.instance().selectMenu(FragmentsAvailable.CONTACTS);

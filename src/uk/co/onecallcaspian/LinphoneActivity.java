@@ -104,11 +104,10 @@ public class LinphoneActivity extends Activity implements
 	private static LinphoneActivity instance;
 	private LinphonePreferences mPrefs;
 	private StatusFragment statusFragment;
-	private TextView missedCalls, missedChats;
+	private TextView missedCalls;
 	private ImageView dialer;
 	private LinearLayout menu, mark;
 	private RelativeLayout contacts, history, settings, aboutChat, aboutSettings;
-	private ImageButton chat;
 	private FragmentsAvailable currentFragment, nextFragment;
 	private List<FragmentsAvailable> fragmentsHistory;
 	private Fragment dialerFragment, messageListenerFragment, messageListFragment, friendStatusListenerFragment;
@@ -161,14 +160,8 @@ public class LinphoneActivity extends Activity implements
 				.commit();
 				getFragmentManager().executePendingTransactions();
 				dialerFragment.onCreateView(getLayoutInflater(), null, savedInstanceState);
-				chat = (ImageButton) ((DialerFragment) dialerFragment).findViewById(R.id.Chat);
-				chat.setOnClickListener(this);
-				missedChats = (TextView) ((DialerFragment) dialerFragment).findViewById(R.id.missedChats);
 				selectMenu(FragmentsAvailable.DIALER);
 			}
-		}
-		
-		if(dialerFragment != null) {
 		}
 		
 		int missedCalls = LinphoneManager.getLc().getMissedCallsCount();
@@ -212,8 +205,6 @@ public class LinphoneActivity extends Activity implements
 		aboutSettings = (RelativeLayout) findViewById(R.id.about_settings);
 
 		if (getResources().getBoolean(R.bool.replace_chat_by_about)) {
-			chat.setVisibility(View.GONE);
-			chat.setOnClickListener(null);
 			findViewById(R.id.completeChat).setVisibility(View.GONE);
 			aboutChat.setVisibility(View.VISIBLE);
 			aboutChat.setOnClickListener(this);
@@ -255,7 +246,7 @@ public class LinphoneActivity extends Activity implements
 		findViewById(R.id.fragmentContainer).setPadding(0, LinphoneUtils.pixelsToDpi(getResources(), 40), 0, 0);
 	}
 
-	private void changeCurrentFragment(FragmentsAvailable newFragmentType, Bundle extras) {
+	protected void changeCurrentFragment(FragmentsAvailable newFragmentType, Bundle extras) {
 		changeCurrentFragment(newFragmentType, extras, false);
 	}
 
@@ -607,8 +598,6 @@ public class LinphoneActivity extends Activity implements
 			changeCurrentFragment(FragmentsAvailable.ABOUT_INSTEAD_OF_SETTINGS, b);
 			aboutSettings.setSelected(true);
 		} else if (id == R.id.Chat) {
-			changeCurrentFragment(FragmentsAvailable.CHATLIST, null);
-			chat.setSelected(true);
 		}
 	}
 
@@ -617,7 +606,6 @@ public class LinphoneActivity extends Activity implements
 		contacts.setSelected(false);
 		dialer.setSelected(false);
 		settings.setSelected(false);
-		chat.setSelected(false);
 		aboutChat.setSelected(false);
 		aboutSettings.setSelected(false);
 	}
@@ -649,10 +637,6 @@ public class LinphoneActivity extends Activity implements
 			break;
 		case ABOUT_INSTEAD_OF_SETTINGS:
 			aboutSettings.setSelected(true);
-			break;
-		case CHAT:
-		case CHATLIST:
-			chat.setSelected(true);
 			break;
 		}
 	}
@@ -804,28 +788,6 @@ public class LinphoneActivity extends Activity implements
 		});
 	}
 
-	private void displayMissedChats(final int missedChatCount) {
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				if (missedChatCount > 0) {
-					missedChats.setText(missedChatCount + "");
-					if (missedChatCount > 99) {
-						missedChats.setTextSize(12);
-					} else {
-						missedChats.setTextSize(20);
-					}
-					missedChats.setVisibility(View.VISIBLE);
-					if (!isAnimationDisabled) {
-						missedChats.startAnimation(AnimationUtils.loadAnimation(LinphoneActivity.this, R.anim.bounce));
-					}
-				} else {
-					missedChats.clearAnimation();
-					missedChats.setVisibility(View.GONE);
-				}
-			}
-		});
-	}
 
 	@Override
 	public void onCallStateChanged(LinphoneCall call, State state, String message) {
@@ -1475,7 +1437,13 @@ public class LinphoneActivity extends Activity implements
 			return view;
 		}
 	}
-
+	
+	protected void displayMissedChats(final int missedChatCount) {
+		DialerFragment frg = (DialerFragment) dialerFragment;
+		if(frg != null) {
+			frg.displayMissedChats(missedChatCount);
+		}
+	}
 }
 
 interface ContactPicked {
