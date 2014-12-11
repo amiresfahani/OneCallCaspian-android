@@ -158,8 +158,6 @@ public class LinphoneActivity extends Activity implements
 				dialerFragment.setArguments(getIntent().getExtras());
 				getFragmentManager().beginTransaction().add(R.id.fragmentContainer, dialerFragment, currentFragment.toString())
 				.commit();
-				getFragmentManager().executePendingTransactions();
-				dialerFragment.onCreateView(getLayoutInflater(), null, savedInstanceState);
 				selectMenu(FragmentsAvailable.DIALER);
 			}
 		}

@@ -68,8 +68,8 @@ public class SmiliesManager {
 				":angel:", "O:-)")); 
 		smallSmilies.add(new SmiliesListItem(":(", 			R.drawable.smilie_64_angry, 
 				":angry:", ":-(", ":[", ":-[")); 
-		smallSmilies.add(new SmiliesListItem(":/ ", 		R.drawable.smilie_64_ashamed, 
-				":ashamed:", ":-/", ":|", ":-|")); 
+		smallSmilies.add(new SmiliesListItem(":-/", 		R.drawable.smilie_64_ashamed, 
+				":ashamed:", ":/", ":|", ":-|")); 
 		smallSmilies.add(new SmiliesListItem("O~", 			R.drawable.smilie_64_balloons, 
 				":balloons:")); 
 		smallSmilies.add(new SmiliesListItem(":$)", 		R.drawable.smilie_64_blush, 

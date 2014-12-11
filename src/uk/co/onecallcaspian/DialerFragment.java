@@ -187,13 +187,13 @@ public class DialerFragment extends Fragment {
 			mAddContact.setEnabled(true);
 			mAddContact.setImageResource(R.drawable.cancel);
 			mAddContact.setOnClickListener(cancelListener);
-			chat.setEnabled(false);
+			//chat.setEnabled(false);
 		} else {
 			mCall.setImageResource(R.drawable.call);
 			mAddContact.setEnabled(true);
 			mAddContact.setImageResource(R.drawable.add_contact);
 			mAddContact.setOnClickListener(addContactListener);
-			chat.setEnabled(true);
+			//chat.setEnabled(true);
 			enableDisableAddContact();
 		}
 	}
