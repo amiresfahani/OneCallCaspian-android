@@ -16,20 +16,26 @@
 	    android:orientation="horizontal"
 	    android:layout_alignParentTop="true"
 	    android:layout_centerHorizontal="true">
+
+       <View
+           android:id="@+id/spacer"
+           android:layout_width="40dp"
+           android:layout_height="0dp" />
+
+       <TextView
+           android:id="@+id/contactName"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:paddingLeft="10dp"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:textColor="@color/text_contrast" />
         
         <uk.co.onecallcaspian.ui.AvatarWithShadow
-		    android:id="@+id/contactPicture"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    linphone:picture="@drawable/unknown_small" />
-	        
-        <TextView
-            android:id="@+id/contactName"
-            android:paddingLeft="10dp"
+            android:id="@+id/contactPicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-	    	android:textColor="@color/text_contrast" />
+            linphone:picture="@drawable/unknown_small" />
         
     </LinearLayout>
     
