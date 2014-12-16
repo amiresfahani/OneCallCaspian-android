@@ -165,7 +165,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			if (getResources().getBoolean(R.bool.never_display_sip_addresses)) {
 				uriToAdd = LinphoneUtils.getUsernameFromAddress(sipUri);
 			}
-			LinphoneActivity.instance().displayContactsForEdition(uriToAdd);
+			LinphoneActivity.instance().addContact(null, uriToAdd);
 		}
 	}
 	
