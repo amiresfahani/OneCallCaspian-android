@@ -492,4 +492,6 @@
 	<string name="balance_unknown">Unknown £</string>
 	<string name="balance_format">£%.2f</string>
 	<string name="shop">Shop</string>
+	<string name="to_header">To:</string>
+	<string name="zero">0</string>
 </resources>

@@ -47,11 +47,16 @@ import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnCallStateChangedLis
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnMessageReceivedListener;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnRegistrationStateChangedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
+import uk.co.onecallcaspian.custom.fragment.SmsFragment;
 import uk.co.onecallcaspian.setup.SetupActivity;
 import uk.co.onecallcaspian.ui.AddressText;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.Fragment.SavedState;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -61,12 +66,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.Fragment.SavedState;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -79,14 +78,11 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import uk.co.onecallcaspian.R;
 
 /**
  * @author Sylvain Berfini
@@ -319,6 +315,9 @@ public class LinphoneActivity extends Activity implements
 		case CHATLIST:
 			newFragment = new ChatListFragment();
 			messageListFragment = new Fragment();
+			break;
+		case SMS:
+			newFragment = new SmsFragment();
 			break;
 		}
 
@@ -564,6 +563,12 @@ public class LinphoneActivity extends Activity implements
 		LinphoneService.instance().resetMessageNotifCount();
 		LinphoneService.instance().removeMessageNotification();
 		displayMissedChats(getChatStorage().getUnreadMessageCount());
+	}
+
+	public void displaySms(String text) {
+		Bundle extras = new Bundle();
+		extras.putString("phone_number", text);
+		changeCurrentFragment(FragmentsAvailable.SMS, extras);		
 	}
 
 	@Override

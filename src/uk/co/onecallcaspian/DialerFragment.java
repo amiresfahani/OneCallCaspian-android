@@ -54,7 +54,7 @@ public class DialerFragment extends Fragment {
 	private AddressText mAddress;
 	private CallButton mCall;
 	private ImageView mAddContact;
-	private ImageButton chat;
+	private ImageButton chat, sms;
 	private TextView missedChats;
 	private OnClickListener addContactListener, cancelListener, transferListener;
 	private boolean shouldEmptyAddressField = true;
@@ -94,6 +94,9 @@ public class DialerFragment extends Fragment {
 		
 		chat = (ImageButton) rootView.findViewById(R.id.Chat);
 		chat.setOnClickListener(onChatClick);
+
+		sms = (ImageButton) rootView.findViewById(R.id.sms);
+		sms.setOnClickListener(onSmsClick);
 
 		missedChats = (TextView) rootView.findViewById(R.id.missedChats);
 
@@ -253,6 +256,17 @@ public class DialerFragment extends Fragment {
 				else {
 					LinphoneActivity.instance()
 					.changeCurrentFragment(FragmentsAvailable.CHATLIST, null);
+				}
+			}
+		}
+	};
+	
+	OnClickListener onSmsClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if(LinphoneActivity.isInstanciated()) {
+				if(mAddress.getText().length() > 0) {
+					LinphoneActivity.instance().displaySms(mAddress.getText().toString());
 				}
 			}
 		}
