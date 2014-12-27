@@ -36,6 +36,7 @@ import org.linphone.mediastream.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnNotifyReceivedListener;
 import uk.co.onecallcaspian.custom.FormattingHelp;
@@ -692,7 +693,16 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				return;
 			}
 			Gson gson = new Gson();
-			CreditJsonData credit = gson.fromJson(result, CreditJsonData.class);
+			CreditJsonData credit = null;
+
+			try {
+				 credit = gson.fromJson(result, CreditJsonData.class);
+			}
+			catch(JsonSyntaxException e) {
+				Toast.makeText(getActivity(), R.string.error_balance_json, Toast.LENGTH_LONG)
+				.show();
+			}
+			
 			if(credit != null) {
 				if(credit.error) {
 					balance.setText(R.string.balance_unknown);

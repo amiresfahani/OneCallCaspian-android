@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_balance"></string>
-    
+        <string name="error_balance"></string>
+        <string name="error_balance_json">Unexpected response from server, while retrieving current balance.</string>
 </resources>
