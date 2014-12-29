@@ -1,7 +1,6 @@
-package uk.co.onecallcaspian.custom.fragment;
 /*
-ChatListFragment.java
-Copyright (C) 2012  Belledonne Communications, Grenoble, France
+SmsFragment.java
+Copyright (C) 2014  Lassi Marttala, Maxpower Inc (http://maxp.fi)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+package uk.co.onecallcaspian.custom.fragment;
 import uk.co.onecallcaspian.R;
 import android.app.Fragment;
 import android.os.Bundle;
