@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/zero"
+            android:text="@null"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/caspian_dark_blue" />
 
@@ -57,25 +57,39 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/chat_send_default" />
+            android:background="@drawable/sms" />
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/sms_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/sms_content_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/sms_footer_layout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_below="@id/sms_header_layout"
         android:layout_margin="10dp"
-        android:ems="10"
-        android:gravity="start|bottom"
-        android:inputType="textMultiLine" >
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <ListView
+            android:id="@+id/sms_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0.8"
+            android:background="@null" >
+
+        </ListView>
+
+        <EditText
+            android:id="@+id/sms_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.2"
+            android:ems="10"
+            android:gravity="start|bottom"
+            android:inputType="textMultiLine" />
+
+    </LinearLayout>
 
 </RelativeLayout>

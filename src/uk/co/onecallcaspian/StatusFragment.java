@@ -699,6 +699,8 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				 credit = gson.fromJson(result, CreditJsonData.class);
 			}
 			catch(JsonSyntaxException e) {
+				Context context = getActivity();
+				if(context == null) return;
 				Toast.makeText(getActivity(), R.string.error_balance_json, Toast.LENGTH_LONG)
 				.show();
 			}

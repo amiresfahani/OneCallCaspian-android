@@ -42,8 +42,8 @@ import org.linphone.mediastream.Log;
 
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
-import uk.co.onecallcaspian.custom.SmiliesDialogFragment;
-import uk.co.onecallcaspian.custom.SmiliesDialogFragment.SmilieDialogListener;
+import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
+import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogListener;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 import uk.co.onecallcaspian.ui.BubbleChat;
 

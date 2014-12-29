@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package uk.co.onecallcaspian.custom.fragment;
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.custom.adapter.SmsListAdapter;
+import uk.co.onecallcaspian.custom.database.SmsDb;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,11 +28,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class SmsFragment extends Fragment {
 	private LayoutInflater mInflater;
 	private EditText mSmsText, mSmsTo;
+	private ListView mSmsList;
+	private SmsListAdapter mSmsAdapter;
 	private Button mSmsSend;
 	
 	@Override
@@ -41,8 +46,14 @@ public class SmsFragment extends Fragment {
 		mSmsText = (EditText) view.findViewById(R.id.sms_text);
 		mSmsTo = (EditText) view.findViewById(R.id.sms_to);
 		mSmsSend = (Button) view.findViewById(R.id.sms_send);
-		
+		mSmsList = (ListView) view.findViewById(R.id.sms_list);
+		mSmsAdapter = new SmsListAdapter(getActivity());
+		mSmsList.setAdapter(mSmsAdapter);
+		mSmsList.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+		mSmsList.setStackFromBottom(true);
+        
 		mSmsSend.setOnClickListener(onSmsSend);
+		
 		return view;
 	}
 	
@@ -56,7 +67,13 @@ public class SmsFragment extends Fragment {
 	OnClickListener onSmsSend = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(getActivity(), "SMS Not implemented yet.", Toast.LENGTH_LONG)
+			String to = mSmsTo.getText().toString();
+			String content = mSmsText.getText().toString();
+			long delivered = System.currentTimeMillis();
+			SmsDb.instance(getActivity()).insert(to, delivered, content);
+			mSmsAdapter.updateCursor();
+			mSmsText.setText("");
+			Toast.makeText(getActivity(), "SMS Not implemented yet. Demostrating local storage", Toast.LENGTH_LONG)
 			.show();
 		}
 	};
