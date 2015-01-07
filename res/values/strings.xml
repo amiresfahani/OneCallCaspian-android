@@ -496,4 +496,6 @@
 	<string name="zero">0</string>
 	<string name="delivered_label">Delivered:</string>
 	<string name="lipsum_short">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue laoreet diam, ac pellentesque libero fermentum et. Curabitur eget ligula pellentesque, ullamcorper neque eget, ullamcorper nisi. Donec luctus, mi eu dapibus viverra, elit quam convallis dui, ut malesuada sapien odio sit amet metus. "</string>
+	
+	<string name="sms_status_sending">Sending...</string>
 </resources>

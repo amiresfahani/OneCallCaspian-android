@@ -17,9 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package uk.co.onecallcaspian.custom.fragment;
+import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.R;
 import uk.co.onecallcaspian.custom.adapter.SmsListAdapter;
 import uk.co.onecallcaspian.custom.database.SmsDb;
+import uk.co.onecallcaspian.custom.rest.SmsHandler;
+import uk.co.onecallcaspian.custom.rest.SmsRequestHandlerCallback;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +32,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class SmsFragment extends Fragment {
 	private LayoutInflater mInflater;
@@ -67,14 +69,28 @@ public class SmsFragment extends Fragment {
 	OnClickListener onSmsSend = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			// Show immediate status
 			String to = mSmsTo.getText().toString();
 			String content = mSmsText.getText().toString();
-			long delivered = System.currentTimeMillis();
-			SmsDb.instance(getActivity()).insert(to, delivered, content);
+			long delivered = -1;
+			long id = SmsDb.instance(getActivity()).insert(to, delivered, content);
 			mSmsAdapter.updateCursor();
 			mSmsText.setText("");
-			Toast.makeText(getActivity(), "SMS Not implemented yet. Demostrating local storage", Toast.LENGTH_LONG)
-			.show();
+			
+			// Try sending in background
+			SmsRequestHandlerCallback cb = new SmsRequestHandlerCallback(getActivity(), id);
+			SmsHandler sms = new SmsHandler(cb);
+			LinphonePreferences prefs = LinphonePreferences.instance();
+
+			String number = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
+			String password = prefs.getAccountPassword(prefs.getDefaultAccountIndex());
+			
+			sms.setMyPhoneNumber(number);
+			sms.setPassword(password);
+			sms.setTo(to);
+			sms.setText(content);
+			
+			sms.execute();
 		}
 	};
 }

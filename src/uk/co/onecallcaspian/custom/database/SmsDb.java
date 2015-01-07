@@ -59,12 +59,26 @@ public class SmsDb {
 		}
 		db.endTransaction();
 	}
+
+	public void updateDelivery(long id, long delivered) {
+		db.beginTransaction();
+		try {
+			stmtUpdateDelivery.bindLong(1, delivered);
+			stmtUpdateDelivery.bindLong(2, id);
+			stmtUpdateDelivery.executeUpdateDelete();
+			db.setTransactionSuccessful();
+		}
+		catch(Exception e) {
+			Log.e("SmsDb", "update", e);
+		}
+		db.endTransaction();
+	}
 	
-	public void delete(int id) {
+	public void delete(long id) {
 		db.beginTransaction();
 		try {
 			stmtDeleteSms.bindLong(1, id);
-			stmtUpdateSms.executeUpdateDelete();
+			stmtDeleteSms.executeUpdateDelete();
 			db.setTransactionSuccessful();
 		}
 		catch(Exception e) {
@@ -72,6 +86,7 @@ public class SmsDb {
 		}
 		db.endTransaction();
 	}
+	
 	public void close() {
 		db.close();
 	}
@@ -88,12 +103,16 @@ public class SmsDb {
 		return db.rawQuery(sqlSelectEverything, null);
 	}
 
+	public Cursor getCursor(long id) {
+		return db.rawQuery(sqlSelectOne, new String[] {Long.toString(id)});
+	}
+
 	// Under the hood
 	private void prepareStatements() {
 		stmtInsertSms = db.compileStatement(sqlInsertSms);
 		stmtUpdateSms = db.compileStatement(sqlUpdateSms);
+		stmtUpdateDelivery = db.compileStatement(sqlUpdateDelivery);
 		stmtDeleteSms = db.compileStatement(sqlDeleteSms);
-		stmtSelectEverything = db.compileStatement(sqlSelectEverything);
 	}
 	
 	private SQLiteDatabase db;
@@ -101,11 +120,13 @@ public class SmsDb {
 	// SQL Queries
 	private static String sqlInsertSms = "INSERT INTO sms('to', 'delivered', 'content') VALUES(?, ?, ?);";
 	private static String sqlUpdateSms = "UPDATE sms set 'to'=?, 'delivered'=?, 'content'=? WHERE _id = ?;";
+	private static String sqlUpdateDelivery = "UPDATE sms set 'delivered'=? WHERE _id = ?;";
 	private static String sqlDeleteSms = "DELETE FROM sms WHERE _id = ?";
 	private static String sqlSelectEverything = "SELECT * FROM sms;";
+	private static String sqlSelectOne = "SELECT * FROM sms WHERE _id = ?;";
 	
 	// Compiled statements
-	private SQLiteStatement stmtInsertSms, stmtUpdateSms, stmtDeleteSms, stmtSelectEverything;
+	private SQLiteStatement stmtInsertSms, stmtUpdateSms, stmtUpdateDelivery, stmtDeleteSms;
 	
 	
 	// Singleton 
@@ -117,6 +138,13 @@ public class SmsDb {
 		this.context = context;
 	}
 
+	public static SmsDb instance() {
+		if(me == null) {
+			throw new RuntimeException("SmsDb was not initialized with context first");
+		}
+		me.open();
+		return me;
+	}
 	public static SmsDb instance(Context context) {
 		if(me == null) {
 			me = new SmsDb(context);

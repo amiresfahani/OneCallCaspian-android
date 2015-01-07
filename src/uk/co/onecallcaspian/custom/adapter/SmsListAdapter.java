@@ -19,31 +19,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package uk.co.onecallcaspian.custom.adapter;
 
-import java.util.Date;
-
 import uk.co.onecallcaspian.R;
 import uk.co.onecallcaspian.custom.database.SmsDb;
 import android.content.Context;
 import android.database.Cursor;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.TextView;
 
-/**
- * @author fizzl
- * 
- */
 public class SmsListAdapter extends CursorAdapter {
 	public SmsListAdapter(Context context) {
 		super(context, SmsDb.instance(context).getCursor(), 0);
 		this.context = context;
+		lastInstance = this;
 	}
 	
 	public void updateCursor() {
 		this.changeCursor(SmsDb.instance(context).getCursor());
+	}
+
+	public static void updateCursorStatic() {
+		if(lastInstance != null) {
+			lastInstance.changeCursor(SmsDb.instance().getCursor());
+		}
 	}
 
 	@Override
@@ -55,24 +54,13 @@ public class SmsListAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		TextView to = (TextView) view.findViewById(R.id.li_sms_to);
-		TextView delivered = (TextView) view.findViewById(R.id.li_sms_delivered);
-		TextView content = (TextView) view.findViewById(R.id.li_sms_content);
-		
-		to.setText(cursor.getString(1));
-		content.setText(cursor.getString(3));
-		
-		long deliveryTime = cursor.getLong(2);
-		if(deliveryTime < 0) {
-			delivered.setText(R.string.failed); 
-		} 
-		else {
-			Date date = new Date(deliveryTime);
-			java.text.DateFormat dfmt = DateFormat.getDateFormat(context);
-			java.text.DateFormat tfmt = DateFormat.getTimeFormat(context);
-			delivered.setText(dfmt.format(date) + " - " + tfmt.format(date));
-		}
+		SmsListItem item = (SmsListItem) view;
+		item.setData(cursor.getLong(0),
+				cursor.getString(1),
+				cursor.getString(3),
+				cursor.getLong(2));
 	}
 
 	Context context;
+	private static SmsListAdapter lastInstance;
 }
