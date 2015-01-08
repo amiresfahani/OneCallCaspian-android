@@ -462,6 +462,14 @@ public class LinphonePreferences {
 		return null;
 	}
 
+	public String getAccountPin() {
+		return getConfig().getString("app", "pin", "");	
+	}
+
+	public void setAccountPin(String pin) {
+		getConfig().setString("app", "pin", pin);	
+	}
+
 	public void setAccountUserId(int n, String userId) {
 		LinphoneAuthInfo info = getClonedAuthInfo(n);
 		info.setUserId(userId);

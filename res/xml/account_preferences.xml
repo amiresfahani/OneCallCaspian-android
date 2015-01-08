@@ -33,7 +33,13 @@
             android:persistent="true"
             android:layout="@layout/hidden"/>
         
-    </PreferenceCategory>
+        <EditTextPreference 
+        	android:title="@string/pref_pin"
+        	android:dialogMessage="@string/pref_help_pin"
+            android:persistent="true"
+            android:editable="false"/>
+        
+       </PreferenceCategory>
     
     <PreferenceCategory
     	android:title="@string/pref_advanced"

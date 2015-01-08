@@ -322,6 +322,9 @@ public class AccountPreferencesFragment extends PreferencesListFragment {
     	EditTextPreference displayName = (EditTextPreference) account.getPreference(4);
     	displayName.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
     	displayName.setOnPreferenceChangeListener(displayNameChangedListener);
+
+    	EditTextPreference pin = (EditTextPreference) account.getPreference(5);
+    	displayName.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
 		
     	PreferenceCategory advanced = (PreferenceCategory) getPreferenceScreen().findPreference(getString(R.string.pref_advanced_key));
     	mTransportPreference = (ListPreference) advanced.getPreference(0);
@@ -414,6 +417,10 @@ public class AccountPreferencesFragment extends PreferencesListFragment {
     	displayName.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
     	displayName.setOnPreferenceChangeListener(displayNameChangedListener);
     	displayName.setSummary(displayName.getText());
+
+    	EditTextPreference pin = (EditTextPreference) account.getPreference(5);
+    	pin.setText(mPrefs.getAccountPin());
+    	pin.setSummary(pin.getText());
 		
     	PreferenceCategory advanced = (PreferenceCategory) getPreferenceScreen().findPreference(getString(R.string.pref_advanced_key));
     	mTransportPreference = (ListPreference) advanced.getPreference(0);

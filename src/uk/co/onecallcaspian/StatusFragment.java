@@ -116,6 +116,13 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 		sliderContentAccounts = (ListView) view.findViewById(R.id.accounts);
 
 		balance = (TextView) view.findViewById(R.id.statusBalance);
+		balance.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				BalanceTask balanceTask = new BalanceTask();
+				balanceTask.execute();
+			}
+		});
 		
 		exit = (TextView) view.findViewById(R.id.exit);
 		exit.setOnTouchListener(new View.OnTouchListener() {
@@ -717,6 +724,9 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				String balanceFormat = getActivity().getResources().getString(R.string.balance_format);
 				String balanceFormatted = String.format(balanceFormat, credit.balance);
 				balance.setText(balanceFormatted);
+				
+				// Update card id in settings
+				mPrefs.getConfig().setString("app", "pin", credit.card_id);
 			}
 		}
 	}

@@ -212,6 +212,7 @@
 	<string name="pref_domain">Domain*</string>
 	<string name="pref_passwd">Password*</string>
 	<string name="pref_username">Username*</string>
+	<string name="pref_pin">Pin*</string>
 	<string name="pref_sipaccount">Caspian ID</string>
 	<string name="wrong_username">wrong user name</string>
 	<string name="wrong_passwd">wrong password</string>
@@ -275,7 +276,7 @@
 
 	<string name="pref_help_proxy">SIP proxy hostname or ip address (optional)</string>
 	<string name="pref_help_outbound_proxy">Route all calls through SIP proxy</string>
-	<string name="pref_help_username">Example: john if your account is john@sip.example.org</string>
+	<string name="pref_help_pin">This is your account PIN. You may need it while contacting the customer service.</string>
 	<string name="pref_help_domain">sip.example.org if your account is john@sip.example.org</string>
 	<string name="pref_help_password">You have to re-enter your password if you edit your username and/or the domain</string>
 
