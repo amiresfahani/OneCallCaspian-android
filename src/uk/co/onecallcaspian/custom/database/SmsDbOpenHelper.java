@@ -45,14 +45,11 @@ public class SmsDbOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.beginTransaction();
 		try {
 			DbUtils.executeSqlScript(context, db, sqlFileName);
-			db.setTransactionSuccessful();
 		} catch (IOException e) {
 			Log.e(e);
 		}
-		db.endTransaction();
 	}
 
 	@Override
