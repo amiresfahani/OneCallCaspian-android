@@ -360,7 +360,7 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler {
 	public static String currentVersionNumber(Context a) {
 		PackageManager pm = a.getPackageManager();
 		try {
-			PackageInfo pi = pm.getPackageInfo("de.gamedisk.app",
+			PackageInfo pi = pm.getPackageInfo("uk.co.onecallcaspian",
 					PackageManager.GET_SIGNATURES);
 			return pi.versionName
 					+ (pi.versionCode > 0 ? " (" + pi.versionCode + ")" : "");
