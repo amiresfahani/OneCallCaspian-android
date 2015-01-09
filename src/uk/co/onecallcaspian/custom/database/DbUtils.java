@@ -24,6 +24,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 /** Database utils, for example to execute SQL scripts */
@@ -82,7 +83,7 @@ public class DbUtils {
         for (String line : statements) {
             line = line.trim();
             if (line.length() > 0) {
-                db.execSQL(line);
+            	db.execSQL(line);
                 count++;
             }
         }
