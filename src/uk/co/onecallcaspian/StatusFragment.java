@@ -109,20 +109,15 @@ public class StatusFragment extends Fragment implements LinphoneOnNotifyReceived
 				LinphoneCore lc = LinphoneManager.getLc();
 				if (lc.isNetworkReachable()) {
 					lc.refreshRegisters();
-				}				
+				}
+				BalanceTask balanceTask = new BalanceTask();
+				balanceTask.execute();
 			}
 		});
 		
 		sliderContentAccounts = (ListView) view.findViewById(R.id.accounts);
 
 		balance = (TextView) view.findViewById(R.id.statusBalance);
-		balance.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				BalanceTask balanceTask = new BalanceTask();
-				balanceTask.execute();
-			}
-		});
 		
 		exit = (TextView) view.findViewById(R.id.exit);
 		exit.setOnTouchListener(new View.OnTouchListener() {
