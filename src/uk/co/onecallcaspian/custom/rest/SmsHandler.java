@@ -43,7 +43,7 @@ public class SmsHandler extends BaseHandler<SmsJsonData> {
 		reqParams.add("receiver", to);
 		reqParams.add("text", text);
 		
-		reqParams.setMethod("GET");
+		reqParams.setMethod("POST");
 		reqParams.setUri(WebApis.sms);
 		hp.requestParams = reqParams;
 

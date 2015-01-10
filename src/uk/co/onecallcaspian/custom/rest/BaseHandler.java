@@ -25,9 +25,15 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 
 import android.os.AsyncTask;
 
@@ -114,8 +120,36 @@ public class BaseHandler<T> {
 		}
 
 		private void httpPost(RequestParams requestParams, RequestHandlerCallback<T> callback) {
-			// TODO Auto-generated method stub
+			String uri = requestParams.getUri();
+			List<NameValuePair> pairs = requestParams.getParams();
+
+			HttpPost post = new HttpPost(uri);
 			
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
+			HttpProtocolParams.setHttpElementCharset(httpParameters, HTTP.UTF_8);
+			HttpClient client = new DefaultHttpClient(httpParameters);
+			
+			try {
+				post.setEntity(new UrlEncodedFormEntity(pairs, HTTP.UTF_8));
+				
+				HttpResponse response = client.execute(post);
+				if(response.getStatusLine().getStatusCode() != 200) {
+					this.error = "Error while communicating with the server:\n"
+							+ response.getStatusLine().getReasonPhrase();
+					return;
+				}
+				
+				InputStream is = response.getEntity().getContent();
+				String content = IOUtils.toString(is);
+				Gson gson = new Gson();
+				returnData = gson.fromJson(content, type);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				error = e.getLocalizedMessage();
+				return;
+			}
 		}
 
 		@Override
