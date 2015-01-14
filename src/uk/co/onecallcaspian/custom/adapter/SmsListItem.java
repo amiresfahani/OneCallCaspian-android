@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package uk.co.onecallcaspian.custom.adapter;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import uk.co.onecallcaspian.LinphonePreferences;
@@ -34,9 +35,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SmsListItem extends LinearLayout {
 	public SmsListItem(Context context) {
@@ -67,38 +68,47 @@ public class SmsListItem extends LinearLayout {
 		this.text = text;
 		this.deliveryTime = deliveryTime;
 		
-		TextView vto = (TextView) findViewById(R.id.li_sms_to);
-		TextView delivered = (TextView) findViewById(R.id.li_sms_delivered);
+		TextView delivered = (TextView) findViewById(R.id.li_sms_time);
 		TextView content = (TextView) findViewById(R.id.li_sms_content);
-		Button retry = (Button) findViewById(R.id.li_sms_retry);
-		ImageButton delete = (ImageButton) findViewById(R.id.li_sms_delete);
+		ImageView status = (ImageView) findViewById(R.id.li_sms_status);
 		
-		vto.setText(to);
 		content.setText(text);
 		
-		retry.setOnClickListener(onRetry);
-		delete.setOnClickListener(onDelete);
+		this.setOnClickListener(onRetry);
 		
 		if(deliveryTime == -1) {
 			delivered.setText(R.string.sms_status_sending); 
-			retry.setVisibility(View.GONE);
+			status.setImageResource(R.drawable.chat_message_inprogress);
 		} 
 		else if(deliveryTime == -2) {
 			delivered.setText(R.string.failed); 
-			retry.setVisibility(View.VISIBLE);
+			status.setImageResource(R.drawable.chat_message_not_delivered);
 		} 
 		else {
+			Calendar yesterday = Calendar.getInstance();
+			yesterday.add(Calendar.DATE, -1);
+			
 			Date date = new Date(deliveryTime);
 			java.text.DateFormat dfmt = DateFormat.getDateFormat(context);
 			java.text.DateFormat tfmt = DateFormat.getTimeFormat(context);
-			delivered.setText(dfmt.format(date) + " - " + tfmt.format(date));
-			retry.setVisibility(View.GONE);
+			status.setImageResource(R.drawable.chat_message_delivered);
+			
+			if(date.before(yesterday.getTime())) {
+				delivered.setText(tfmt.format(date) + " " + dfmt.format(date));				
+			} 
+			else {
+				delivered.setText(tfmt.format(date));				
+			}
 		}
 	}
 	
 	private OnClickListener onRetry = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			if(deliveryTime > 0) {
+				return;
+			}
+			
 			SmsRequestHandlerCallback cb = new SmsRequestHandlerCallback(context, id);
 			SmsHandler handler = new SmsHandler(cb);
 			
@@ -111,9 +121,6 @@ public class SmsListItem extends LinearLayout {
 			handler.setTo(to);
 			handler.setText(text);
 			handler.execute();
-			
-			Button retry = (Button) findViewById(R.id.li_sms_retry);
-			retry.setVisibility(View.GONE);
 		}
 	};
 

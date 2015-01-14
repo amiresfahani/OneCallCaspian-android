@@ -1,95 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:linphone="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background" >
+  	android:background="@drawable/background" >
+    
+   <LinearLayout 
+       android:id="@+id/sms_header"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingTop="10dp"
+		android:paddingLeft="10dp"
+		android:paddingRight="10dp"
+	    android:gravity="center"
+	    android:orientation="horizontal"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true">
 
-    <LinearLayout
-        android:id="@+id/sms_header_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/caspian_lightblue" >
+       <View
+           android:id="@+id/spacer"
+           android:layout_width="40dp"
+           android:layout_height="0dp" />
 
-        <TextView
-            android:id="@+id/sms_to_label"
+       <TextView
+           android:id="@+id/sms_to"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:paddingLeft="10dp"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:textColor="@color/text_contrast" />
+        
+        <uk.co.onecallcaspian.ui.AvatarWithShadow
+            android:id="@+id/sms_to_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/to_header"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/sms_to"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/chat_fast_address_background"
-            android:ems="10"
-            android:enabled="false"
-            android:inputType="phone" />
+            linphone:picture="@drawable/unknown_small" />
+        
     </LinearLayout>
+    
+   <LinearLayout 
+        android:id="@+id/sms_footer"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+   		android:background="@drawable/chat_background">
+       
+	    <RelativeLayout 
+	        android:id="@+id/sms_message_layout"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content">
+	        
+	        
+	        <TextView
+	            android:id="@+id/sms_send"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
+	            android:layout_centerVertical="true"
+	            android:drawableTop="@drawable/chat_send_message"
+	            android:gravity="center"
+	            android:paddingLeft="10dp"
+	            android:paddingRight="10dp"
+	            android:textColor="@drawable/text_color" />
 
-    <LinearLayout
-        android:id="@+id/sms_footer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/caspian_lightblue" >
+	        <EditText
+	            android:id="@+id/sms_text"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentBottom="false"
+	            android:layout_toLeftOf="@+id/sms_send"
+	            android:layout_alignParentLeft="true"
+	            android:ems="10"
+	            android:inputType="textMultiLine"
+	            android:maxLines="3"
+	            android:padding="10dp"
+	            android:text="sdfg"
+	            android:textColor="@android:color/black"
+	            android:textCursorDrawable="@null" >
 
-        <TextView
-            android:id="@+id/sms_chars"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@null"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/caspian_dark_blue" />
-
-        <Button
-            android:id="@+id/sms_send"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sms" />
-
+	            <requestFocus />
+	        </EditText>
+	    </RelativeLayout>
+	    
+    
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/sms_content_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/sms_footer_layout"
-        android:layout_below="@id/sms_header_layout"
-        android:layout_margin="10dp"
-        android:orientation="vertical" >
-
-        <ListView
-            android:id="@+id/sms_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="0.8"
-            android:background="@null" >
-
-        </ListView>
-
-        <EditText
-            android:id="@+id/sms_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.2"
-            android:ems="10"
-            android:gravity="start|bottom"
-            android:inputType="textMultiLine" />
-
-    </LinearLayout>
-
+	<ListView
+		android:id="@+id/sms_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:divider="@android:color/transparent"
+		android:stackFromBottom="true"
+		android:cacheColorHint="@color/transparent"
+		android:dividerHeight="1dp"
+		android:layout_above="@id/sms_footer"
+		android:layout_below="@id/sms_header"
+		/>
+    
 </RelativeLayout>

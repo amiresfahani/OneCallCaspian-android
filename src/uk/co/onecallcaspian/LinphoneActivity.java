@@ -48,6 +48,7 @@ import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnMessageReceivedList
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnRegistrationStateChangedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
 import uk.co.onecallcaspian.custom.fragment.SmsFragment;
+import uk.co.onecallcaspian.custom.fragment.SmsHistoryFragment;
 import uk.co.onecallcaspian.setup.SetupActivity;
 import uk.co.onecallcaspian.ui.AddressText;
 import android.annotation.SuppressLint;
@@ -114,7 +115,7 @@ public class LinphoneActivity extends Activity implements
 	private Cursor contactCursor, sipContactCursor;
 	private OrientationEventListener mOrientationHelper;
 
-	static final boolean isInstanciated() {
+	public static final boolean isInstanciated() {
 		return instance != null;
 	}
 
@@ -246,7 +247,8 @@ public class LinphoneActivity extends Activity implements
 
 	@SuppressWarnings("incomplete-switch")
 	private void changeCurrentFragment(FragmentsAvailable newFragmentType, Bundle extras, boolean withoutAnimation) {
-		if (newFragmentType == currentFragment && newFragmentType != FragmentsAvailable.CHAT) {
+		if (newFragmentType == currentFragment && newFragmentType != FragmentsAvailable.CHAT &&
+				newFragmentType != FragmentsAvailable.SMS) {
 			return;
 		}
 		nextFragment = newFragmentType;
@@ -318,6 +320,9 @@ public class LinphoneActivity extends Activity implements
 			break;
 		case SMS:
 			newFragment = new SmsFragment();
+			break;
+		case SMS_HISTORY:
+			newFragment = new SmsHistoryFragment();
 			break;
 		}
 
@@ -566,9 +571,14 @@ public class LinphoneActivity extends Activity implements
 	}
 
 	public void displaySms(String text) {
-		Bundle extras = new Bundle();
-		extras.putString("phone_number", text);
-		changeCurrentFragment(FragmentsAvailable.SMS, extras);		
+		if(text == null || text.length() < 1) {
+			changeCurrentFragment(FragmentsAvailable.SMS_HISTORY, null);					
+		}
+		else {
+			Bundle extras = new Bundle();
+			extras.putString("phone_number", text);
+			changeCurrentFragment(FragmentsAvailable.SMS, extras);		
+		}
 	}
 
 	@Override

@@ -99,11 +99,20 @@ public class SmsDb {
 		}
 	}
 
-	public Cursor getCursor() {
+	public Cursor getHistoryListCursor() {
+		return db.rawQuery(sqlSelectJoinHistory, null);
+	}
+
+	public Cursor getAllCursor() {
 		return db.rawQuery(sqlSelectEverything, null);
 	}
 
-	public Cursor getCursor(long id) {
+	public Cursor getCursorForNumber(String number) {
+		String prepared = String.format(sqlSelectNumber, number);
+		return db.rawQuery(prepared, null);
+	}
+
+	public Cursor getCursorForId(long id) {
 		return db.rawQuery(sqlSelectOne, new String[] {Long.toString(id)});
 	}
 
@@ -124,6 +133,8 @@ public class SmsDb {
 	private static String sqlDeleteSms = "DELETE FROM sms WHERE _id = ?";
 	private static String sqlSelectEverything = "SELECT * FROM sms;";
 	private static String sqlSelectOne = "SELECT * FROM sms WHERE _id = ?;";
+	private static String sqlSelectNumber = "SELECT * FROM sms WHERE \"to\"=\"%s\";";
+	private static String sqlSelectJoinHistory = "SELECT * FROM sms WHERE _id IN (SELECT MAX(_id) FROM sms GROUP BY \"to\");";
 	
 	// Compiled statements
 	private SQLiteStatement stmtInsertSms, stmtUpdateSms, stmtUpdateDelivery, stmtDeleteSms;

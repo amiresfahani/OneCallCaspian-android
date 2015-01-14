@@ -35,7 +35,8 @@ public enum FragmentsAvailable {
 	SETTINGS,
 	CHATLIST,
 	CHAT,
-	SMS;
+	SMS,
+	SMS_HISTORY;
 	
 	public boolean shouldAddToBackStack() {
 		return true;

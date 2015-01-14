@@ -20,27 +20,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 import org.linphone.core.LinphoneCore;
 import org.linphone.mediastream.Log;
 
-import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.ui.AddressAware;
 import uk.co.onecallcaspian.ui.AddressText;
 import uk.co.onecallcaspian.ui.CallButton;
 import uk.co.onecallcaspian.ui.EraseButton;
-
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import uk.co.onecallcaspian.R;
 
 /**
  * @author Sylvain Berfini
@@ -267,6 +263,8 @@ public class DialerFragment extends Fragment {
 			if(LinphoneActivity.isInstanciated()) {
 				if(mAddress.getText().length() > 0) {
 					LinphoneActivity.instance().displaySms(mAddress.getText().toString());
+				} else {
+					LinphoneActivity.instance().displaySms(null);
 				}
 			}
 		}

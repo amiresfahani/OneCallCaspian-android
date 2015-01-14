@@ -28,41 +28,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 
-public class SmsListAdapter extends CursorAdapter {
-	public SmsListAdapter(Context context, String number) {
-		super(context, SmsDb.instance(context).getCursorForNumber(number), 0);
+public class SmsHistoryListAdapter extends CursorAdapter {
+	public SmsHistoryListAdapter(Context context) {
+		super(context, SmsDb.instance(context).getHistoryListCursor(), 0);
 		this.context = context;
-		this.number = number;
 		lastInstance = this;
 	}
 	
 	public void updateCursor() {
-		this.changeCursor(SmsDb.instance(context).getCursorForNumber(number));
+		this.changeCursor(SmsDb.instance(context).getHistoryListCursor());
 	}
 
 	public static void updateCursorStatic() {
 		if(lastInstance != null) {
-			lastInstance.changeCursor(SmsDb.instance().getCursorForNumber(lastInstance.number));
+			lastInstance.changeCursor(SmsDb.instance().getHistoryListCursor());
 		}
 	}
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		ViewGroup v = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.list_item_sms, parent, false);
+		ViewGroup v = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.list_item_sms_history, parent, false);
 		bindView(v, context, cursor);
 		return v;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		SmsListItem item = (SmsListItem) view;
-		item.setData(cursor.getLong(0),
-				cursor.getString(1),
-				cursor.getString(3),
-				cursor.getLong(2));
+		SmsHistoryListItem item = (SmsHistoryListItem) view;
+		item.setData(cursor.getString(1),
+				cursor.getString(3));
 	}
 
 	Context context;
-	private static SmsListAdapter lastInstance;
-	private String number;
+	private static SmsHistoryListAdapter lastInstance;
 }

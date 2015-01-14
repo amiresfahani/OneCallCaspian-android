@@ -29,16 +29,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class SmsFragment extends Fragment {
 	private LayoutInflater mInflater;
-	private EditText mSmsText, mSmsTo;
+	private TextView mSmsText, mSmsTo;
 	private ListView mSmsList;
 	private SmsListAdapter mSmsAdapter;
-	private Button mSmsSend;
+	private TextView mSmsSend;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,11 +46,9 @@ public class SmsFragment extends Fragment {
 		mInflater = inflater;
 		View view = mInflater.inflate(R.layout.sms, container, false);
 		mSmsText = (EditText) view.findViewById(R.id.sms_text);
-		mSmsTo = (EditText) view.findViewById(R.id.sms_to);
-		mSmsSend = (Button) view.findViewById(R.id.sms_send);
+		mSmsTo = (TextView) view.findViewById(R.id.sms_to);
+		mSmsSend = (TextView) view.findViewById(R.id.sms_send);
 		mSmsList = (ListView) view.findViewById(R.id.sms_list);
-		mSmsAdapter = new SmsListAdapter(getActivity());
-		mSmsList.setAdapter(mSmsAdapter);
 		mSmsList.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
 		mSmsList.setStackFromBottom(true);
         
@@ -64,6 +62,8 @@ public class SmsFragment extends Fragment {
 		super.onResume();
 		String phoneNumber = getArguments().getString("phone_number");
 		mSmsTo.setText(phoneNumber);
+		mSmsAdapter = new SmsListAdapter(getActivity(), phoneNumber);
+		mSmsList.setAdapter(mSmsAdapter);
 	}
 
 	OnClickListener onSmsSend = new OnClickListener() {
