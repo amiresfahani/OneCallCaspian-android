@@ -71,13 +71,12 @@
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentBottom="false"
-	            android:layout_toLeftOf="@+id/sms_send"
 	            android:layout_alignParentLeft="true"
+	            android:layout_toLeftOf="@+id/sms_send"
 	            android:ems="10"
 	            android:inputType="textMultiLine"
 	            android:maxLines="3"
 	            android:padding="10dp"
-	            android:text="sdfg"
 	            android:textColor="@android:color/black"
 	            android:textCursorDrawable="@null" >
 
