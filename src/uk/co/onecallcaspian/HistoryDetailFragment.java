@@ -24,6 +24,7 @@ import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 
+import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 
 import android.annotation.SuppressLint;
@@ -43,7 +44,7 @@ import uk.co.onecallcaspian.R;
  * @author Sylvain Berfini
  */
 public class HistoryDetailFragment extends Fragment implements OnClickListener {
-	private ImageView dialBack, chat, addToContacts;
+	private ImageView dialBack, chat, sms, addToContacts;
 	private View view;
 	private AvatarWithShadow contactPicture;
 	private TextView contactName, contactAddress, callDirection, time, date;
@@ -68,6 +69,9 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		chat.setOnClickListener(this);
 		if (getResources().getBoolean(R.bool.disable_chat))
 			view.findViewById(R.id.chatRow).setVisibility(View.GONE);
+
+		sms = (ImageView) view.findViewById(R.id.sms);
+		sms.setOnClickListener(this);
 		
 		addToContacts = (ImageView) view.findViewById(R.id.addToContacts);
 		addToContacts.setOnClickListener(this);
@@ -160,6 +164,8 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			LinphoneActivity.instance().setAddresGoToDialerAndCall(sipUri, displayName, pictureUri == null ? null : Uri.parse(pictureUri));
 		} else if (id == R.id.chat) {
 			LinphoneActivity.instance().displayChat(sipUri);
+		} else if (id == R.id.sms) {
+			LinphoneActivity.instance().displaySms(FormattingHelp.stripDomainFromAddress(sipUri));
 		} else if (id == R.id.addToContacts) {
 			String uriToAdd = sipUri;
 			if (getResources().getBoolean(R.bool.never_display_sip_addresses)) {
