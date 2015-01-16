@@ -21,6 +21,8 @@ import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.R;
 import uk.co.onecallcaspian.custom.adapter.SmsListAdapter;
 import uk.co.onecallcaspian.custom.database.SmsDb;
+import uk.co.onecallcaspian.custom.dialog.ActivateSmsDialog;
+import uk.co.onecallcaspian.custom.dialog.VerifySmsDialog;
 import uk.co.onecallcaspian.custom.rest.SmsHandler;
 import uk.co.onecallcaspian.custom.rest.SmsRequestHandlerCallback;
 import android.app.Fragment;
@@ -60,6 +62,7 @@ public class SmsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		ActivateSmsDialog.activateIfFirstRun(getActivity());
 		String phoneNumber = getArguments().getString("phone_number");
 		mSmsTo.setText(phoneNumber);
 		mSmsAdapter = new SmsListAdapter(getActivity(), phoneNumber);

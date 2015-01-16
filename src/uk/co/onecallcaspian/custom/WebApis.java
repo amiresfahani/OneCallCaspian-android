@@ -18,6 +18,12 @@ public class WebApis {
 	// https://onecallcaspian.co.uk/mobile/credit?phone_number=1234567890&password=123456
 	public static String balance = "https://onecallcaspian.co.uk/mobile/credit?";
 
+	// https://onecallcaspian.co.uk/mobile/regsender?phone_number=393425513699&password=pass1234
+	public static String reg_sms = "https://onecallcaspian.co.uk/mobile/regsender?";
+
+	// https://onecallcaspian.co.uk/mobile/verify?phone_number=393423333699&password=pass1234&code=a3095
+	public static String verify_sms = "https://onecallcaspian.co.uk/mobile/verify?";
+		
 	// https://onecallcaspian.co.uk/mobile/sms?phone_number=1234567890&password=123456&from=1234567890&text=SMSTEST&receiver=2134567890
 	public static String sms = "https://onecallcaspian.co.uk/mobile/sms?";
 }

@@ -504,4 +504,11 @@
 	<string name="lipsum_short">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue laoreet diam, ac pellentesque libero fermentum et. Curabitur eget ligula pellentesque, ullamcorper neque eget, ullamcorper nisi. Donec luctus, mi eu dapibus viverra, elit quam convallis dui, ut malesuada sapien odio sit amet metus. "</string>
 	
 	<string name="sms_status_sending">Sending...</string>
+	<string name="activate">Activate</string>
+	<string name="activate_title">Activate SMS</string>
+	<string name="activate_prompt">This is the first time you are sending an SMS. Do you want to activate SMS sending on your account now?</string>
+	<string name="verify_prompt">Activation in progress. You should receive an SMS with the activation code. Input the code here and click Activate.</string>
+	<string name="activate_error">Failed to activate. Please try again.</string>
+	<string name="activate_success">Activation succesfull</string>
+				
 </resources>

@@ -107,6 +107,14 @@ public class LinphonePreferences {
 		getConfig().setBool("app", "first_launch", false);
 	}
 
+	public boolean isSmsActivated() {
+		return getConfig().getBool("app", "sms_activated", false);
+	}
+
+	public void activateSms() {
+		getConfig().setBool("app", "sms_activated", true);
+	}
+
 	public String getRingtone(String defaultRingtone) {
 		String ringtone = getConfig().getString("app", "ringtone", defaultRingtone);
 		if (ringtone == null || ringtone.length() == 0)
