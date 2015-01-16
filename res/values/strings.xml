@@ -281,8 +281,11 @@
 	<string name="pref_help_password">You have to re-enter your password if you edit your username and/or the domain</string>
 
 	<string name="delete">Delete</string>
-	<string name="chat">Chat for Free</string>
+	<string name="chat">Chat</string>
+	<string name="chat_all_caps">CHAT</string>
+	<string name="chat_for_free">Chat for Free</string>
 	<string name="sms">SMS</string>
+	<string name="sms_extra_space">SMS&#160;&#160;</string>
 	<string name="call">Call</string>
 	<string name="add_to_contacts">Add to contacts</string>
 	<string name="status_connected">Active</string>

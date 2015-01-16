@@ -50,7 +50,7 @@ public class DialerFragment extends Fragment {
 	private AddressText mAddress;
 	private CallButton mCall;
 	private ImageView mAddContact;
-	private ImageButton chat, sms;
+	private TextView chat, sms;
 	private TextView missedChats;
 	private OnClickListener addContactListener, cancelListener, transferListener;
 	private boolean shouldEmptyAddressField = true;
@@ -88,10 +88,10 @@ public class DialerFragment extends Fragment {
 			numpad.setAddressWidget(mAddress);
 		}
 		
-		chat = (ImageButton) rootView.findViewById(R.id.Chat);
+		chat = (TextView) rootView.findViewById(R.id.Chat);
 		chat.setOnClickListener(onChatClick);
 
-		sms = (ImageButton) rootView.findViewById(R.id.sms);
+		sms = (TextView) rootView.findViewById(R.id.sms);
 		sms.setOnClickListener(onSmsClick);
 
 		missedChats = (TextView) rootView.findViewById(R.id.missedChats);

@@ -52,13 +52,16 @@
         android:layout_centerHorizontal="true"
         android:background="@color/caspian_lightblue" >
 
-        <ImageButton
+        <TextView
             android:id="@+id/sms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:background="@null"
-            android:src="@drawable/btn_sms_dialer" />
+            android:drawableTop="@drawable/btn_sms_dialer"
+            android:gravity="center_horizontal"
+            android:text="@string/sms"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black" />
 
         <View
             android:id="@+id/spacer1"
@@ -70,6 +73,7 @@
             android:id="@+id/Call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="0"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
@@ -87,12 +91,15 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true" >
 
-            <ImageButton
+            <TextView
                 android:id="@+id/Chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/btn_chat_dialer" />
+                android:drawableTop="@drawable/btn_chat_dialer"
+                android:gravity="center"
+                android:text="@string/chat"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/missedChats"
@@ -104,6 +111,7 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
+
     </LinearLayout>
 
     <uk.co.onecallcaspian.ui.Numpad
