@@ -21,6 +21,7 @@ package uk.co.onecallcaspian.custom.dialog;
 
 import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.custom.RunState;
 import uk.co.onecallcaspian.custom.rest.RequestHandlerCallback;
 import uk.co.onecallcaspian.custom.rest.VerifySmsHandler;
 import uk.co.onecallcaspian.custom.rest.data.VerifySmsJsonData;
@@ -42,6 +43,9 @@ public class VerifySmsDialog implements RequestHandlerCallback<VerifySmsJsonData
     }
     
     private void activate(Activity activity) {
+    	if(!RunState.isRunning(activity)) {
+    		return;
+    	}
     	this.activity = activity;
         input = new EditText(activity);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

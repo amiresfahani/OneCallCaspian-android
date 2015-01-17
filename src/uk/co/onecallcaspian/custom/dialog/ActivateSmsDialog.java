@@ -21,6 +21,7 @@ package uk.co.onecallcaspian.custom.dialog;
 
 import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.custom.RunState;
 import uk.co.onecallcaspian.custom.rest.ActivateSmsHandler;
 import uk.co.onecallcaspian.custom.rest.RequestHandlerCallback;
 import uk.co.onecallcaspian.custom.rest.data.ActivateSmsJsonData;
@@ -45,6 +46,9 @@ public class ActivateSmsDialog implements RequestHandlerCallback<ActivateSmsJson
     }
     
     public static void activateSms(Activity activity) {
+    	if(!RunState.isRunning(activity)) {
+    		return;
+    	}
     	ActivateSmsDialog dlg = new ActivateSmsDialog();
     	dlg.activate(activity);
     }
