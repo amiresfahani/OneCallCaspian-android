@@ -64,6 +64,14 @@ public class ContactFragment extends Fragment implements OnClickListener {
 				LinphoneActivity.instance().displayChat(v.getTag().toString());
 		}
 	};
+
+	private OnClickListener smsListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if (LinphoneActivity.isInstanciated())
+				LinphoneActivity.instance().displaySms(v.getTag().toString());
+		}
+	};
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		contact = (Contact) getArguments().getSerializable("Contact");
@@ -123,6 +131,7 @@ public class ContactFragment extends Fragment implements OnClickListener {
 			}
 
 			v.findViewById(R.id.start_chat).setOnClickListener(chatListener);
+			v.findViewById(R.id.start_sms).setOnClickListener(smsListener);
 			LinphoneProxyConfig lpc = LinphoneManager.getLc().getDefaultProxyConfig();
 			if (lpc != null) {
 				if (!displayednumberOrAddress.startsWith("sip:")) {
@@ -134,8 +143,10 @@ public class ContactFragment extends Fragment implements OnClickListener {
 					tag = numberOrAddress + "@" + lpc.getDomain();
 				}
 				v.findViewById(R.id.start_chat).setTag(tag);
+				v.findViewById(R.id.start_sms).setTag(tag);
 			} else {
 				v.findViewById(R.id.start_chat).setTag(numberOrAddress);
+				v.findViewById(R.id.start_sms).setTag(numberOrAddress);
 			}
 			
 			final String finalNumberOrAddress = numberOrAddress;
