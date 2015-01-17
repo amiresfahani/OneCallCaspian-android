@@ -62,7 +62,6 @@ public class SmsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		ActivateSmsDialog.activateIfFirstRun(getActivity());
 		String phoneNumber = getArguments().getString("phone_number");
 		mSmsTo.setText(phoneNumber);
 		mSmsAdapter = new SmsListAdapter(getActivity(), phoneNumber);

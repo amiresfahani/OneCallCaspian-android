@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 import org.linphone.core.LinphoneCore;
 import org.linphone.mediastream.Log;
 
+import uk.co.onecallcaspian.custom.dialog.ActivateSmsDialog;
 import uk.co.onecallcaspian.ui.AddressAware;
 import uk.co.onecallcaspian.ui.AddressText;
 import uk.co.onecallcaspian.ui.CallButton;
@@ -261,6 +262,7 @@ public class DialerFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			if(LinphoneActivity.isInstanciated()) {
+				ActivateSmsDialog.activateIfFirstRun(getActivity());
 				if(mAddress.getText().length() > 0) {
 					LinphoneActivity.instance().displaySms(mAddress.getText().toString());
 				} else {

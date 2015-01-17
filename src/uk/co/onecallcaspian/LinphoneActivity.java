@@ -47,6 +47,7 @@ import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnCallStateChangedLis
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnMessageReceivedListener;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnRegistrationStateChangedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
+import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.fragment.SmsFragment;
 import uk.co.onecallcaspian.custom.fragment.SmsHistoryFragment;
 import uk.co.onecallcaspian.setup.SetupActivity;
@@ -571,6 +572,7 @@ public class LinphoneActivity extends Activity implements
 	}
 
 	public void displaySms(String text) {
+		text = FormattingHelp.stripDomainFromAddress(text);
 		if(text == null || text.length() < 1) {
 			changeCurrentFragment(FragmentsAvailable.SMS_HISTORY, null);					
 		}
