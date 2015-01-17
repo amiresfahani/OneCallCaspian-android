@@ -132,7 +132,7 @@ public class HistoryFragment extends Fragment implements OnClickListener, OnChil
 		if (!hideHistoryListAndDisplayMessageIfEmpty()) {
 			historyList.setAdapter(new CallHistoryAdapter(getActivity().getApplicationContext()));
 		}
-        expandAllGroups();
+        //expandAllGroups();
 	}
 	
 	private void initLogsLists(List<LinphoneCallLog> logs) {
