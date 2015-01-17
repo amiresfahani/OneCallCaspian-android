@@ -28,6 +28,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 /**
@@ -39,20 +41,31 @@ public class ActivateSmsDialog implements RequestHandlerCallback<ActivateSmsJson
     	if(LinphonePreferences.instance().isSmsActivated()) {
     		return;
     	}
+    	activateSms(activity);
+    }
+    
+    public static void activateSms(Activity activity) {
     	ActivateSmsDialog dlg = new ActivateSmsDialog();
     	dlg.activate(activity);
     }
-    
+
     private void activate(Activity activity) {
     	this.activity = activity;
     	AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
+    	final ProgressBar progress = new ProgressBar(activity);
+    	progress.setVisibility(View.GONE);
+    	
+    	builder.setCancelable(false);
+    	builder.setView(progress);
     	builder.setTitle(R.string.activate_title);
     	builder.setMessage(R.string.activate_prompt);
     	builder.setPositiveButton(R.string.yes, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialogInterface = dialog;
+				progress.setVisibility(View.VISIBLE);
+				
 				ActivateSmsHandler handler = new ActivateSmsHandler(ActivateSmsDialog.this);
 				
 				LinphonePreferences prefs = LinphonePreferences.instance();

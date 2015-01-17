@@ -37,6 +37,7 @@ import org.linphone.mediastream.Version;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 
 import uk.co.onecallcaspian.LinphoneManager.EcCalibrationListener;
+import uk.co.onecallcaspian.custom.dialog.ActivateSmsDialog;
 import uk.co.onecallcaspian.setup.SetupActivity;
 import uk.co.onecallcaspian.ui.LedPreference;
 import uk.co.onecallcaspian.ui.PreferencesListFragment;
@@ -117,6 +118,17 @@ public class SettingsFragment extends PreferencesListFragment implements EcCalib
 			public boolean onPreferenceClick(Preference preference) {
 				if (LinphoneActivity.isInstanciated()) {
 					LinphoneActivity.instance().exit();
+					return true;
+				}
+				return false;
+			}
+		});
+
+		findPreference(getString(R.string.menu_register_sms_key)).setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				if (LinphoneActivity.isInstanciated()) {
+					ActivateSmsDialog.activateSms(getActivity());
 					return true;
 				}
 				return false;

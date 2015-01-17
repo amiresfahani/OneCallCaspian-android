@@ -13,6 +13,10 @@
 	    android:title="@string/menu_exit"
 	    android:key="@string/menu_exit_key"/>
     
+    <Preference
+	    android:title="@string/menu_register_sms"
+	    android:key="@string/menu_register_sms_key"/>
+    
     <PreferenceCategory
         android:title="@string/pref_sipaccounts"
 	    android:key="@string/pref_sipaccounts_key"/>

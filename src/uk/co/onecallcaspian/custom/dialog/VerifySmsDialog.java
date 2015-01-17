@@ -46,6 +46,7 @@ public class VerifySmsDialog implements RequestHandlerCallback<VerifySmsJsonData
         input = new EditText(activity);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
+        builder.setCancelable(false);
     	builder.setTitle(R.string.activate_title);
     	builder.setMessage(R.string.verify_prompt);
     	builder.setView(input);

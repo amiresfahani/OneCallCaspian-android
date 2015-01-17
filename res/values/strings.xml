@@ -204,6 +204,7 @@
 	<string name="menu_send_log">Send log</string>
 	<string name="pref_audio">Audio</string>
 	<string name="menu_exit">Exit</string>
+	<string name="menu_register_sms">Activate SMS</string>
 	<string name="menu_logout">Logout</string>
 	<string name="pref_prefix">Prefix</string>
 	<string name="pref_advanced">Advanced</string>

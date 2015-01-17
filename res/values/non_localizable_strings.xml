@@ -32,6 +32,7 @@
 
 	<string name="menu_about_key">menu_about_key</string>
 	<string name="menu_exit_key">menu_exit_key</string>
+	<string name="menu_register_sms_key">menu_register_sms_key</string>
 	<string name="menu_logout_key">menu_logout_key</string>
 	<string name="pref_sipaccounts_key">pref_sipaccounts_key</string>
 	<string name="setup_key">setup_key</string>
