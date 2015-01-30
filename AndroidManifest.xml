@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.co.onecallcaspian"
     android:installLocation="auto"
-    android:versionCode="6" >
+    android:versionCode="7" >
 
     <uses-sdk
         android:minSdkVersion="14"
