@@ -267,7 +267,8 @@ public class SignUp extends Activity implements RequestHandlerCallback<SignupJso
 		AccountBuilder builder = new AccountBuilder(LinphoneManager.getLc()).setUsername(username).setDomain(domain).setPassword(password)
 				.setTransport(TransportType.LinphoneTransportTcp);
 		LinphonePreferences mPrefs = LinphonePreferences.instance();
-
+		mPrefs.setActivating(true);
+		
 		if (getResources().getBoolean(R.bool.enable_push_id)) {
 			String regId = mPrefs.getPushNotificationRegistrationID();
 			String appId = getString(R.string.push_sender_id);

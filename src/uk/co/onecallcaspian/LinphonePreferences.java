@@ -107,6 +107,14 @@ public class LinphonePreferences {
 		getConfig().setBool("app", "first_launch", false);
 	}
 
+	public boolean isActivating() {
+		return getConfig().getBool("app", "activating", false);
+	}
+
+	public void setActivating(boolean newState) {
+		getConfig().setBool("app", "activating", newState);
+	}
+
 	public boolean isSmsActivated() {
 		return getConfig().getBool("app", "sms_activated", false);
 	}

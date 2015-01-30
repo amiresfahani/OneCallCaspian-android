@@ -22,6 +22,7 @@ import static android.content.Intent.ACTION_MAIN;
 
 import org.linphone.mediastream.Log;
 
+import uk.co.onecallcaspian.custom.ConfirmSignUpAccessCode;
 import uk.co.onecallcaspian.custom.ErrorReporter;
 import uk.co.onecallcaspian.setup.RemoteProvisioningActivity;
 import uk.co.onecallcaspian.tutorials.TutorialLauncherActivity;
@@ -82,7 +83,10 @@ public class LinphoneLauncherActivity extends Activity {
 			classToStart = TutorialLauncherActivity.class;
 		} else if (getResources().getBoolean(R.bool.display_sms_remote_provisioning_activity) && LinphonePreferences.instance().isFirstRemoteProvisioning()) {
 			classToStart = RemoteProvisioningActivity.class;
-		} else {
+		} else if(LinphonePreferences.instance().isActivating()) {
+			classToStart = ConfirmSignUpAccessCode.class;
+		}
+		else {
 			classToStart = LinphoneActivity.class;
 		}
 		

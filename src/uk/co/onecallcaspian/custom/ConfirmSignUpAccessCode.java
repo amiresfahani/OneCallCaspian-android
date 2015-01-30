@@ -5,8 +5,11 @@ import org.json.JSONObject;
 
 import uk.co.onecallcaspian.CustomPreferences;
 import uk.co.onecallcaspian.LinphoneActivity;
+import uk.co.onecallcaspian.LinphoneLauncherActivity;
+import uk.co.onecallcaspian.LinphonePreferences;
 
 import uk.co.onecallcaspian.R;
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -48,13 +51,19 @@ public class ConfirmSignUpAccessCode extends Activity {
 		enter = (ImageView) findViewById(R.id.signup_code_enter_iv);
 		back = (ImageView) findViewById(R.id.signup_code_back_iv);
 
-		String tempCode = getIntent().getExtras().getString("activation_code");
+		// String tempCode = getIntent().getExtras().getString("activation_code");
 		// access_code.setText(tempCode);
 
 		back.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				LinphonePreferences mPrefs = LinphonePreferences.instance();
+				while(mPrefs.getAccountCount() > 0) {
+					mPrefs.deleteAccount(0);
+				}
+				mPrefs.setActivating(false);
+				startActivity(new Intent(ConfirmSignUpAccessCode.this, LinphoneLauncherActivity.class));
 				finish();
 			}
 		});
@@ -148,13 +157,14 @@ public class ConfirmSignUpAccessCode extends Activity {
 							.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int id) {
 									dialog.cancel();
-									Intent intent = new Intent(ConfirmSignUpAccessCode.this, Password.class);
-									startActivity(intent);
+									// Intent intent = new Intent(ConfirmSignUpAccessCode.this, SignUp.class);
+									// startActivity(intent);
 								}
 							});
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
 				} else {
+					LinphonePreferences.instance().setActivating(false);
 
 					String msg = jobj.getString("message");
 					String user_id = jobj.getString("user_id");
