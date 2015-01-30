@@ -19,26 +19,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -56,8 +55,6 @@ import org.linphone.core.LinphoneChatRoom;
 import org.linphone.core.LinphoneCore;
 import org.linphone.mediastream.Log;
 
-import com.google.gson.Gson;
-
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
@@ -65,10 +62,11 @@ import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogLi
 import uk.co.onecallcaspian.custom.rest.data.SendFileJsonData;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 import uk.co.onecallcaspian.ui.BubbleChat;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -83,8 +81,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.app.Fragment;
-import android.content.CursorLoader;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -106,7 +102,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import uk.co.onecallcaspian.R;
+import com.google.gson.Gson;
 
 /**
  * @author Sylvain Berfini
@@ -348,12 +344,12 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			BubbleChat bubble;
 			LinphoneChatMessage msg = history[position];
 			View v;
-
-			if (msg.getExternalBodyUrl() != null ) {	
-				bubble = displayImageMessage(msg.getStorageId(), null, msg.getTime(), !msg.isOutgoing(), msg.getStatus(), context, msg.getExternalBodyUrl());
+			
+			String url = extractFileUrlOrNull(msg.getText());
+			if(url != null) {	
+				bubble = displayImageMessage(msg.getStorageId(), null, msg.getTime(), !msg.isOutgoing(), msg.getStatus(), context, url);
 			} else {
-				bubble = displayMessage(msg.getStorageId(), msg.getText(), msg.getTime(), !msg.isOutgoing(), msg.getStatus(), context);
-				
+				bubble = displayMessage(msg.getStorageId(), msg.getText(), msg.getTime(), !msg.isOutgoing(), msg.getStatus(), context);		
 			}
 			
 			v = bubble.getView();
@@ -365,6 +361,29 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			
 			return rlayout;
 		}
+
+		private String extractFileUrlOrNull(String text) {
+			String baseUrl = LinphonePreferences.instance().getSharingPictureServerUrl();
+
+			if(text == null) {
+				return null;
+			}
+			
+			Pattern p = Pattern.compile("<file>(.*)</file>");
+			Matcher m = p.matcher(text);
+			if(!m.matches()) {
+				return null;
+			}
+			if(m.groupCount() == 1) {
+				String url = m.group(1);
+				if(!url.startsWith(baseUrl)) {
+					return null;
+				}
+				return url;
+			}
+			return null;
+		}
+
 	 }
 	
 	public View getBubble(int position){
@@ -634,6 +653,34 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		boolean isNetworkReachable = lc == null ? false : lc.isNetworkReachable();
 
 		if (chatRoom != null && url != null && url.length() > 0 && isNetworkReachable) {
+			String msgContent = String.format("<file>%s</file>", url);
+			LinphoneChatMessage chatMessage = chatRoom.createLinphoneChatMessage(msgContent);
+			chatRoom.sendMessage(chatMessage, this);
+
+			int newId = -1;
+			if (LinphoneActivity.isInstanciated()) {
+				newId = LinphoneActivity.instance().onMessageSent(sipUri, bitmap, url);
+			}
+			newId = chatMessage.getStorageId();
+			latestImageMessages.put(newId, url);
+
+			if (useLinphoneMessageStorage)
+				url = saveImage(bitmap, newId, chatMessage);
+			
+			adapter.refreshHistory();
+			adapter.notifyDataSetChanged();
+			
+			scrollToEnd();
+		} else if (!isNetworkReachable && LinphoneActivity.isInstanciated()) {
+			LinphoneActivity.instance().displayCustomToast(getString(R.string.error_network_unreachable), Toast.LENGTH_LONG);
+		}
+	}
+	
+	private void sendImageMessageRFC2017(String url, Bitmap bitmap) {
+		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+		boolean isNetworkReachable = lc == null ? false : lc.isNetworkReachable();
+
+		if (chatRoom != null && url != null && url.length() > 0 && isNetworkReachable) {
 			LinphoneChatMessage chatMessage = chatRoom.createLinphoneChatMessage("");
 			chatMessage.setExternalBodyUrl(url);
 			chatRoom.sendMessage(chatMessage, this);
@@ -886,7 +933,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		String fileName;
 		File sourceFile = new File(filePath);
 		if (filePath != null) {
-			fileName = sourceFile.getName();
+			fileName = String.valueOf(System.currentTimeMillis()) + sourceFile.getName();
 		} else {
 			fileName = getString(R.string.temp_photo_name_with_date).replace("%s", String.valueOf(System.currentTimeMillis()));
 		}
@@ -898,7 +945,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			LinphonePreferences prefs = LinphonePreferences.instance();
 			String username = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
 			multiPart.addPart("username", new StringBody(username));
-			multiPart.addPart("file", new FileBody(sourceFile));
+			FileBody fb = new FileBody(sourceFile, fileName, "image/jpeg", "UTF-8");
+			multiPart.addPart("file", fb);
 			
 			HttpParams httpParameters = new BasicHttpParams();
 			HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
@@ -916,7 +964,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			if(returnData.code < 0) {
 				return null;
 			}
-			response = uploadServerUri + "?username="+username+"&file="+URLEncoder.encode(fileName, "UTF-8");
+			String retFn = FilenameUtils.getName(returnData.file);
+			response = uploadServerUri + "?username="+username+"&file="+URLEncoder.encode(retFn, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
