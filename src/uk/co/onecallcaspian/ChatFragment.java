@@ -25,13 +25,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.ByteArrayBuffer;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneChatMessage;
@@ -40,10 +56,13 @@ import org.linphone.core.LinphoneChatRoom;
 import org.linphone.core.LinphoneCore;
 import org.linphone.mediastream.Log;
 
+import com.google.gson.Gson;
+
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogListener;
+import uk.co.onecallcaspian.custom.rest.data.SendFileJsonData;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 import uk.co.onecallcaspian.ui.BubbleChat;
 
@@ -862,21 +881,46 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		return hash;
 	}
 
+	// TODO Convert to AsyncTask. This is horrible.
 	private String uploadImage(String filePath, Bitmap file, int compressorQuality, final int imageSize) {
 		String fileName;
+		File sourceFile = new File(filePath);
 		if (filePath != null) {
-			File sourceFile = new File(filePath);
 			fileName = sourceFile.getName();
 		} else {
 			fileName = getString(R.string.temp_photo_name_with_date).replace("%s", String.valueOf(System.currentTimeMillis()));
 		}
 
-		if (getResources().getBoolean(R.bool.hash_images_as_name_before_upload)) {
-			fileName = String.valueOf(hashBitmap(file)) + ".jpg";
-		}
-
 		String response = null;
-		HttpURLConnection conn = null;
+		try {
+			HttpPost post = new HttpPost(uploadServerUri);
+			MultipartEntity multiPart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			LinphonePreferences prefs = LinphonePreferences.instance();
+			String username = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
+			multiPart.addPart("username", new StringBody(username));
+			multiPart.addPart("file", new FileBody(sourceFile));
+			
+			HttpParams httpParameters = new BasicHttpParams();
+			HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
+			HttpProtocolParams.setHttpElementCharset(httpParameters, HTTP.UTF_8);
+			HttpClient client = new DefaultHttpClient(httpParameters);
+			post.setEntity(multiPart);
+			HttpResponse res = client.execute(post);
+			if(res.getStatusLine().getStatusCode() != 200) {
+				return null;
+			}
+			InputStream is = res.getEntity().getContent();
+			String content = IOUtils.toString(is);
+			Gson gson = new Gson();
+			SendFileJsonData returnData = gson.fromJson(content, SendFileJsonData.class);
+			if(returnData.code < 0) {
+				return null;
+			}
+			response = uploadServerUri + "?username="+username+"&file="+URLEncoder.encode(fileName, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+/*		HttpURLConnection conn = null;
 		try {
 		    String lineEnd = "\r\n";
 			String twoHyphens = "--";
@@ -935,8 +979,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
             if (conn != null) {
                 conn.disconnect();
             }
-        }
-
+        }*/
 		return response;
 	}
 
@@ -1018,27 +1061,31 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
                 }
 
                 if (!uploadThread.isInterrupted()) {
-                    final Bitmap fbm = bm;
-                    final String furl = url;
-	                mHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							uploadLayout.setVisibility(View.GONE);
-							textLayout.setVisibility(View.VISIBLE);
-							progressBar.setProgress(0);
-			            	if (furl != null) {
-			            		sendImageMessage(furl, fbm);
-			            	} else {
-			            		Toast.makeText(getActivity(), getString(R.string.error), Toast.LENGTH_LONG).show();
-			            	}
-						}
-					});
+                	ImageSenderRunnable isr = new ImageSenderRunnable();
+                	isr.fbm = bm;
+                	isr.furl = url;
+	                mHandler.post(isr);
                 }
 			}
 		});
     	uploadThread.start();
 	}
 
+	private class ImageSenderRunnable implements Runnable {
+		public void run() {
+			uploadLayout.setVisibility(View.GONE);
+			textLayout.setVisibility(View.VISIBLE);
+			progressBar.setProgress(0);
+        	if (furl != null) {
+        		sendImageMessage(furl, fbm);
+        	} else {
+        		Toast.makeText(getActivity(), getString(R.string.error), Toast.LENGTH_LONG).show();
+        	}			
+		}
+		public String furl;
+		public Bitmap fbm; 
+	}
+	
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_PHOTO && resultCode == Activity.RESULT_OK) {

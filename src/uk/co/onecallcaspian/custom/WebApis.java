@@ -26,4 +26,7 @@ public class WebApis {
 		
 	// https://onecallcaspian.co.uk/mobile/sms?phone_number=1234567890&password=123456&from=1234567890&text=SMSTEST&receiver=2134567890
 	public static String sms = "https://onecallcaspian.co.uk/mobile/sms?";
+
+	// https://onecallcaspian.co.uk/sharing/index.php (POST with username and file)
+	public static String sharing_server = "https://onecallcaspian.co.uk/sharing/index.php";
 }
