@@ -398,6 +398,10 @@ public class ChatListFragment extends Fragment implements OnClickListener, OnIte
 					message = (lastMessage == null || lastMessage.getMessage() == null) ? "" : lastMessage.getMessage();
 				}
 			}
+			
+			if(message.startsWith("<file>")) {
+				message = "This message contains a file...";
+			}
 			TextView lastMessageView = (TextView) view.findViewById(R.id.lastMessage);
 			lastMessageView.setText(message);
 			
