@@ -345,7 +345,15 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			LinphoneChatMessage msg = history[position];
 			View v;
 			
-			String url = extractFileUrlOrNull(msg.getText());
+			/**
+			 * First, if there is an external body url, use that.
+			 * Second, check for our style file url.
+			 * Finally, settle for normal message.
+			 */
+			String url = msg.getExternalBodyUrl();
+			if(url == null || url.length() < 1) {
+				url = extractFileUrlOrNull(msg.getText());
+			}
 			if(url != null) {	
 				bubble = displayImageMessage(msg.getStorageId(), null, msg.getTime(), !msg.isOutgoing(), msg.getStatus(), context, url);
 			} else {
