@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -482,6 +483,13 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 					}).start();
 				}
 			});
+    		// Hack to click button immediately
+			Handler h = new Handler(getActivity().getMainLooper());
+			h.post(new Runnable() {
+				public void run() {
+					v.findViewById(R.id.download).performClick();
+				}
+			});
 		} else { // Show
 			Bitmap bm = BitmapFactory.decodeFile(url);
 			((ImageView)v.findViewById(R.id.image)).setImageBitmap(bm);
@@ -937,9 +945,10 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	}
 
 	// TODO Convert to AsyncTask. This is horrible.
-	private String uploadImage(String filePath, Bitmap file, int compressorQuality, final int imageSize) {
+	private String uploadImage(String filePath, String compressedPath, Bitmap file, int compressorQuality, final long l) {
 		String fileName;
 		File sourceFile = new File(filePath);
+		File compressedSourceFile = new File(compressedPath);
 		if (filePath != null) {
 			fileName = String.valueOf(System.currentTimeMillis()) + sourceFile.getName();
 		} else {
@@ -953,7 +962,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			LinphonePreferences prefs = LinphonePreferences.instance();
 			String username = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
 			multiPart.addPart("username", new StringBody(username));
-			FileBody fb = new FileBody(sourceFile, fileName, "image/jpeg", "UTF-8");
+			FileBody fb = new FileBody(compressedSourceFile, fileName, "image/jpeg", "UTF-8");
 			multiPart.addPart("file", fb);
 			
 			HttpParams httpParameters = new BasicHttpParams();
@@ -1106,15 +1115,21 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 					e.printStackTrace();
 				}
 
-                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                if (bm != null) {
-                	bm.compress(CompressFormat.JPEG, COMPRESSOR_QUALITY, outStream);
-                }
-
                 if (!uploadThread.isInterrupted() && bm != null) {
-	                url = uploadImage(filePath, bm, COMPRESSOR_QUALITY, outStream.size());
-	                File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
-	                file.delete();
+                	try {
+	                	File compressed = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
+	                	FileOutputStream out = new FileOutputStream(compressed); 
+	                    if (bm != null) {
+	                    	bm.compress(CompressFormat.JPEG, COMPRESSOR_QUALITY, out);
+	                    }
+	                    out.flush();
+	                    out.close();
+		                url = uploadImage(filePath, compressed.getAbsolutePath(), bm, COMPRESSOR_QUALITY, compressed.length());
+		                compressed.delete();
+                	}
+                	catch(IOException e) {
+                		e.printStackTrace();
+                	}
                 }
 
                 if (!uploadThread.isInterrupted()) {
