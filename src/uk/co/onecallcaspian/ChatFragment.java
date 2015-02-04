@@ -18,36 +18,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.ByteArrayBuffer;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneChatMessage;
@@ -58,9 +42,13 @@ import org.linphone.mediastream.Log;
 
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
+import uk.co.onecallcaspian.custom.filesharing.FilesharingCache;
+import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask;
+import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask.DownloadTaskCallback;
+import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask;
+import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask.UploadTaskCallback;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogListener;
-import uk.co.onecallcaspian.custom.rest.data.SendFileJsonData;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
 import uk.co.onecallcaspian.ui.BubbleChat;
 import android.annotation.SuppressLint;
@@ -102,8 +90,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 /**
  * @author Sylvain Berfini
@@ -430,6 +416,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		return bubble;
 	}
 
+
 	private BubbleChat displayImageMessage(int id, Bitmap image, long time, boolean isIncoming, LinphoneChatMessage.State status, Context context, final String url) {
 		final BubbleChat bubble = new BubbleChat(context, id, null, image, time, isIncoming, status, url);
 		if (!isIncoming) {
@@ -441,55 +428,40 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		final View v = bubble.getView();
 		final int finalId = id;
 
-		if (url.startsWith("http")) { // Download
-			bubble.setShowOrDownloadText(getString(R.string.download_image));
-			bubble.setShowOrDownloadImageButtonListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					v.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
-					v.findViewById(R.id.download).setVisibility(View.GONE);
+		DownloadTaskCallback downloadCallback = new DownloadTaskCallback() {
+			@Override
+			public void success(File f) {
+				bubble.updateUrl(f.getAbsolutePath());
+				Bitmap bm = BitmapFactory.decodeFile(f.getAbsolutePath());
+				((ImageView)v.findViewById(R.id.image)).setImageBitmap(bm);
+				v.findViewById(R.id.image).setVisibility(View.VISIBLE);
+				v.findViewById(R.id.spinner).setVisibility(View.GONE);
+			}
+			
+			@Override
+			public void fail(String reason) {
+				v.findViewById(R.id.image).setVisibility(View.GONE);
+				v.findViewById(R.id.spinner).setVisibility(View.GONE);
+				Toast.makeText(getActivity(), reason, Toast.LENGTH_LONG).show();
+			}
+		};
 
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							final Bitmap bm = ChatFragment.downloadImage(url);
-							if (bm != null) {
-								if (useLinphoneMessageStorage) {
-									String newFileUrl = saveImage(bm, finalId, getMessageForId(finalId));
-									bubble.updateUrl(newFileUrl);
-									adapter.refreshHistory();
-								} else {
-									LinphoneActivity.instance().getChatStorage().saveImage(finalId, bm);
-								}
-								mHandler.post(new Runnable() {
-									@Override
-									public void run() {
-										((ImageView)v.findViewById(R.id.image)).setImageBitmap(bm);
-										v.findViewById(R.id.image).setVisibility(View.VISIBLE);
-										v.findViewById(R.id.spinner).setVisibility(View.GONE);
-									}
-								});
-							} else {
-								mHandler.post(new Runnable() {
-									@Override
-									public void run() {
-										v.findViewById(R.id.spinner).setVisibility(View.GONE);
-										v.findViewById(R.id.download).setVisibility(View.VISIBLE);
-										LinphoneActivity.instance().displayCustomToast(getString(R.string.download_image_failed), Toast.LENGTH_LONG);
-									}
-								});
-							}
-						}
-					}).start();
-				}
-			});
-    		// Hack to click button immediately
-			Handler h = new Handler(getActivity().getMainLooper());
-			h.post(new Runnable() {
-				public void run() {
-					v.findViewById(R.id.download).performClick();
-				}
-			});
+		if (url.startsWith("http")) { 
+			URL realUrl;
+			try {
+				realUrl = new URL(url);
+			} catch (MalformedURLException e1) {
+				e1.printStackTrace();
+				return bubble;
+			}
+			
+			FilesharingCache cache = FilesharingCache.instance(getActivity());
+			
+			v.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
+			v.findViewById(R.id.download).setVisibility(View.GONE);
+
+			FilesharingDownloadTask task = new FilesharingDownloadTask(getActivity(), downloadCallback);
+			task.execute(realUrl);
 		} else { // Show
 			// Allocate toast memory before entering potentially problematic part
 			Toast t = Toast.makeText(getActivity(), R.string.error_out_of_memory_decoding_bm, Toast.LENGTH_LONG);
@@ -502,8 +474,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				t.show();
 				err.printStackTrace();
 			}
-				v.findViewById(R.id.image).setVisibility(View.VISIBLE);
-				v.findViewById(R.id.download).setVisibility(View.GONE);
+			v.findViewById(R.id.image).setVisibility(View.VISIBLE);
+			v.findViewById(R.id.download).setVisibility(View.GONE);
 		}
 		
 		return bubble;
@@ -953,110 +925,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		return hash;
 	}
 
-	// TODO Convert to AsyncTask. This is horrible.
-	private String uploadImage(String filePath, String compressedPath, Bitmap file, int compressorQuality, final long l) {
-		String fileName;
-		File sourceFile = new File(filePath);
-		File compressedSourceFile = new File(compressedPath);
-		if (filePath != null) {
-			fileName = String.valueOf(System.currentTimeMillis()) + sourceFile.getName();
-		} else {
-			fileName = getString(R.string.temp_photo_name_with_date).replace("%s", String.valueOf(System.currentTimeMillis()));
-		}
-
-		String response = null;
-		try {
-			HttpPost post = new HttpPost(uploadServerUri);
-			MultipartEntity multiPart = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			LinphonePreferences prefs = LinphonePreferences.instance();
-			String username = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
-			multiPart.addPart("username", new StringBody(username));
-			FileBody fb = new FileBody(compressedSourceFile, fileName, "image/jpeg", "UTF-8");
-			multiPart.addPart("file", fb);
-			
-			HttpParams httpParameters = new BasicHttpParams();
-			HttpProtocolParams.setContentCharset(httpParameters, HTTP.UTF_8);
-			HttpProtocolParams.setHttpElementCharset(httpParameters, HTTP.UTF_8);
-			HttpClient client = new DefaultHttpClient(httpParameters);
-			post.setEntity(multiPart);
-			HttpResponse res = client.execute(post);
-			if(res.getStatusLine().getStatusCode() != 200) {
-				return null;
-			}
-			InputStream is = res.getEntity().getContent();
-			String content = IOUtils.toString(is);
-			Gson gson = new Gson();
-			SendFileJsonData returnData = gson.fromJson(content, SendFileJsonData.class);
-			if(returnData.code < 0) {
-				return null;
-			}
-			String retFn = FilenameUtils.getName(returnData.file);
-			response = uploadServerUri + "?username="+username+"&file="+URLEncoder.encode(retFn, "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-/*		HttpURLConnection conn = null;
-		try {
-		    String lineEnd = "\r\n";
-			String twoHyphens = "--";
-			String boundary = "---------------------------14737809831466499882746641449";
-
-            URL url = new URL(uploadServerUri);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setUseCaches(false);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("uploaded_file", fileName);
-
-            ProgressOutputStream pos = new ProgressOutputStream(conn.getOutputStream());
-            pos.setListener(new OutputStreamListener() {
-				@Override
-				public void onBytesWrite(int count) {
-					bytesSent += count;
-					progressBar.setProgress(bytesSent * 100 / imageSize);
-				}
-            });
-            DataOutputStream dos = new DataOutputStream(pos);
-
-            dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"userfile\"; filename=\""+ fileName + "\"" + lineEnd);
-            dos.writeBytes("Content-Type: application/octet-stream" + lineEnd);
-            dos.writeBytes(lineEnd);
-
-            file.compress(CompressFormat.JPEG, compressorQuality, dos);
-
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-            dos.flush();
-            dos.close();
-
-            InputStream is = conn.getInputStream();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            int bytesRead;
-            byte[] bytes = new byte[1024];
-            while((bytesRead = is.read(bytes)) != -1) {
-                baos.write(bytes, 0, bytesRead);
-            }
-            byte[] bytesReceived = baos.toByteArray();
-            baos.close();
-            is.close();
-
-            response = new String(bytesReceived);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }*/
-		return response;
-	}
 
 	public String getRealPathFromURI(Uri contentUri) {
 		String[] proj = { MediaStore.Images.Media.DATA };
@@ -1083,90 +951,79 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		uploadLayout.setVisibility(View.VISIBLE);
     	textLayout.setVisibility(View.GONE);
 
-    	uploadThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Bitmap bm = null;
-				String url = null;
+		Bitmap bm = null;
+		String url = null;
 
-				if (!uploadThread.isInterrupted()) {
-					if (filePath != null) {
-		                bm = BitmapFactory.decodeFile(filePath);
-		                if (bm != null && size != ImageSize.REAL) {
-		                	int pixelsMax = size == ImageSize.SMALL ? SIZE_SMALL : size == ImageSize.MEDIUM ? SIZE_MEDIUM : SIZE_LARGE;
-		                    if (bm.getWidth() > bm.getHeight() && bm.getWidth() > pixelsMax) {
-		                    	bm = Bitmap.createScaledBitmap(bm, pixelsMax, (pixelsMax * bm.getHeight()) / bm.getWidth(), false);
-		                    } else if (bm.getHeight() > bm.getWidth() && bm.getHeight() > pixelsMax) {
-		                    	bm = Bitmap.createScaledBitmap(bm, (pixelsMax * bm.getWidth()) / bm.getHeight(), pixelsMax, false);
-		                    }
-		                }
-					} else if (image != null) {
-						bm = image;
-					}
-				}
-
-				// Rotate the bitmap if possible/needed, using EXIF data
-				try {
-					if (filePath != null) {
-						ExifInterface exif = new ExifInterface(filePath);
-						int pictureOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
-						Matrix matrix = new Matrix();
-						if (pictureOrientation == 6) {
-							matrix.postRotate(90);
-						} else if (pictureOrientation == 3) {
-							matrix.postRotate(180);
-						} else if (pictureOrientation == 8) {
-							matrix.postRotate(270);
-						}
-						bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-                if (!uploadThread.isInterrupted() && bm != null) {
-                	try {
-	                	File compressed = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
-	                	FileOutputStream out = new FileOutputStream(compressed); 
-	                    if (bm != null) {
-	                    	bm.compress(CompressFormat.JPEG, COMPRESSOR_QUALITY, out);
-	                    }
-	                    out.flush();
-	                    out.close();
-		                url = uploadImage(filePath, compressed.getAbsolutePath(), bm, COMPRESSOR_QUALITY, compressed.length());
-		                compressed.delete();
-                	}
-                	catch(IOException e) {
-                		e.printStackTrace();
-                	}
+		if (filePath != null) {
+            bm = BitmapFactory.decodeFile(filePath);
+            if (bm != null && size != ImageSize.REAL) {
+            	int pixelsMax = size == ImageSize.SMALL ? SIZE_SMALL : size == ImageSize.MEDIUM ? SIZE_MEDIUM : SIZE_LARGE;
+                if (bm.getWidth() > bm.getHeight() && bm.getWidth() > pixelsMax) {
+                	bm = Bitmap.createScaledBitmap(bm, pixelsMax, (pixelsMax * bm.getHeight()) / bm.getWidth(), false);
+                } else if (bm.getHeight() > bm.getWidth() && bm.getHeight() > pixelsMax) {
+                	bm = Bitmap.createScaledBitmap(bm, (pixelsMax * bm.getWidth()) / bm.getHeight(), pixelsMax, false);
                 }
-
-                if (!uploadThread.isInterrupted()) {
-                	ImageSenderRunnable isr = new ImageSenderRunnable();
-                	isr.fbm = bm;
-                	isr.furl = url;
-	                mHandler.post(isr);
-                }
-			}
-		});
-    	uploadThread.start();
-	}
-
-	private class ImageSenderRunnable implements Runnable {
-		public void run() {
-			uploadLayout.setVisibility(View.GONE);
-			textLayout.setVisibility(View.VISIBLE);
-			progressBar.setProgress(0);
-        	if (furl != null) {
-        		sendImageMessage(furl, fbm);
-        	} else {
-        		Toast.makeText(getActivity(), getString(R.string.error), Toast.LENGTH_LONG).show();
-        	}			
+            }
+		} else if (image != null) {
+			bm = image;
 		}
-		public String furl;
-		public Bitmap fbm; 
+
+		try {
+			if (filePath != null) {
+				ExifInterface exif = new ExifInterface(filePath);
+				int pictureOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+				Matrix matrix = new Matrix();
+				if (pictureOrientation == 6) {
+					matrix.postRotate(90);
+				} else if (pictureOrientation == 3) {
+					matrix.postRotate(180);
+				} else if (pictureOrientation == 8) {
+					matrix.postRotate(270);
+				}
+				bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		final Bitmap tempBmToSave = bm;
+		
+        UploadTaskCallback uploadCallback = new UploadTaskCallback() {
+			
+			@Override
+			public void success(URL url) {
+				uploadLayout.setVisibility(View.GONE);
+				textLayout.setVisibility(View.VISIBLE);
+				sendImageMessage(url.toExternalForm(), tempBmToSave);
+			}
+			
+			@Override
+			public void fail(String reason) {
+				uploadLayout.setVisibility(View.GONE);
+				textLayout.setVisibility(View.VISIBLE);
+        		Toast.makeText(getActivity(), reason, Toast.LENGTH_LONG).show();
+			}
+		};
+
+		if (bm != null) {
+        	try {
+        		File f = new File(filePath);
+            	File compressed = new File(getActivity().getCacheDir().getAbsolutePath() + "/" + f.getName());
+            	FileOutputStream out = new FileOutputStream(compressed); 
+                if (bm != null) {
+                	bm.compress(CompressFormat.JPEG, COMPRESSOR_QUALITY, out);
+                }
+                out.flush();
+                out.close();
+                FilesharingUploadTask task = new FilesharingUploadTask(getActivity(), uploadCallback, progressBar);
+                task.execute(compressed);
+        	}
+        	catch(IOException e) {
+        		e.printStackTrace();
+        	}
+        }
 	}
-	
+
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_PHOTO && resultCode == Activity.RESULT_OK) {

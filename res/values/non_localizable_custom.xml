@@ -97,6 +97,8 @@
 	<!-- Database Related values -->
 	<string name="sms_db_name">sms_database</string>
 	<string name="sms_db_version">1</string>
-		
+
+	<!--  File sharing values -->
+	<string name="file_sharing_server">https://onecallcaspian.co.uk/sharing/index.php</string>
 </resources>
 
