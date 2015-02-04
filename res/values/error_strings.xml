@@ -2,4 +2,5 @@
 <resources>
         <string name="error_balance"></string>
         <string name="error_balance_json">Unexpected response from server, while retrieving current balance.</string>
+        <string name="error_out_of_memory_decoding_bm">Application ran out of memory while decoding an image. This image will be skipped.</string>
 </resources>

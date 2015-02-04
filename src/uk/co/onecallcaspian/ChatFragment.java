@@ -378,7 +378,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				return null;
 			}
 			
-			Pattern p = Pattern.compile("<file>(.*)</file>");
+			Pattern p = Pattern.compile(".*<file>(.*)</file>.*");
 			Matcher m = p.matcher(text);
 			if(!m.matches()) {
 				return null;
@@ -491,10 +491,19 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				}
 			});
 		} else { // Show
-			Bitmap bm = BitmapFactory.decodeFile(url);
-			((ImageView)v.findViewById(R.id.image)).setImageBitmap(bm);
-			v.findViewById(R.id.image).setVisibility(View.VISIBLE);
-			v.findViewById(R.id.download).setVisibility(View.GONE);
+			// Allocate toast memory before entering potentially problematic part
+			Toast t = Toast.makeText(getActivity(), R.string.error_out_of_memory_decoding_bm, Toast.LENGTH_LONG);
+			try {
+				Bitmap bm = BitmapFactory.decodeFile(url);
+				((ImageView)v.findViewById(R.id.image)).setImageBitmap(bm);
+			}
+			catch(OutOfMemoryError err) {
+				// We might still crash here.
+				t.show();
+				err.printStackTrace();
+			}
+				v.findViewById(R.id.image).setVisibility(View.VISIBLE);
+				v.findViewById(R.id.download).setVisibility(View.GONE);
 		}
 		
 		return bubble;
