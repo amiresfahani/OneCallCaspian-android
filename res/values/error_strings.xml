@@ -5,4 +5,5 @@
         <string name="error_out_of_memory_decoding_bm">Application ran out of memory while decoding an image. This image will be skipped.</string>
         <string name="error_download_failed">Failed to download file.</string>
         <string name="error_upload_failed">Failed to upload file.</string>
+        <string name="error_image_show_failed">Could not show file.</string>
 </resources>
