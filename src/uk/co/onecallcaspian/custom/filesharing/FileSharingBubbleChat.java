@@ -20,10 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package uk.co.onecallcaspian.custom.filesharing;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +33,8 @@ import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.adapter.SmiliesListItem;
 import uk.co.onecallcaspian.custom.adapter.SmiliesManager;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask.DownloadTaskCallback;
-import android.R.mipmap;
 import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -48,10 +45,10 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -89,8 +86,10 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 		findViews();
+		prepareViews();
 	}
 
+	// Get reference to all views
 	private void findViews() {
 		mMessage = (TextView) findViewById(R.id.message);
 		mImage = (ImageView) findViewById(R.id.image);
@@ -99,11 +98,16 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mStatusIcon = (ImageView) findViewById(R.id.status);
 	}
 	
-	
+	// Do extra initialization for view
+	private void prepareViews() {
+	}
+
 	// Public API
 	// Set everything from a linphone message
 	public void setData(LinphoneChatMessage msg) {
 		reset();
+		mData = msg;
+		setTag(msg.getStorageId());
 		setBubble(msg.isOutgoing());
 		if(isFileMessage(msg)) {
 			showFile(msg.getExternalBodyUrl());
@@ -112,6 +116,11 @@ public class FileSharingBubbleChat extends RelativeLayout {
 			showText(msg.getText());
 		}
 		setStatus(msg.getStatus(), msg.getTime());
+	}
+	
+	// Return the currently shown message
+	public LinphoneChatMessage getData() {
+		return mData;
 	}
 	
 	// Internal working
@@ -136,6 +145,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	}
 
+	// j
 	private void showText(String text) {
 		Spanned resultText = null;
     	if (context.getResources().getBoolean(R.bool.emoticons_in_messages)) {
@@ -286,8 +296,12 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	};
 	
+	// Data
+	LinphoneChatMessage mData;
+	
 	// Environment information
 	private Context context;
+	private Fragment parentFragment;
 	
 	// My views
 	private TextView 	mMessage;

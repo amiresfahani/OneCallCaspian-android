@@ -38,6 +38,15 @@ public class ChatMessageAdapter extends BaseAdapter {
 		this.context = context;
 	}
 	
+	public LinphoneChatMessage getItemForId(int id) {
+		for(LinphoneChatMessage msg : history) {
+			if(msg.getStorageId() == id) {
+				return msg;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public int getCount() {
 		return history.length;

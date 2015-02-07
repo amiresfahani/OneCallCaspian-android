@@ -86,6 +86,19 @@ public class SmsDb {
 		}
 		db.endTransaction();
 	}
+
+	public void deleteTo(String to) {
+		db.beginTransaction();
+		try {
+			stmtDeleteTo.bindString(1, to);
+			stmtDeleteTo.executeUpdateDelete();
+			db.setTransactionSuccessful();
+		}
+		catch(Exception e) {
+			Log.e("SmsDb", "delete to", e);
+		}
+		db.endTransaction();
+	}
 	
 	public void close() {
 		db.close();
@@ -122,6 +135,7 @@ public class SmsDb {
 		stmtUpdateSms = db.compileStatement(sqlUpdateSms);
 		stmtUpdateDelivery = db.compileStatement(sqlUpdateDelivery);
 		stmtDeleteSms = db.compileStatement(sqlDeleteSms);
+		stmtDeleteTo = db.compileStatement(sqlDeleteTo);
 	}
 	
 	private SQLiteDatabase db;
@@ -131,13 +145,14 @@ public class SmsDb {
 	private static String sqlUpdateSms = "UPDATE sms set 'to'=?, 'delivered'=?, 'content'=? WHERE _id = ?;";
 	private static String sqlUpdateDelivery = "UPDATE sms set 'delivered'=? WHERE _id = ?;";
 	private static String sqlDeleteSms = "DELETE FROM sms WHERE _id = ?";
+	private static String sqlDeleteTo = "DELETE FROM sms WHERE \"to\" = ?";
 	private static String sqlSelectEverything = "SELECT * FROM sms;";
 	private static String sqlSelectOne = "SELECT * FROM sms WHERE _id = ?;";
 	private static String sqlSelectNumber = "SELECT * FROM sms WHERE \"to\"=\"%s\";";
 	private static String sqlSelectJoinHistory = "SELECT * FROM sms WHERE _id IN (SELECT MAX(_id) FROM sms GROUP BY \"to\");";
 	
 	// Compiled statements
-	private SQLiteStatement stmtInsertSms, stmtUpdateSms, stmtUpdateDelivery, stmtDeleteSms;
+	private SQLiteStatement stmtInsertSms, stmtUpdateSms, stmtUpdateDelivery, stmtDeleteSms, stmtDeleteTo;
 	
 	
 	// Singleton 

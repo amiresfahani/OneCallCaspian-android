@@ -29,6 +29,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.linphone.core.LinphoneAddress;
@@ -41,15 +43,13 @@ import org.linphone.mediastream.Log;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
 import uk.co.onecallcaspian.custom.filesharing.ChatMessageAdapter;
+import uk.co.onecallcaspian.custom.filesharing.FileSharingBubbleChat;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingCache;
-import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask;
-import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask.DownloadTaskCallback;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask.UploadTaskCallback;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogListener;
 import uk.co.onecallcaspian.ui.AvatarWithShadow;
-import uk.co.onecallcaspian.ui.BubbleChat;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
@@ -81,6 +81,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -96,6 +97,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private static final int ADD_PHOTO = 1337;
 	private static final int MENU_DELETE_MESSAGE = 0;
 	private static final int MENU_SAVE_PICTURE = 1;
+	private static final int MENU_SHOW_FILE = 8;
 	private static final int MENU_PICTURE_SMALL = 2;
 	private static final int MENU_PICTURE_MEDIUM = 3;
 	private static final int MENU_PICTURE_LARGE = 4;
@@ -116,7 +118,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private AvatarWithShadow contactPicture;
 	private RelativeLayout uploadLayout, textLayout;
 	private Handler mHandler = new Handler();
-	private List<BubbleChat> lastSentMessagesBubbles;
 	private HashMap<Integer, String> latestImageMessages;
 	private boolean useLinphoneMessageStorage;
 	private ListView messagesList;
@@ -157,6 +158,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         remoteComposing.setVisibility(View.GONE);
         
         messagesList = (ListView) view.findViewById(R.id.chatMessageList);
+        registerForContextMenu(messagesList);
         messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         messagesList.setStackFromBottom(true);
 
@@ -352,19 +354,24 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 //			Not a good idea, very big pictures cause Out of Memory exceptions, slow display, ...
 //			menu.add(0, MENU_PICTURE_REAL, 0, getString(R.string.share_picture_size_real));
 		} else {
-			menu.add(v.getId(), MENU_DELETE_MESSAGE, 0, getString(R.string.delete));
-			ImageView iv = (ImageView) v.findViewById(R.id.image);
+			 AdapterView.AdapterContextMenuInfo info =
+			            (AdapterView.AdapterContextMenuInfo) menuInfo;
+			FileSharingBubbleChat item = (FileSharingBubbleChat) info.targetView;
+			LinphoneChatMessage msg = item.getData(); 
+			int id = msg.getStorageId();
+			menu.add(id, MENU_DELETE_MESSAGE, 0, getString(R.string.delete));
+			ImageView iv = (ImageView) item.findViewById(R.id.image);
 			if (iv != null && iv.getVisibility() == View.VISIBLE) {
 				if (!useLinphoneMessageStorage) {
-					menu.add(v.getId(), MENU_SAVE_PICTURE, 0, getString(R.string.save_picture));
+					menu.add(id, MENU_SAVE_PICTURE, 0, getString(R.string.save_picture));
 				}
+				menu.add(id, MENU_SHOW_FILE, 0, getString(R.string.show_image));
 			} else {
-				menu.add(v.getId(), MENU_COPY_TEXT, 0, getString(R.string.copy_text));
+				menu.add(id, MENU_COPY_TEXT, 0, getString(R.string.copy_text));
 			}
 
-			LinphoneChatMessage msg = getMessageForId(v.getId());
 			if (msg != null && msg.getStatus() == LinphoneChatMessage.State.NotDelivered) {
-				menu.add(v.getId(), MENU_RESEND_MESSAGE, 0, getString(R.string.retry));
+				menu.add(id, MENU_RESEND_MESSAGE, 0, getString(R.string.retry));
 			}
 		}
 	}
@@ -378,6 +385,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			break;
 		case MENU_SAVE_PICTURE:
 			saveImage(item.getGroupId());
+			break;
+		case MENU_SHOW_FILE:
+			showFile(item.getGroupId());
 			break;
 		case MENU_COPY_TEXT:
 			copyTextMessageToClipboard(item.getGroupId());
@@ -518,9 +528,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		} catch (Exception e) {}
 
 		if (msg == null) {
-			for (BubbleChat bubble : lastSentMessagesBubbles) {
-				if (bubble.getId() == id) {
-					return bubble.getNativeMessageObject();
+			for(LinphoneChatMessage m : chatRoom.getHistory()) {
+				if(m.getStorageId() == id) {
+					msg = m;
 				}
 			}
 		}
@@ -611,14 +621,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 							}
 						}
 					}
-
-					if (lastSentMessagesBubbles != null && lastSentMessagesBubbles.size() > 0) {
-						for (BubbleChat bubble : lastSentMessagesBubbles) {
-							if (bubble.getNativeMessageObject() == finalMessage) {
-								bubble.updateStatusView(finalState);
-							}
-						}
-					}
 					adapter.notifyDataSetChanged();
 				}
 				
@@ -683,6 +685,37 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		}
 	}
 
+	private void showFile(int id) {
+		LinphoneChatMessage msg = adapter.getItemForId(id);
+		File file = null;
+		String path = msg.getExternalBodyUrl();
+
+		if(path == null) {
+			return;
+		}
+
+		if(path.startsWith("http")) {
+			try {
+				URL url = new URL(path);
+				FilesharingCache cache = FilesharingCache.instance(getActivity());
+				if(cache.isCached(url)) {
+					file = cache.getFileForUrl(url);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		} 
+		else {
+			file = new File(path);
+		}
+		if(file == null) return;
+		
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setDataAndType(Uri.fromFile(file), FilesharingCache.getGeneralMimeTypeForFile(file));
+		startActivity(i);
+	}
+	
 	private String saveImage(Bitmap bm, int id, LinphoneChatMessage message) {
 		try {
 			String path = Environment.getExternalStorageDirectory().toString();

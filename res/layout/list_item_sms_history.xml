@@ -2,7 +2,8 @@
 <uk.co.onecallcaspian.custom.adapter.SmsHistoryListItem xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+    android:background="@drawable/list_selector">
 
     <TextView
         android:id="@+id/sms_history_from"
@@ -16,7 +17,8 @@
 		    android:layout_height="wrap_content"
 		    android:textAppearance="?android:attr/textAppearanceLarge"
 		    android:textColor="@color/text_contrast"
-		    android:layout_marginLeft="10dp" />
+		    android:layout_marginLeft="10dp" 
+		    android:focusable="false" />
 
     <TextView
         android:id="@+id/sms_history_last_text"
@@ -26,6 +28,7 @@
 		    android:layout_height="wrap_content"
 		    android:textAppearance="?android:attr/textAppearanceSmall"
 		    android:textColor="@color/text_contrast"
-		    android:layout_marginLeft="5dp"  />
+		    android:layout_marginLeft="5dp"  
+		    android:focusable="false" />
 
 </uk.co.onecallcaspian.custom.adapter.SmsHistoryListItem>

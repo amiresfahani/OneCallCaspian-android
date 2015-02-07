@@ -34,6 +34,7 @@ import org.linphone.mediastream.Log;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
 /**
@@ -131,16 +132,31 @@ public class FilesharingCache {
 	    return new String(hexChars);
 	}
 	private File getCacheDir() {
-		File f = context.getCacheDir();
-		String myCacheDir = f.getAbsolutePath() + "/filesharingcache/";
+		File f = Environment.getExternalStorageDirectory();
+		String myCacheDir = f.getAbsolutePath() + "/OneCallCaspian/Cache/";
 		File ret = new File(myCacheDir);
 		if(ret.exists() && ret.isDirectory()) {
 			return ret;
 		}
-		ret.mkdir();
+		ret.mkdirs();
 		return ret;
 	}
 
+	public static String getMimeTypeForFile(File file) {
+		String ext = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).getEncodedPath());
+		return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+	}
+
+	public static String getGeneralMimeTypeForFile(File file) {
+		String mime = getMimeTypeForFile(file);
+		if(mime.contains("/")) {
+			int slash = mime.indexOf("/");
+			mime = mime.substring(0, slash+1);
+			mime += "*";
+		}
+		return mime;
+	}
+	
 	// Singleton
 	private FilesharingCache() {
 	}

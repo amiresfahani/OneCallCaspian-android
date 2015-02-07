@@ -74,8 +74,6 @@ public class SmsListItem extends LinearLayout {
 		
 		content.setText(text);
 		
-		this.setOnClickListener(onRetry);
-		
 		if(deliveryTime == -1) {
 			delivered.setText(R.string.sms_status_sending); 
 			status.setImageResource(R.drawable.chat_message_inprogress);
@@ -102,36 +100,30 @@ public class SmsListItem extends LinearLayout {
 		}
 	}
 	
-	private OnClickListener onRetry = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if(deliveryTime > 0) {
-				return;
-			}
-			
-			SmsRequestHandlerCallback cb = new SmsRequestHandlerCallback(context, id);
-			SmsHandler handler = new SmsHandler(cb);
-			
-			LinphonePreferences prefs = LinphonePreferences.instance();
-			String number = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
-			String password = prefs.getAccountPassword(prefs.getDefaultAccountIndex());
-
-			handler.setMyPhoneNumber(number);
-			handler.setPassword(password);
-			handler.setTo(to);
-			handler.setText(text);
-			handler.execute();
+	public void retry() {
+		if(deliveryTime > 0) {
+			return;
 		}
-	};
+		
+		SmsRequestHandlerCallback cb = new SmsRequestHandlerCallback(context, id);
+		SmsHandler handler = new SmsHandler(cb);
+		
+		LinphonePreferences prefs = LinphonePreferences.instance();
+		String number = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
+		String password = prefs.getAccountPassword(prefs.getDefaultAccountIndex());
 
-	private OnClickListener onDelete = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			SmsDb.instance(context).delete(id);
-			SmsListAdapter.updateCursorStatic();
-		}
-	};
-	
+		handler.setMyPhoneNumber(number);
+		handler.setPassword(password);
+		handler.setTo(to);
+		handler.setText(text);
+		handler.execute();
+	}
+
+	public void delete() {
+		SmsDb.instance(context).delete(id);
+		SmsListAdapter.updateCursorStatic();
+	}
+
 	private long id;
 	private String to;
 	private String text;

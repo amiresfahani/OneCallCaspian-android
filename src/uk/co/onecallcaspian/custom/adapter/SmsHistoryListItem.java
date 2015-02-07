@@ -25,6 +25,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class SmsHistoryListItem extends LinearLayout {
 	
 	private void init(Context context) {
 		this.context = context;
+
 	}
 	
 	public void setData(String from, String lastText) {
@@ -60,21 +62,12 @@ public class SmsHistoryListItem extends LinearLayout {
 
 		textFrom.setText(from);
 		textLast.setText(lastText);
-		
-		setOnClickListener(onClick);
+	}
+	
+	public String getFrom() {
+		return from;
 	}
 	
 	private Context context;
 	private String from;
-
-	private OnClickListener onClick = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if(LinphoneActivity.isInstanciated()) {
-				if(from.length() > 0) {
-					LinphoneActivity.instance().displaySms(from);
-				}
-			}			
-		}
-	};
 }
