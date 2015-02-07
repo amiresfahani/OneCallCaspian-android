@@ -779,6 +779,12 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		} catch (Exception e) { e.printStackTrace(); };
 	}
 
+	private void skipPopupMenuAskingImageSize(final String filePath, final Bitmap image) {
+		fileToUploadPath = filePath;
+		imageToUpload = image;
+		uploadAndSendImage(fileToUploadPath, imageToUpload, ImageSize.LARGE);
+	}
+	
 	private void uploadAndSendImage(final String filePath, final Bitmap image, final ImageSize size) {
 		uploadLayout.setVisibility(View.VISIBLE);
     	textLayout.setVisibility(View.GONE);
@@ -860,22 +866,22 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         if (requestCode == ADD_PHOTO && resultCode == Activity.RESULT_OK) {
         	if (data != null && data.getExtras() != null && data.getExtras().get("data") != null) {
         		Bitmap bm = (Bitmap) data.getExtras().get("data");
-        		showPopupMenuAskingImageSize(null, bm);
+        		skipPopupMenuAskingImageSize(null, bm);
         	}
         	else if (data != null && data.getData() != null) {
 	    		String filePath = getRealPathFromURI(data.getData());
-	        	showPopupMenuAskingImageSize(filePath, null);
+	        	skipPopupMenuAskingImageSize(filePath, null);
         	}
         	else if (imageToUploadUri != null) {
         		String filePath = imageToUploadUri.getPath();
-        		showPopupMenuAskingImageSize(filePath, null);
+        		skipPopupMenuAskingImageSize(filePath, null);
         	}
         	else {
         		File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
         		if (file.exists()) {
 	        	    imageToUploadUri = Uri.fromFile(file);
 	        	    String filePath = imageToUploadUri.getPath();
-	        		showPopupMenuAskingImageSize(filePath, null);
+	        		skipPopupMenuAskingImageSize(filePath, null);
         		}
         	}
 		} else {
