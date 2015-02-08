@@ -348,11 +348,11 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.sendPicture) {
-			menu.add(0, MENU_PICTURE_SMALL, 0, getString(R.string.share_picture_size_small));
+/*			menu.add(0, MENU_PICTURE_SMALL, 0, getString(R.string.share_picture_size_small));
 			menu.add(0, MENU_PICTURE_MEDIUM, 0, getString(R.string.share_picture_size_medium));
 			menu.add(0, MENU_PICTURE_LARGE, 0, getString(R.string.share_picture_size_large));
-//			Not a good idea, very big pictures cause Out of Memory exceptions, slow display, ...
-//			menu.add(0, MENU_PICTURE_REAL, 0, getString(R.string.share_picture_size_real));
+			Not a good idea, very big pictures cause Out of Memory exceptions, slow display, ...
+			menu.add(0, MENU_PICTURE_REAL, 0, getString(R.string.share_picture_size_real)); */
 		} else {
 			 AdapterView.AdapterContextMenuInfo info =
 			            (AdapterView.AdapterContextMenuInfo) menuInfo;
