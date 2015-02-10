@@ -36,6 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             linphone:picture="@drawable/unknown_small" />
+
+        <ImageView
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/call_answer" />
         
     </LinearLayout>
     

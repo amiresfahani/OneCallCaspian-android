@@ -18,8 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package uk.co.onecallcaspian.custom.fragment;
 import uk.co.onecallcaspian.LinphoneActivity;
+import uk.co.onecallcaspian.LinphoneManager;
 import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.R;
+import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.adapter.SmsHistoryListItem;
 import uk.co.onecallcaspian.custom.adapter.SmsListAdapter;
 import uk.co.onecallcaspian.custom.adapter.SmsListItem;
@@ -41,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +51,7 @@ public class SmsFragment extends Fragment {
 	private LayoutInflater mInflater;
 	private TextView mSmsText, mSmsTo;
 	private ListView mSmsList;
+	private ImageView mCallButton;
 	private SmsListAdapter mSmsAdapter;
 	private TextView mSmsSend;
 	
@@ -56,6 +60,7 @@ public class SmsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		mInflater = inflater;
 		View view = mInflater.inflate(R.layout.sms, container, false);
+        mCallButton = (ImageView) view.findViewById(R.id.call);
 		mSmsText = (EditText) view.findViewById(R.id.sms_text);
 		mSmsTo = (TextView) view.findViewById(R.id.sms_to);
 		mSmsSend = (TextView) view.findViewById(R.id.sms_send);
@@ -66,7 +71,8 @@ public class SmsFragment extends Fragment {
 		mSmsList.setStackFromBottom(true);
         
 		mSmsSend.setOnClickListener(onSmsSend);
-		
+
+		mCallButton.setOnClickListener(onCall);
 		return view;
 	}
 	
@@ -78,6 +84,14 @@ public class SmsFragment extends Fragment {
 		}
 	};
 
+	OnClickListener onCall = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			String sip = getArguments().getString("phone_number");
+			LinphoneManager.getInstance().newOutgoingCall(sip, FormattingHelp.stripDomainFromAddress(sip));
+		}
+	};
+	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);

@@ -23,14 +23,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.linphone.core.LinphoneAddress;
@@ -40,8 +37,10 @@ import org.linphone.core.LinphoneChatRoom;
 import org.linphone.core.LinphoneCore;
 import org.linphone.mediastream.Log;
 
+import uk.co.onecallcaspian.LinphoneManager.AddressType;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnComposingReceivedListener;
 import uk.co.onecallcaspian.compatibility.Compatibility;
+import uk.co.onecallcaspian.custom.FormattingHelp;
 import uk.co.onecallcaspian.custom.filesharing.ChatMessageAdapter;
 import uk.co.onecallcaspian.custom.filesharing.FileSharingBubbleChat;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingCache;
@@ -113,7 +112,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private View view;
 	private String sipUri;
 	private EditText message;
-	private ImageView cancelUpload;
+	private ImageView cancelUpload, callButton;
 	private TextView sendImage, selectSmiley, sendMessage, contactName, remoteComposing;
 	private AvatarWithShadow contactPicture;
 	private RelativeLayout uploadLayout, textLayout;
@@ -138,6 +137,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 
         view = inflater.inflate(R.layout.chat, container, false);
 
+        callButton = (ImageView) view.findViewById(R.id.call);
+
+		callButton.setOnClickListener(onCall);
         useLinphoneMessageStorage = getResources().getBoolean(R.bool.use_linphone_chat_storage);
 
         contactName = (TextView) view.findViewById(R.id.contactName);
@@ -947,4 +949,12 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	public void insertSmiley(String txt) {
 		message.append(" " + txt + " ");		
 	}
+	
+    OnClickListener onCall = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			String sip = getArguments().getString(getArguments().getString("SipUri"));
+			LinphoneManager.getInstance().newOutgoingCall(sip, FormattingHelp.stripDomainFromAddress(sip));
+		}
+	};
 }
