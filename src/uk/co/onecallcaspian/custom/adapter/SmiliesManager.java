@@ -138,7 +138,7 @@ public class SmiliesManager {
 		bigSmilies.add(new SmiliesListItem(":(", 			R.drawable.smilie_128_angry, 
 				":angry:", ":-(", ":[", ":-[")); 
 		bigSmilies.add(new SmiliesListItem(":-/", 			R.drawable.smilie_128_ashamed, 
-				":ashamed:", ":/", ":|", ":-|")); 
+				":ashamed:", ":|", ":-|")); 
 		bigSmilies.add(new SmiliesListItem("O~", 			R.drawable.smilie_128_balloons, 
 				":balloons:")); 
 		bigSmilies.add(new SmiliesListItem(":$)", 			R.drawable.smilie_128_blush, 
@@ -190,7 +190,7 @@ public class SmiliesManager {
 		stickers.add(new SmiliesListItem(":(", 			R.drawable.smilie_256_angry, 
 				":angry:", ":-(", ":[", ":-[")); 
 		stickers.add(new SmiliesListItem(":-/", 		R.drawable.smilie_256_ashamed, 
-				":ashamed:", ":/", ":|", ":-|")); 
+				":ashamed:", ":|", ":-|")); 
 		stickers.add(new SmiliesListItem("O~", 			R.drawable.smilie_256_balloons, 
 				":balloons:")); 
 		stickers.add(new SmiliesListItem(":$)", 		R.drawable.smilie_256_blush, 
