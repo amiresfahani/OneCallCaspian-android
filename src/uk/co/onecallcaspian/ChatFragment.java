@@ -118,7 +118,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private AvatarWithShadow contactPicture;
 	private RelativeLayout uploadLayout, textLayout;
 	private Handler mHandler = new Handler();
-	private HashMap<Integer, String> latestImageMessages;
 	private boolean useLinphoneMessageStorage;
 	private ListView messagesList;
 
@@ -418,7 +417,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 
 	@Override
 	public void onPause() {
-		latestImageMessages = null;
 		message.removeTextChangedListener(textWatcher);
 		removeVirtualKeyboardVisiblityListener();
 	
@@ -435,7 +433,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	@SuppressLint("UseSparseArrays")
 	@Override
 	public void onResume() {
-		latestImageMessages = new HashMap<Integer, String>();
 		message.addTextChangedListener(textWatcher);
 		addVirtualKeyboardVisiblityListener();
 
@@ -512,7 +509,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				newId = LinphoneActivity.instance().onMessageSent(sipUri, bitmap, url);
 			}
 			newId = chatMessage.getStorageId();
-			latestImageMessages.put(newId, url);
 
 			if (useLinphoneMessageStorage)
 				url = saveImage(bitmap, newId, chatMessage);
@@ -603,7 +599,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	@Override
 	public synchronized void onLinphoneChatMessageStateChanged(LinphoneChatMessage msg, State state) {
 		final LinphoneChatMessage finalMessage = msg;
-		final String finalImage = finalMessage.getExternalBodyUrl();
 		final State finalState=state;
 		if (LinphoneActivity.isInstanciated() && state != State.InProgress) {
 			mHandler.post(new Runnable() {
@@ -611,21 +606,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				public void run() {
 					if (finalMessage != null && !finalMessage.equals("")) {
 						LinphoneActivity.instance().onMessageStateChanged(sipUri, finalMessage.getText(), finalState.toInt());
-					} else if (finalImage != null && !finalImage.equals("")) {
-						if (latestImageMessages != null && latestImageMessages.containsValue(finalImage)) {
-							int id = -1;
-							for (int key : latestImageMessages.keySet()) {
-								String object = latestImageMessages.get(key);
-								if (object.equals(finalImage)) {
-									id = key;
-									break;
-								}
-							}
-							if (id != -1) {
-								LinphoneActivity.instance().onImageMessageStateChanged(sipUri, id, finalState.toInt());
-							}
-						}
-					}
+					} 
 					adapter.notifyDataSetChanged();
 				}
 				
@@ -836,7 +817,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			public void success(URL url) {
 				uploadLayout.setVisibility(View.GONE);
 				textLayout.setVisibility(View.VISIBLE);
-				sendImageMessage(url.toExternalForm(), tempBmToSave);
+				if(url == null || tempBmToSave == null) return;
+					sendImageMessage(url.toExternalForm(), tempBmToSave);
 			}
 			
 			@Override

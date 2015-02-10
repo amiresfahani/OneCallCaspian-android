@@ -314,6 +314,7 @@ public class LinphoneManager implements LinphoneCoreListener {
 //			return;
 //		}
 		LinphoneAddress lAddress;
+		to = to.replaceAll("\\+", "");
 		try {
 			lAddress = mLc.interpretUrl(to);
 			if (mServiceContext.getResources().getBoolean(R.bool.override_domain_using_default_one)) {
