@@ -81,6 +81,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -161,6 +162,8 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         
         messagesList = (ListView) view.findViewById(R.id.chatMessageList);
         registerForContextMenu(messagesList);
+
+		messagesList.setOnItemClickListener(onMessageClick);
         messagesList.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         messagesList.setStackFromBottom(true);
 
@@ -955,6 +958,16 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		public void onClick(View v) {
 			String sip = getArguments().getString(getArguments().getString("SipUri"));
 			LinphoneManager.getInstance().newOutgoingCall(sip, FormattingHelp.stripDomainFromAddress(sip));
+		}
+	};
+	
+    OnItemClickListener onMessageClick = new OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			FileSharingBubbleChat item = (FileSharingBubbleChat) view;
+			if(item.findViewById(R.id.image).getVisibility() == View.VISIBLE) {
+				showFile(item.getData().getStorageId());
+			}
 		}
 	};
 }
