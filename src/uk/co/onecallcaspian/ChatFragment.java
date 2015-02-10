@@ -956,8 +956,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
     OnClickListener onCall = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			String sip = getArguments().getString(getArguments().getString("SipUri"));
-			LinphoneManager.getInstance().newOutgoingCall(sip, FormattingHelp.stripDomainFromAddress(sip));
+			LinphoneManager.getInstance().newOutgoingCall(sipUri, FormattingHelp.stripDomainFromAddress(sipUri));
 		}
 	};
 	
