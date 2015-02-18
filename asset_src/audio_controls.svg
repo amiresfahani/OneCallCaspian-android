@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="162"
+   height="108"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="audio_controls.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="84.718876"
+     inkscape:cy="47.232037"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1600"
+     inkscape:window-height="878"
+     inkscape:window-x="-8"
+     inkscape:window-y="420"
+     inkscape:window-maximized="1"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-944.36217)">
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987"
+       width="50"
+       height="50"
+       x="2"
+       y="2"
+       transform="translate(0,998.36217)"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_play_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <path
+       style="fill:#66a7c8;fill-opacity:1;stroke:#080f20;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M 8,8 8,46 46,26 z"
+       id="path3757"
+       inkscape:connector-curvature="0"
+       transform="translate(0,998.36217)"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_play_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#080f20;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3759"
+       width="16"
+       height="16"
+       x="33.67767"
+       y="1066.3064"
+       ry="2" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3761"
+       width="16"
+       height="16"
+       x="57.67767"
+       y="1066.3064"
+       ry="2" />
+    <rect
+       style="color:#000000;fill:#d8d8d8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3763"
+       width="20"
+       height="16"
+       x="85.677673"
+       y="1070.3064"
+       ry="2" />
+    <rect
+       style="color:#000000;fill:#0084c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3765"
+       width="12"
+       height="20"
+       x="117.67767"
+       y="1070.3064"
+       ry="2" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987-1"
+       width="50"
+       height="50"
+       x="56.064396"
+       y="1000.3287"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987-7"
+       width="50"
+       height="50"
+       x="109.79083"
+       y="1000.4872"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_stop_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#080f20;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794"
+       width="11.999999"
+       height="38"
+       x="64.660713"
+       y="1006.4515"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#080f20;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794-4"
+       width="11.999999"
+       height="38"
+       x="87.125"
+       y="1006.3086"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#080f20;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794-0"
+       width="38.035713"
+       height="38.178577"
+       x="115.96429"
+       y="1006.1836"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_stop_normal.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987-9"
+       width="50"
+       height="50"
+       x="2.2706239"
+       y="946.18866"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_play_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 8.270624,952.18862 0,38 38,-20 z"
+       id="path3757-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_play_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987-1-8"
+       width="50"
+       height="50"
+       x="56.335018"
+       y="946.15515"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#66a7c8;fill-opacity:1;fill-rule:nonzero;stroke:#66a7c8;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2987-7-8"
+       width="50"
+       height="50"
+       x="110.06145"
+       y="946.31366"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_stop_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794-2"
+       width="11.999999"
+       height="38"
+       x="64.931335"
+       y="952.27795"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794-4-4"
+       width="11.999999"
+       height="38"
+       x="87.395622"
+       y="952.13507"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_pause_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+    <rect
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3794-0-5"
+       width="38.035713"
+       height="38.178577"
+       x="116.23491"
+       y="952.01007"
+       ry="2"
+       inkscape:export-filename="C:\Users\fizzl\git\OneCallCaspian\res\drawable-xhdpi\audio_control_stop_over.png"
+       inkscape:export-xdpi="92.57"
+       inkscape:export-ydpi="92.57" />
+  </g>
+</svg>

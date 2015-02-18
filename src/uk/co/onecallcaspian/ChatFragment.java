@@ -94,14 +94,15 @@ import android.widget.Toast;
  * @author Sylvain Berfini
  */
 public class ChatFragment extends Fragment implements OnClickListener, LinphoneChatMessage.StateListener, LinphoneOnComposingReceivedListener, SmilieDialogListener {
-	private static final int ADD_PHOTO = 1337;
+	private static final int ADD_PHOTO = 9;
+	private static final int ADD_AUDIO = 10;
+	private static final int ADD_VIDEO = 11;
 	private static final int MENU_DELETE_MESSAGE = 0;
 	private static final int MENU_SAVE_PICTURE = 1;
 	private static final int MENU_SHOW_FILE = 8;
-	private static final int MENU_PICTURE_SMALL = 2;
-	private static final int MENU_PICTURE_MEDIUM = 3;
-	private static final int MENU_PICTURE_LARGE = 4;
-	private static final int MENU_PICTURE_REAL = 5;
+	private static final int MENU_FILE_IMAGE = 2;
+	private static final int MENU_FILE_AUDIO = 3;
+	private static final int MENU_FILE_VIDEO = 4;
 	private static final int MENU_COPY_TEXT = 6;
 	private static final int MENU_RESEND_MESSAGE = 7;
 	private static final int COMPRESSOR_QUALITY = 100;
@@ -184,7 +185,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	        sendImage.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					pickImage();
+					sendImage.showContextMenu();
 				}
 			});
         } else {
@@ -352,11 +353,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.sendPicture) {
-/*			menu.add(0, MENU_PICTURE_SMALL, 0, getString(R.string.share_picture_size_small));
-			menu.add(0, MENU_PICTURE_MEDIUM, 0, getString(R.string.share_picture_size_medium));
-			menu.add(0, MENU_PICTURE_LARGE, 0, getString(R.string.share_picture_size_large));
-			Not a good idea, very big pictures cause Out of Memory exceptions, slow display, ...
-			menu.add(0, MENU_PICTURE_REAL, 0, getString(R.string.share_picture_size_real)); */
+			menu.add(0, MENU_FILE_IMAGE, 0, getString(R.string.share_file_image));
+			menu.add(0, MENU_FILE_AUDIO, 0, getString(R.string.share_file_audio));
+			menu.add(0, MENU_FILE_VIDEO, 0, getString(R.string.share_file_video));
 		} else {
 			 AdapterView.AdapterContextMenuInfo info =
 			            (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -396,17 +395,14 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		case MENU_COPY_TEXT:
 			copyTextMessageToClipboard(item.getGroupId());
 			break;
-		case MENU_PICTURE_SMALL:
-			uploadAndSendImage(fileToUploadPath, imageToUpload, ImageSize.SMALL);
+		case MENU_FILE_IMAGE:
+			selectImageToSend();
 			break;
-		case MENU_PICTURE_MEDIUM:
-			uploadAndSendImage(fileToUploadPath, imageToUpload, ImageSize.MEDIUM);
+		case MENU_FILE_AUDIO:
+			selectAudioToSend();
 			break;
-		case MENU_PICTURE_LARGE:
-			uploadAndSendImage(fileToUploadPath, imageToUpload, ImageSize.LARGE);
-			break;
-		case MENU_PICTURE_REAL:
-			uploadAndSendImage(fileToUploadPath, imageToUpload, ImageSize.REAL);
+		case MENU_FILE_VIDEO:
+			selectVideoToSend();
 			break;
 		case MENU_RESEND_MESSAGE:
 			resendMessage(item.getGroupId());
@@ -415,6 +411,45 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		return true;
 	}
 
+	private void selectImageToSend() {
+	    final List<Intent> cameraIntents = new ArrayList<Intent>();
+	    final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
+	    imageToUploadUri = Uri.fromFile(file);
+    	captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageToUploadUri);
+	    cameraIntents.add(captureIntent);
+
+	    final Intent galleryIntent = new Intent();
+	    galleryIntent.setType("image/*");
+	    galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+	    final Intent chooserIntent = Intent.createChooser(galleryIntent, getString(R.string.image_picker_title));
+	    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
+
+	    startActivityForResult(chooserIntent, ADD_PHOTO);
+	}
+	
+	private void selectAudioToSend() {
+	    final List<Intent> recordIntents = new ArrayList<Intent>();
+	    final Intent recordIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+	    
+    	recordIntent.putExtra(MediaStore.Audio.Media.EXTRA_MAX_BYTES, 1024*1024*4);
+	    recordIntents.add(recordIntent);
+
+	    final Intent audioIntent = new Intent();
+	    audioIntent.setType("audio/*");
+	    audioIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+	    final Intent chooserIntent = Intent.createChooser(audioIntent, getString(R.string.audio_picker_title));
+	    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, recordIntents.toArray(new Parcelable[]{}));
+
+	    startActivityForResult(chooserIntent, ADD_AUDIO);
+	}
+	
+	private void selectVideoToSend() {
+		
+	}
+	
 	@Override
 	public void onPause() {
 		message.removeTextChangedListener(textWatcher);
@@ -495,6 +530,11 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		}
 	}
 
+	private void sendFileMessage(String url) {
+		String msgContent = String.format("<file>%s</file>", url);
+		sendTextMessage(msgContent);
+	}
+	
 	private void sendImageMessage(String url, Bitmap bitmap) {
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
 		boolean isNetworkReachable = lc == null ? false : lc.isNetworkReachable();
@@ -513,8 +553,10 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			if (useLinphoneMessageStorage)
 				url = saveImage(bitmap, newId, chatMessage);
 			
-			adapter.refreshHistory(chatRoom);
-			adapter.notifyDataSetChanged();
+			if(adapter != null) {
+				adapter.refreshHistory(chatRoom);
+				adapter.notifyDataSetChanged();
+			}
 			
 			scrollToEnd();
 		} else if (!isNetworkReachable && LinphoneActivity.isInstanciated()) {
@@ -618,23 +660,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		return sipUri;
 	}
 
-	private void pickImage() {
-	    final List<Intent> cameraIntents = new ArrayList<Intent>();
-	    final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
-	    imageToUploadUri = Uri.fromFile(file);
-    	captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageToUploadUri);
-	    cameraIntents.add(captureIntent);
-
-	    final Intent galleryIntent = new Intent();
-	    galleryIntent.setType("image/*");
-	    galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-	    final Intent chooserIntent = Intent.createChooser(galleryIntent, getString(R.string.image_picker_title));
-	    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
-
-	    startActivityForResult(chooserIntent, ADD_PHOTO);
-    }
 
 	public static Bitmap downloadImage(String stringUrl) {
 		URL url;
@@ -757,14 +782,6 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	    return null;
     }
 
-	private void showPopupMenuAskingImageSize(final String filePath, final Bitmap image) {
-		fileToUploadPath = filePath;
-		imageToUpload = image;
-		try {
-			sendImage.showContextMenu();
-		} catch (Exception e) { e.printStackTrace(); };
-	}
-
 	private void skipPopupMenuAskingImageSize(final String filePath, final Bitmap image) {
 		fileToUploadPath = filePath;
 		imageToUpload = image;
@@ -818,7 +835,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 				uploadLayout.setVisibility(View.GONE);
 				textLayout.setVisibility(View.VISIBLE);
 				if(url == null || tempBmToSave == null) return;
-					sendImageMessage(url.toExternalForm(), tempBmToSave);
+					sendFileMessage(url.toExternalForm());
 			}
 			
 			@Override
@@ -847,34 +864,81 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
         	}
         }
 	}
+	
+	private void uploadAndSendAudioMessage(String filePath) {
+        UploadTaskCallback uploadCallback = new UploadTaskCallback() {
+			
+			@Override
+			public void success(URL url) {
+				uploadLayout.setVisibility(View.GONE);
+				textLayout.setVisibility(View.VISIBLE);
+				if(url == null ) return;
+				sendFileMessage(url.toExternalForm());
+			}
+			
+			@Override
+			public void fail(String reason) {
+				uploadLayout.setVisibility(View.GONE);
+				textLayout.setVisibility(View.VISIBLE);
+        		Toast.makeText(getActivity(), reason, Toast.LENGTH_LONG).show();
+			}
+		};
+
+		FilesharingUploadTask task = new FilesharingUploadTask(getActivity(), uploadCallback, progressBar);
+		task.execute(new File(filePath));
+	}
 
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_PHOTO && resultCode == Activity.RESULT_OK) {
-        	if (data != null && data.getExtras() != null && data.getExtras().get("data") != null) {
-        		Bitmap bm = (Bitmap) data.getExtras().get("data");
-        		skipPopupMenuAskingImageSize(null, bm);
+        if (resultCode == Activity.RESULT_OK) {
+        	if(requestCode == ADD_PHOTO) {
+        		addPhotoReceived(data);
         	}
-        	else if (data != null && data.getData() != null) {
-	    		String filePath = getRealPathFromURI(data.getData());
-	        	skipPopupMenuAskingImageSize(filePath, null);
+        	else if(requestCode == ADD_AUDIO) {
+        		addAudioReceived(data);
         	}
-        	else if (imageToUploadUri != null) {
-        		String filePath = imageToUploadUri.getPath();
-        		skipPopupMenuAskingImageSize(filePath, null);
+        	else if(requestCode == ADD_VIDEO) {
+        		addVideoReceived(data);
         	}
-        	else {
-        		File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
-        		if (file.exists()) {
-	        	    imageToUploadUri = Uri.fromFile(file);
-	        	    String filePath = imageToUploadUri.getPath();
-	        		skipPopupMenuAskingImageSize(filePath, null);
-        		}
-        	}
-		} else {
+		}
+       else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
     }
+
+	private void addPhotoReceived(Intent data) {
+    	if (data != null && data.getExtras() != null && data.getExtras().get("data") != null) {
+    		Bitmap bm = (Bitmap) data.getExtras().get("data");
+    		skipPopupMenuAskingImageSize(null, bm);
+    	}
+    	else if (data != null && data.getData() != null) {
+    		String filePath = getRealPathFromURI(data.getData());
+        	skipPopupMenuAskingImageSize(filePath, null);
+    	}
+    	else if (imageToUploadUri != null) {
+    		String filePath = imageToUploadUri.getPath();
+    		skipPopupMenuAskingImageSize(filePath, null);
+    	}
+    	else {
+    		File file = new File(Environment.getExternalStorageDirectory(), getString(R.string.temp_photo_name));
+    		if (file.exists()) {
+        	    imageToUploadUri = Uri.fromFile(file);
+        	    String filePath = imageToUploadUri.getPath();
+        		skipPopupMenuAskingImageSize(filePath, null);
+    		}
+    	}		
+	}
+	
+
+	private void addAudioReceived(Intent data) {
+		if (data != null && data.getData() != null) {
+    		String filePath = getRealPathFromURI(data.getData());
+        	uploadAndSendAudioMessage(filePath);
+    	}
+	}
+
+	private void addVideoReceived(Intent data) {
+	}
 
 	class ProgressOutputStream extends OutputStream {
 		OutputStream outputStream;

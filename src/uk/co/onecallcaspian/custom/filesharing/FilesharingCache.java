@@ -84,7 +84,8 @@ public class FilesharingCache {
 	private String getMimeFromFileParameter(URL url) {
 		Uri uri = Uri.parse(url.toExternalForm());
 		String fn = uri.getQueryParameter("file");
-		String ext = MimeTypeMap.getFileExtensionFromUrl(fn);
+		String parsed = Uri.encode(fn);
+		String ext = MimeTypeMap.getFileExtensionFromUrl(parsed);
 		if(ext != null) {
 			return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
 		}

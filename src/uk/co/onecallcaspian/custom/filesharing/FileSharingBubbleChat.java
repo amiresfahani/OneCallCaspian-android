@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package uk.co.onecallcaspian.custom.filesharing;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +39,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
@@ -45,14 +49,15 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 /**
  * @author Lassi Marttala
@@ -96,10 +101,19 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mProgressSpinner = (ProgressBar) findViewById(R.id.spinner);
 		mStatusTime = (TextView) findViewById(R.id.time);
 		mStatusIcon = (ImageView) findViewById(R.id.status);
+		mVideoPlayer = (VideoView) findViewById(R.id.media);
+		
+		mAudioControlsLayout = (ViewGroup) findViewById(R.id.audio_controls);
+		mAudioPlayButton = (ImageView) findViewById(R.id.audio_play);
+		mAudioPauseButton = (ImageView) findViewById(R.id.audio_pause);
+		mAudioStopButton = (ImageView) findViewById(R.id.audio_stop);
 	}
 	
 	// Do extra initialization for view
 	private void prepareViews() {
+		mAudioPlayButton.setOnClickListener(onAudioPlayPause);
+		mAudioPauseButton.setOnClickListener(onAudioPlayPause);
+		mAudioStopButton.setOnClickListener(onAudioStop);
 	}
 
 	// Public API
@@ -131,6 +145,8 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mImage.setVisibility(View.GONE);
 		mStatusIcon.setVisibility(View.GONE);
 		mStatusTime.setVisibility(View.GONE);
+		mVideoPlayer.setVisibility(View.GONE);
+		mAudioControlsLayout.setVisibility(View.GONE);
 	}
 
 	// Set status icon and message time
@@ -145,7 +161,6 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	}
 
-	// j
 	private void showText(String text) {
 		Spanned resultText = null;
     	if (context.getResources().getBoolean(R.bool.emoticons_in_messages)) {
@@ -202,7 +217,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	private void showFile(String url) {
 		if(!url.startsWith("http")) {
 			File f = new File(url);
-			setImage(f);
+			setFile(f);
 			return;
 		}
 
@@ -211,7 +226,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 			FilesharingCache cache = FilesharingCache.instance(getContext());
 			
 			if(cache.isCached(realUrl)) {
-				setImage(cache.getFileFromCache(realUrl));
+				setFile(cache.getFileFromCache(realUrl));
 			}
 			else {
 				mProgressSpinner.setVisibility(View.VISIBLE);
@@ -226,6 +241,19 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}		
 	}
 	
+	private void setFile(File file) {
+		String mime = FilesharingCache.getGeneralMimeTypeForFile(file);
+		if(mime.startsWith("image")) {
+			setImage(file);
+		}
+		else if(mime.startsWith("audio")) {
+			setAudio(file);
+		}
+		else if(mime.startsWith("video")) {
+			setVideo(file);
+		}
+		
+	}
 	private void setImage(File f) {
 		Bitmap bm = BitmapFactory.decodeFile(f.getAbsolutePath());
 		mImage.setImageBitmap(bm);
@@ -233,6 +261,28 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mImage.setVisibility(View.VISIBLE);
 	}
 	
+	private void setAudio(File file) {
+		if(mAudioPlayer == null) {
+			mAudioPlayer = new MediaPlayer();
+		}
+		try {
+			mAudioPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mAudioPlayer.setDataSource(file.getAbsolutePath());
+			mAudioPlayer.setOnCompletionListener(onAudioComplete);
+			mAudioPlayer.prepare();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mProgressSpinner.setVisibility(View.GONE);
+		mAudioControlsLayout.setVisibility(View.VISIBLE);
+		mAudioPauseButton.setVisibility(View.GONE);
+		mAudioPlayButton.setVisibility(View.VISIBLE);
+	}
+
+	private void setVideo(File file) {
+		// TODO Auto-generated method stub
+		
+	}
 	private boolean isFileMessage(LinphoneChatMessage msg) {
 		String url = msg.getExternalBodyUrl();
 		if(url == null || url.length() < 1) {
@@ -296,6 +346,41 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	};
 	
+	// Control listeners
+	OnClickListener onAudioPlayPause = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if(mAudioPlayer.isPlaying()) {
+				mAudioPlayer.pause();
+				mAudioPauseButton.setVisibility(View.GONE);
+				mAudioPlayButton.setVisibility(View.VISIBLE);
+			}
+			else {
+				mAudioPlayer.start();
+				mAudioPauseButton.setVisibility(View.VISIBLE);
+				mAudioPlayButton.setVisibility(View.GONE);
+			}
+		}
+	};
+	
+	OnClickListener onAudioStop = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			mAudioPlayer.stop();
+			// Easier to just reset the whole view
+			setData(mData);
+		}
+	};
+	
+	OnCompletionListener onAudioComplete = new OnCompletionListener() {
+		@Override
+		public void onCompletion(MediaPlayer mp) {
+			setData(mData);
+		}
+	};
+
+
+	
 	// Data
 	LinphoneChatMessage mData;
 	
@@ -304,9 +389,15 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	private Fragment parentFragment;
 	
 	// My views
-	private TextView 	mMessage;
-	private ImageView 	mImage;
-	private ProgressBar mProgressSpinner;
-	private TextView 	mStatusTime;
-	private ImageView	mStatusIcon;
+	private TextView 		mMessage;
+	private ImageView 		mImage;
+	private ProgressBar 	mProgressSpinner;
+	private TextView 		mStatusTime;
+	private ImageView		mStatusIcon;
+	private VideoView 		mVideoPlayer;
+	private MediaPlayer		mAudioPlayer;
+	private ViewGroup		mAudioControlsLayout;
+	private ImageView		mAudioPlayButton;
+	private ImageView		mAudioPauseButton;
+	private ImageView		mAudioStopButton;
 }
