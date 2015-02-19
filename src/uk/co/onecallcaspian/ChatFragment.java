@@ -100,6 +100,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private static final int MENU_DELETE_MESSAGE = 0;
 	private static final int MENU_SAVE_PICTURE = 1;
 	private static final int MENU_SHOW_FILE = 8;
+	private static final int DEBUG_MENU_DO_NOTHING = 2001;
 	private static final int MENU_FILE_IMAGE = 2;
 	private static final int MENU_FILE_AUDIO = 3;
 	private static final int MENU_FILE_VIDEO = 4;
@@ -353,6 +354,11 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.sendPicture) {
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
 			menu.add(0, MENU_FILE_IMAGE, 0, getString(R.string.share_file_image));
 			menu.add(0, MENU_FILE_AUDIO, 0, getString(R.string.share_file_audio));
 			menu.add(0, MENU_FILE_VIDEO, 0, getString(R.string.share_file_video));
@@ -866,6 +872,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	}
 	
 	private void uploadAndSendAudioMessage(String filePath) {
+		uploadLayout.setVisibility(View.VISIBLE);
+    	textLayout.setVisibility(View.GONE);
+
         UploadTaskCallback uploadCallback = new UploadTaskCallback() {
 			
 			@Override

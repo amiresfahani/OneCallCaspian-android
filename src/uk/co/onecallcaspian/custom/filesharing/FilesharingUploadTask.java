@@ -73,7 +73,9 @@ public class FilesharingUploadTask extends AsyncTask<File, Long, URL> {
 			LinphonePreferences prefs = LinphonePreferences.instance();
 			String username = prefs.getAccountUsername(prefs.getDefaultAccountIndex());
 			multiPart.addPart("username", new StringBody(username));
-			FileBody fb = new FileBody(file, file.getName(), "image/jpeg", "UTF-8");
+			
+			String mime = FilesharingCache.getMimeTypeForFile(file);
+			FileBody fb = new FileBody(file, file.getName(), mime, "UTF-8");
 			multiPart.addPart("file", fb);
 			
 			HttpParams httpParameters = new BasicHttpParams();

@@ -140,6 +140,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	// Internal working
 	// Reset everything so that this view can be reused
 	private void reset() {
+		// Change to initilal visibilitys
 		mMessage.setVisibility(View.GONE);
 		mProgressSpinner.setVisibility(View.GONE);
 		mImage.setVisibility(View.GONE);
@@ -147,6 +148,14 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mStatusTime.setVisibility(View.GONE);
 		mVideoPlayer.setVisibility(View.GONE);
 		mAudioControlsLayout.setVisibility(View.GONE);
+
+		// Reset the audio player
+		if(mAudioPlayer != null) {
+			mAudioPlayer.reset();
+			mAudioPlayer.release();
+			mAudioPlayer = null;
+		}
+
 	}
 
 	// Set status icon and message time
@@ -336,7 +345,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	DownloadTaskCallback downloadCallback = new DownloadTaskCallback() {
 		@Override
 		public void success(File f) {
-			setImage(f);
+			setData(mData);
 		}
 
 		@Override
