@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import uk.co.onecallcaspian.ChatFragment;
 import uk.co.onecallcaspian.R;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Build;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
  * @author fizzl
  *
  */
-public class SoundPlayer extends LinearLayout {
+public class SoundPlayer extends LinearLayout implements OnPauseListener {
 	private void init(Context context) {
 		this.context = context;
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -70,8 +72,17 @@ public class SoundPlayer extends LinearLayout {
 	}
 	
 	@Override
+	protected Parcelable onSaveInstanceState() {
+		mMediaPlayer.stop();
+		mMediaPlayer.release();
+		mMediaPlayer = null;
+		return super.onSaveInstanceState();
+	}
+
+	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
+		ChatFragment.instance().registerOnPauseListener(this);
 		findViews();
 		prepareViews();
 	}
@@ -96,8 +107,8 @@ public class SoundPlayer extends LinearLayout {
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mMediaPlayer.setDataSource(file.getAbsolutePath());
 		mMediaPlayer.setOnCompletionListener(onAudioComplete);
-		mMediaPlayer.prepare();
 		mMediaPlayer.setOnPreparedListener(onMediaPrepared);
+		mMediaPlayer.prepare();
 	}
 	
 	public void reset() {
@@ -184,14 +195,24 @@ public class SoundPlayer extends LinearLayout {
 	private class SeekUpdateTimerTask extends TimerTask {
 		@Override
 		public void run() {
-			if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-				mSeek.setProgress(mMediaPlayer.getCurrentPosition());
-				mSeekTimer = new Timer();
-				mSeekTimer.schedule(new SeekUpdateTimerTask(), 200);
+			try {
+				if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+					mSeek.setProgress(mMediaPlayer.getCurrentPosition());
+					mSeekTimer = new Timer();
+					mSeekTimer.schedule(new SeekUpdateTimerTask(), 200);
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
 	
+	@Override
+	public void onPause() {
+		reset();
+	}
+
 	private Timer mSeekTimer;
 	private MediaPlayer mMediaPlayer;
 	private ImageView mPlay;

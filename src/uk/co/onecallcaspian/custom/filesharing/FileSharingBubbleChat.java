@@ -330,15 +330,6 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	};
 	
-	OnCompletionListener onAudioComplete = new OnCompletionListener() {
-		@Override
-		public void onCompletion(MediaPlayer mp) {
-			setData(mData);
-		}
-	};
-
-
-	
 	// Data
 	LinphoneChatMessage mData;
 	

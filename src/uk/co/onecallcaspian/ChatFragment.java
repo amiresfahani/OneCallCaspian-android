@@ -45,6 +45,7 @@ import uk.co.onecallcaspian.custom.filesharing.ChatMessageAdapter;
 import uk.co.onecallcaspian.custom.filesharing.FileSharingBubbleChat;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingCache;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask;
+import uk.co.onecallcaspian.custom.filesharing.OnPauseListener;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingUploadTask.UploadTaskCallback;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment;
 import uk.co.onecallcaspian.custom.fragment.SmiliesDialogFragment.SmilieDialogListener;
@@ -130,9 +131,15 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	private TextWatcher textWatcher;
 	private OnGlobalLayoutListener keyboardListener;
 	private ChatMessageAdapter adapter;
+	private static ChatFragment me;
 
+	public static ChatFragment instance() {
+		return me;
+	}
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		me = this;
 		sipUri = getArguments().getString("SipUri");
 		String displayName = getArguments().getString("DisplayName");
 		String pictureUri = getArguments().getString("PictureUri");
@@ -456,8 +463,22 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		
 	}
 	
+	/**
+	 * Hack to receive onPause to audioplayer components
+	 * TODO: Implement a cleaner way to do this.
+	 */
+	List<OnPauseListener> pausables = new ArrayList<OnPauseListener>();
+	public void registerOnPauseListener(OnPauseListener p) {
+		pausables.add(p);
+	}
+	
 	@Override
 	public void onPause() {
+		for(OnPauseListener p : pausables) {
+			p.onPause();
+		}
+		pausables.clear();
+		
 		message.removeTextChangedListener(textWatcher);
 		removeVirtualKeyboardVisiblityListener();
 	
