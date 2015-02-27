@@ -35,11 +35,9 @@ import uk.co.onecallcaspian.custom.adapter.SmiliesListItem;
 import uk.co.onecallcaspian.custom.adapter.SmiliesManager;
 import uk.co.onecallcaspian.custom.filesharing.FilesharingDownloadTask.DownloadTaskCallback;
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
@@ -52,7 +50,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -101,19 +98,13 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		mProgressSpinner = (ProgressBar) findViewById(R.id.spinner);
 		mStatusTime = (TextView) findViewById(R.id.time);
 		mStatusIcon = (ImageView) findViewById(R.id.status);
+		mSoundPlayer = (SoundPlayer) findViewById(R.id.sound_player);
 		mVideoPlayer = (VideoView) findViewById(R.id.media);
 		
-		mAudioControlsLayout = (ViewGroup) findViewById(R.id.audio_controls);
-		mAudioPlayButton = (ImageView) findViewById(R.id.audio_play);
-		mAudioPauseButton = (ImageView) findViewById(R.id.audio_pause);
-		mAudioStopButton = (ImageView) findViewById(R.id.audio_stop);
 	}
 	
 	// Do extra initialization for view
 	private void prepareViews() {
-		mAudioPlayButton.setOnClickListener(onAudioPlayPause);
-		mAudioPauseButton.setOnClickListener(onAudioPlayPause);
-		mAudioStopButton.setOnClickListener(onAudioStop);
 	}
 
 	// Public API
@@ -141,21 +132,14 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	// Reset everything so that this view can be reused
 	private void reset() {
 		// Change to initilal visibilitys
+		mSoundPlayer.reset();
 		mMessage.setVisibility(View.GONE);
 		mProgressSpinner.setVisibility(View.GONE);
 		mImage.setVisibility(View.GONE);
 		mStatusIcon.setVisibility(View.GONE);
 		mStatusTime.setVisibility(View.GONE);
+		mSoundPlayer.setVisibility(View.GONE);
 		mVideoPlayer.setVisibility(View.GONE);
-		mAudioControlsLayout.setVisibility(View.GONE);
-
-		// Reset the audio player
-		if(mAudioPlayer != null) {
-			mAudioPlayer.reset();
-			mAudioPlayer.release();
-			mAudioPlayer = null;
-		}
-
 	}
 
 	// Set status icon and message time
@@ -271,21 +255,12 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	}
 	
 	private void setAudio(File file) {
-		if(mAudioPlayer == null) {
-			mAudioPlayer = new MediaPlayer();
-		}
 		try {
-			mAudioPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mAudioPlayer.setDataSource(file.getAbsolutePath());
-			mAudioPlayer.setOnCompletionListener(onAudioComplete);
-			mAudioPlayer.prepare();
+			mSoundPlayer.setSound(file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mProgressSpinner.setVisibility(View.GONE);
-		mAudioControlsLayout.setVisibility(View.VISIBLE);
-		mAudioPauseButton.setVisibility(View.GONE);
-		mAudioPlayButton.setVisibility(View.VISIBLE);
+		mSoundPlayer.setVisibility(View.VISIBLE);
 	}
 
 	private void setVideo(File file) {
@@ -355,32 +330,6 @@ public class FileSharingBubbleChat extends RelativeLayout {
 		}
 	};
 	
-	// Control listeners
-	OnClickListener onAudioPlayPause = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if(mAudioPlayer.isPlaying()) {
-				mAudioPlayer.pause();
-				mAudioPauseButton.setVisibility(View.GONE);
-				mAudioPlayButton.setVisibility(View.VISIBLE);
-			}
-			else {
-				mAudioPlayer.start();
-				mAudioPauseButton.setVisibility(View.VISIBLE);
-				mAudioPlayButton.setVisibility(View.GONE);
-			}
-		}
-	};
-	
-	OnClickListener onAudioStop = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			mAudioPlayer.stop();
-			// Easier to just reset the whole view
-			setData(mData);
-		}
-	};
-	
 	OnCompletionListener onAudioComplete = new OnCompletionListener() {
 		@Override
 		public void onCompletion(MediaPlayer mp) {
@@ -395,7 +344,6 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	
 	// Environment information
 	private Context context;
-	private Fragment parentFragment;
 	
 	// My views
 	private TextView 		mMessage;
@@ -403,10 +351,6 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	private ProgressBar 	mProgressSpinner;
 	private TextView 		mStatusTime;
 	private ImageView		mStatusIcon;
+	private SoundPlayer		mSoundPlayer;
 	private VideoView 		mVideoPlayer;
-	private MediaPlayer		mAudioPlayer;
-	private ViewGroup		mAudioControlsLayout;
-	private ImageView		mAudioPlayButton;
-	private ImageView		mAudioPauseButton;
-	private ImageView		mAudioStopButton;
 }

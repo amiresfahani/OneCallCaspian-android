@@ -30,46 +30,16 @@
             android:contentDescription="@null"
             android:focusable="false"/>
 
+        <uk.co.onecallcaspian.custom.filesharing.SoundPlayer
+            android:id="@+id/sound_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </uk.co.onecallcaspian.custom.filesharing.SoundPlayer>
+
         <VideoView
             android:id="@+id/media"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:id="@+id/audio_controls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/audio_stop"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/btn_audio_control_stop" 
-                android:contentDescription="@null"/>
-
-            <ImageView
-                android:id="@+id/audio_pause"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/btn_audio_control_pause"
-                android:contentDescription="@null" />
-
-			<ImageView
-			    android:id="@+id/audio_play"
-			    android:layout_width="50dp"
-			    android:layout_height="50dp"
-			    android:layout_margin="5dp"
-			    android:scaleType="fitCenter"
-			    android:src="@drawable/btn_audio_control_play"
-			    android:contentDescription="@null" />
-            
-        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/spinner"
