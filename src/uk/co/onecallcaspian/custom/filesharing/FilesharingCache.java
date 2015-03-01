@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package uk.co.onecallcaspian.custom.filesharing;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +64,24 @@ public class FilesharingCache {
 		return ret;
 	}
 
+	public void cacheLocal(URL url, File srcFile) throws IOException {
+		String dstFileName = getHashOfString(url.toExternalForm());
+		String mime = getMimeFromFileParameter(url);
+		String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+		File dstFile = new File(getCacheDir().getAbsolutePath() + "/" + dstFileName + "." + ext);
+		
+		InputStream is = new FileInputStream(srcFile);
+		OutputStream os = new FileOutputStream(dstFile);
+		
+		byte[] buf = new byte[16 * 1024];
+		int read = 0;
+		while((read = is.read(buf)) > 0) {
+			os.write(buf, 0, read);
+		}
+		os.close();
+		is.close();
+	}
+	
 	private void cache(URL url) throws IOException {
 		String dstFileName = getHashOfString(url.toExternalForm());
 		String mime = getMimeFromFileParameter(url);

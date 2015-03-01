@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package uk.co.onecallcaspian.custom.filesharing;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +37,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
@@ -110,6 +107,14 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	// Public API
 	// Set everything from a linphone message
 	public void setData(LinphoneChatMessage msg) {
+		if(mData != null && mData.equals(msg)) {
+			return;
+		}
+		setDataInternal(msg);
+	}
+	
+	// Skip the view change check
+	private void setDataInternal(LinphoneChatMessage msg) {
 		reset();
 		mData = msg;
 		setTag(msg.getStorageId());
@@ -320,7 +325,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	DownloadTaskCallback downloadCallback = new DownloadTaskCallback() {
 		@Override
 		public void success(File f) {
-			setData(mData);
+			setDataInternal(mData);
 		}
 
 		@Override

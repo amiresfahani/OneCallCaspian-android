@@ -96,8 +96,9 @@ public class FilesharingUploadTask extends AsyncTask<File, Long, URL> {
 			}
 			String retFn = FilenameUtils.getName(returnData.file);
 			String response = uploadServerUri + "?username="+username+"&file="+URLEncoder.encode(retFn, "UTF-8");
-	
-			return new URL(response);
+			URL ret = new URL(response);
+			FilesharingCache.instance(context).cacheLocal(ret, file);
+			return ret;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
