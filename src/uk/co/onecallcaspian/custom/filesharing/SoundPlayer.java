@@ -151,6 +151,8 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		public void onCompletion(MediaPlayer mp) {
 			reset();
 			try {
+				mState.setPlaying(ChatMessageFileState.STATE_STOP);
+				mState.setSeekPosition(0);
 				setSound(mSoundFile);
 			}
 			catch (Exception e) {
@@ -192,6 +194,7 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		public void onClick(View v) {
 			try {
 				getFileState().setPlaying(ChatMessageFileState.STATE_STOP);
+				mState.setSeekPosition(0);
 				setSound(mSoundFile);
 			}
 			catch(Exception e) {
