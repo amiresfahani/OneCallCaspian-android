@@ -109,6 +109,30 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		mMediaPlayer.setOnCompletionListener(onAudioComplete);
 		mMediaPlayer.setOnPreparedListener(onMediaPrepared);
 		mMediaPlayer.prepare();
+
+		
+	}
+	
+	private void restoreState() {
+		mStop.setVisibility(View.VISIBLE);
+		mSeek.setProgress(getFileState().getSeekPosition());
+		mMediaPlayer.seekTo(mState.getSeekPosition());
+
+		switch(getFileState().getPlaying()) {
+		case ChatMessageFileState.STATE_STOP:
+			mPlay.setVisibility(View.VISIBLE);
+			mPause.setVisibility(View.GONE);
+			break;
+		case ChatMessageFileState.STATE_PLAY:
+			mPlay.setVisibility(View.GONE);
+			mPause.setVisibility(View.VISIBLE);
+			mMediaPlayer.start();
+			break;
+		case ChatMessageFileState.STATE_PAUSE:
+			mPlay.setVisibility(View.VISIBLE);
+			mPause.setVisibility(View.GONE);
+			break;
+		}
 	}
 	
 	public void reset() {
@@ -139,10 +163,7 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		@Override
 		public void onPrepared(MediaPlayer mp) {
 			mSeek.setMax(mp.getDuration());
-			mSeek.setProgress(mp.getCurrentPosition());
-			mPlay.setVisibility(View.VISIBLE);
-			mPause.setVisibility(View.GONE);
-			mStop.setVisibility(View.VISIBLE);
+			restoreState();
 		}
 	};
 
@@ -154,6 +175,7 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 			mPause.setVisibility(View.VISIBLE);
 			mSeekTimer = new Timer();
 			mSeekTimer.schedule(new SeekUpdateTimerTask(), 200);
+			getFileState().setPlaying(ChatMessageFileState.STATE_PLAY);
 		}
 	};
 	OnClickListener onPauseClick = new OnClickListener() {
@@ -162,12 +184,14 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 			mMediaPlayer.pause();
 			mPlay.setVisibility(View.VISIBLE);
 			mPause.setVisibility(View.GONE);
+			getFileState().setPlaying(ChatMessageFileState.STATE_PAUSE);
 		}
 	};
 	OnClickListener onStopClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			try {
+				getFileState().setPlaying(ChatMessageFileState.STATE_STOP);
 				setSound(mSoundFile);
 			}
 			catch(Exception e) {
@@ -187,7 +211,8 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			if(fromUser) {
-				mMediaPlayer.seekTo(progress);
+				getFileState().setSeekPosition(progress);
+				mMediaPlayer.seekTo(getFileState().getSeekPosition());
 			}
 		}
 	};
@@ -197,7 +222,8 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		public void run() {
 			try {
 				if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-					mSeek.setProgress(mMediaPlayer.getCurrentPosition());
+					getFileState().setSeekPosition(mMediaPlayer.getCurrentPosition());
+					mSeek.setProgress(getFileState().getSeekPosition());
 					mSeekTimer = new Timer();
 					mSeekTimer.schedule(new SeekUpdateTimerTask(), 200);
 				}
@@ -213,6 +239,13 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		reset();
 	}
 
+	public ChatMessageFileState getFileState() {
+		return mState;
+	}
+	public void setFileState(ChatMessageFileState mState) {
+		this.mState = mState;
+	}
+
 	private Timer mSeekTimer;
 	private MediaPlayer mMediaPlayer;
 	private ImageView mPlay;
@@ -220,5 +253,6 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 	private ImageView mStop;
 	private SeekBar mSeek;
 	private File mSoundFile;
+	private ChatMessageFileState mState;
 	private Context context;
 }

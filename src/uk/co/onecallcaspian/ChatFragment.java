@@ -373,7 +373,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			 AdapterView.AdapterContextMenuInfo info =
 			            (AdapterView.AdapterContextMenuInfo) menuInfo;
 			FileSharingBubbleChat item = (FileSharingBubbleChat) info.targetView;
-			LinphoneChatMessage msg = item.getData(); 
+			LinphoneChatMessage msg = item.getData().getMessage(); 
 			int id = msg.getStorageId();
 			menu.add(id, MENU_DELETE_MESSAGE, 0, getString(R.string.delete));
 			ImageView iv = (ImageView) item.findViewById(R.id.image);
@@ -724,7 +724,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 	}
 
 	private void showFile(int id) {
-		LinphoneChatMessage msg = adapter.getItemForId(id);
+		LinphoneChatMessage msg = adapter.getItemForId(id).getMessage();
 		File file = null;
 		String path = msg.getExternalBodyUrl();
 
@@ -1041,7 +1041,7 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			FileSharingBubbleChat item = (FileSharingBubbleChat) view;
 			if(item.findViewById(R.id.image).getVisibility() == View.VISIBLE) {
-				showFile(item.getData().getStorageId());
+				showFile(item.getData().getMessage().getStorageId());
 			}
 		}
 	};

@@ -106,30 +106,26 @@ public class FileSharingBubbleChat extends RelativeLayout {
 
 	// Public API
 	// Set everything from a linphone message
-	public void setData(LinphoneChatMessage msg) {
-		if(mData != null && mData.equals(msg)) {
-			return;
-		}
+	public void setData(ChatMessageMetaContainer msg) {
 		setDataInternal(msg);
 	}
 	
-	// Skip the view change check
-	private void setDataInternal(LinphoneChatMessage msg) {
+	private void setDataInternal(ChatMessageMetaContainer msg) {
 		reset();
 		mData = msg;
-		setTag(msg.getStorageId());
-		setBubble(msg.isOutgoing());
-		if(isFileMessage(msg)) {
-			showFile(msg.getExternalBodyUrl());
+		setTag(msg.getMessage().getStorageId());
+		setBubble(msg.getMessage().isOutgoing());
+		if(isFileMessage(msg.getMessage())) {
+			showFile(msg.getMessage().getExternalBodyUrl());
 		}
 		else {
-			showText(msg.getText());
+			showText(msg.getMessage().getText());
 		}
-		setStatus(msg.getStatus(), msg.getTime());
+		setStatus(msg.getMessage().getStatus(), msg.getMessage().getTime());
 	}
 	
 	// Return the currently shown message
-	public LinphoneChatMessage getData() {
+	public ChatMessageMetaContainer getData() {
 		return mData;
 	}
 	
@@ -262,6 +258,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	private void setAudio(File file) {
 		try {
 			mSoundPlayer.setSound(file);
+			mSoundPlayer.setFileState(mData.getState());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -336,7 +333,7 @@ public class FileSharingBubbleChat extends RelativeLayout {
 	};
 	
 	// Data
-	LinphoneChatMessage mData;
+	ChatMessageMetaContainer mData;
 	
 	// Environment information
 	private Context context;

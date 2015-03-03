@@ -19,6 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package uk.co.onecallcaspian.custom.filesharing;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.linphone.core.LinphoneChatMessage;
 import org.linphone.core.LinphoneChatRoom;
 
@@ -38,9 +42,9 @@ public class ChatMessageAdapter extends BaseAdapter {
 		this.context = context;
 	}
 	
-	public LinphoneChatMessage getItemForId(int id) {
-		for(LinphoneChatMessage msg : history) {
-			if(msg.getStorageId() == id) {
+	public ChatMessageMetaContainer getItemForId(int id) {
+		for(ChatMessageMetaContainer msg : history) {
+			if(msg.getMessage().getStorageId() == id) {
 				return msg;
 			}
 		}
@@ -49,17 +53,17 @@ public class ChatMessageAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return history.length;
+		return history.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return history[position];
+		return history.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		return history[position].getStorageId();
+		return history.get(position).getMessage().getStorageId();
 	}
 
 	@Override
@@ -69,14 +73,46 @@ public class ChatMessageAdapter extends BaseAdapter {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 			bubble = (FileSharingBubbleChat) inflater.inflate(R.layout.filesharing_chat_bubble, parent, false);
 		}
-		bubble.setData(history[position]);
+		bubble.setData(history.get(position));
 		return bubble;
 	}
 	
 	public void refreshHistory(LinphoneChatRoom room){
-		this.history = room.getHistory();
+		// First, clean removed messages
+		List<ChatMessageMetaContainer> toRemove = new ArrayList<ChatMessageMetaContainer>();
+		for(ChatMessageMetaContainer cnt : history) {
+			boolean found = false;
+			for(LinphoneChatMessage msg : room.getHistory()) {
+				if(msg.getStorageId() == cnt.getMessage().getStorageId()) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				toRemove.add(cnt);
+			}
+			found = false;
+		}
+		history.removeAll(toRemove);
+		
+		// Update messages that are already in history
+		for(LinphoneChatMessage msg : room.getHistory()) {
+			boolean found = false;
+			for(ChatMessageMetaContainer cnt : history) {
+				if(msg.getStorageId() == cnt.getMessage().getStorageId()) {
+					cnt.setMessage(msg);
+					found = true;
+				}
+			}
+			if(!found) { // Add messages that are not in history
+				history.add(new ChatMessageMetaContainer(msg));
+			}
+		}
+		
+		// Finally, sort the list by time
+		Collections.sort(history);
 	}
 	
-	private LinphoneChatMessage[] history = new LinphoneChatMessage[0];
+	private final List<ChatMessageMetaContainer> history = new ArrayList<ChatMessageMetaContainer>();
 	private Context context;
 }
