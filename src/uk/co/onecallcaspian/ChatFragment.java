@@ -360,12 +360,12 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		if (v.getId() == R.id.sendPicture) {
+		if (v.getId() == R.id.sendPicture) {/*
 			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
 			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
 			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
 			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
-			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));
+			menu.add(0, DEBUG_MENU_DO_NOTHING, 0, getString(R.string.no));*/
 			menu.add(0, MENU_FILE_IMAGE, 0, getString(R.string.share_file_image));
 			menu.add(0, MENU_FILE_AUDIO, 0, getString(R.string.share_file_audio));
 			menu.add(0, MENU_FILE_VIDEO, 0, getString(R.string.share_file_video));
