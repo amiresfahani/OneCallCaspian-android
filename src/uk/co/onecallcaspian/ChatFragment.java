@@ -910,7 +910,9 @@ public class ChatFragment extends Fragment implements OnClickListener, LinphoneC
 			public void fail(String reason) {
 				uploadLayout.setVisibility(View.GONE);
 				textLayout.setVisibility(View.VISIBLE);
-        		Toast.makeText(getActivity(), reason, Toast.LENGTH_LONG).show();
+				if(getActivity() != null) {
+					Toast.makeText(getActivity(), reason, Toast.LENGTH_LONG).show();
+				}
 			}
 		};
 

@@ -214,8 +214,10 @@ public class SoundPlayer extends LinearLayout implements OnPauseListener {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			if(fromUser) {
-				getFileState().setSeekPosition(progress);
-				mMediaPlayer.seekTo(getFileState().getSeekPosition());
+				if(getFileState() != null && mMediaPlayer != null) {
+					getFileState().setSeekPosition(progress);
+					mMediaPlayer.seekTo(getFileState().getSeekPosition());
+				}
 			}
 		}
 	};
