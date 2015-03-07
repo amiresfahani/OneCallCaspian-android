@@ -428,7 +428,10 @@
 	<string name="setup_ec_calibration">Echo canceller calibration in progress</string>
     <string name="pref_image_sharing_server_title">Sharing server</string>
     <string name="pref_remote_provisioning_title">Remote provisioning</string>
-
+    <string name="remote_provisioning_again_title">Remote provisioning again</string>
+    <string name="remote_provisioning_again_message">Remote provisioning message</string>
+    <string name="remote_provisioning_failure">Remote provisioning failure</string>
+    
 	<string name="delete_contact">Delete contact</string>
 	<string name="sip_address">SIP address</string>
 	<string name="phone_number">Phone number</string>
@@ -466,6 +469,7 @@
 	<string name="download_image_failed">Download failed. Please check your internet access or try again later.</string>
 
 	<string name="pref_auth_userid">Auth userid</string>
+	<string name="pref_help_username">Enter authentication username</string>
 	<string name="pref_help_auth_userid">Enter authentication userid (optionnal)</string>
 	<string name="pref_display_name">Display name</string>
 	<string name="pref_help_display_name">Enter display name (optionnal)</string>

@@ -29,7 +29,7 @@ import uk.co.onecallcaspian.LinphoneManager;
 import uk.co.onecallcaspian.LinphonePreferences;
 import uk.co.onecallcaspian.LinphoneService;
 import uk.co.onecallcaspian.LinphoneSimpleListener.LinphoneOnRemoteProvisioningListener;
-
+import uk.co.onecallcaspian.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,8 +40,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import uk.co.onecallcaspian.R;
 
 /**
  * @author Sylvain Berfini
