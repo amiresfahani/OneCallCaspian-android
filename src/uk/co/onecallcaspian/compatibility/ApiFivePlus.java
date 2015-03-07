@@ -274,7 +274,7 @@ public class ApiFivePlus {
 		Uri sound = Uri.parse("android.resource://uk.co.onecallcaspian/" + R.raw.mt1);
 
 		Notification notif = new Notification();
-		notif.icon = R.drawable.chat_icon_over;
+		notif.icon = R.drawable.notification_chat_notification;
 		notif.iconLevel = 0;
 		notif.when = System.currentTimeMillis();
 		notif.flags &= Notification.FLAG_ONGOING_EVENT;
